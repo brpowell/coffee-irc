@@ -1,5 +1,22 @@
-$color-background: ##e0e5ee;
+$color-background: grey;
 
 body {
     background-color: $color-background;
+}
+
+.chat-log {
+    height: 600px;
+    background-color: white;
+    padding: 6px;
+}
+
+.message {
+    span { font-weight: bold; }
+}
+
+.chat-input {
+    padding: 6px;
+    input {
+        width: 100%;
+    }
 }

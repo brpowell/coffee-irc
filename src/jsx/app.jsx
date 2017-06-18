@@ -33,6 +33,11 @@ class App extends React.Component {
         this.setState({ messages: messages });
     }
 
+    componentDidUpdate() {
+        const node = reactDOM.findDOMNode(this.messagesContainer);
+        node.scrollTop = node.scrollHeight;
+    }
+
     handleSendKey(event) {
         if(event.key === 'Enter') {
             client.say('#cool', this.state.input )
@@ -51,7 +56,7 @@ class App extends React.Component {
         });
         return(
             <div>
-               <div className="chat-log">
+               <div className="chat-log" ref={ (el) => { this.messagesContainer = el; } }>
                     { messages }
                 </div>
                 <div className="chat-input">

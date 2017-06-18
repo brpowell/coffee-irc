@@ -2,9 +2,11 @@ body {
   background-color: grey; }
 
 .chat-log {
-  height: 600px;
+  height: 80vh;
+  margin-bottom: auto;
   background-color: white;
-  padding: 6px; }
+  padding: 6px;
+  overflow-y: scroll; }
 
 .message span {
   font-weight: bold; }

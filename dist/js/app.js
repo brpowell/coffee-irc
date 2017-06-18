@@ -83,6 +83,12 @@ var App = function (_React$Component2) {
             this.setState({ messages: messages });
         }
     }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            var node = _reactDom2.default.findDOMNode(this.messagesContainer);
+            node.scrollTop = node.scrollHeight;
+        }
+    }, {
         key: 'handleSendKey',
         value: function handleSendKey(event) {
             if (event.key === 'Enter') {
@@ -99,6 +105,8 @@ var App = function (_React$Component2) {
     }, {
         key: 'render',
         value: function render() {
+            var _this4 = this;
+
             var messages = this.state.messages.map(function (message) {
                 return _react2.default.createElement(Message, { sender: message.sender, message: message.message });
             });
@@ -107,7 +115,9 @@ var App = function (_React$Component2) {
                 null,
                 _react2.default.createElement(
                     'div',
-                    { className: 'chat-log' },
+                    { className: 'chat-log', ref: function ref(el) {
+                            _this4.messagesContainer = el;
+                        } },
                     messages
                 ),
                 _react2.default.createElement(

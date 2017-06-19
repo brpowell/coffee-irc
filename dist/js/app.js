@@ -18,7 +18,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var irc = require('irc');
 var client = require('electron').remote.getGlobal('client');
 
 var Message = function (_React$Component) {
@@ -50,29 +49,48 @@ var Message = function (_React$Component) {
     return Message;
 }(_react2.default.Component);
 
-var App = function (_React$Component2) {
-    _inherits(App, _React$Component2);
+var ChannelList = function (_React$Component2) {
+    _inherits(ChannelList, _React$Component2);
+
+    function ChannelList() {
+        _classCallCheck(this, ChannelList);
+
+        return _possibleConstructorReturn(this, (ChannelList.__proto__ || Object.getPrototypeOf(ChannelList)).apply(this, arguments));
+    }
+
+    _createClass(ChannelList, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement('div', { className: 'channel-list' });
+        }
+    }]);
+
+    return ChannelList;
+}(_react2.default.Component);
+
+var App = function (_React$Component3) {
+    _inherits(App, _React$Component3);
 
     function App(props) {
         _classCallCheck(this, App);
 
-        var _this2 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-        _this2.state = { input: "", messages: [] };
-        _this2.handleInput = _this2.handleInput.bind(_this2);
-        _this2.handleSendKey = _this2.handleSendKey.bind(_this2);
-        return _this2;
+        _this3.state = { input: "", messages: [] };
+        _this3.handleInput = _this3.handleInput.bind(_this3);
+        _this3.handleSendKey = _this3.handleSendKey.bind(_this3);
+        return _this3;
     }
 
     _createClass(App, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this3 = this;
+            var _this4 = this;
 
             client.join('#cool');
             client.addListener('message', function (sender, to, message) {
                 console.log(sender + " => " + to + ": " + message);
-                _this3.addMessage(sender, message);
+                _this4.addMessage(sender, message);
             });
         }
     }, {
@@ -105,7 +123,7 @@ var App = function (_React$Component2) {
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
+            var _this5 = this;
 
             var messages = this.state.messages.map(function (message) {
                 return _react2.default.createElement(Message, { sender: message.sender, message: message.message });
@@ -113,17 +131,22 @@ var App = function (_React$Component2) {
             return _react2.default.createElement(
                 'div',
                 null,
+                _react2.default.createElement(ChannelList, null),
                 _react2.default.createElement(
                     'div',
-                    { className: 'chat-log', ref: function ref(el) {
-                            _this4.messagesContainer = el;
-                        } },
-                    messages
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'chat-input' },
-                    _react2.default.createElement('input', { value: this.state.input, onKeyPress: this.handleSendKey, onChange: this.handleInput })
+                    { className: 'chat-area' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'chat-log', ref: function ref(el) {
+                                _this5.messagesContainer = el;
+                            } },
+                        messages
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'chat-input' },
+                        _react2.default.createElement('input', { value: this.state.input, onKeyPress: this.handleSendKey, onChange: this.handleInput })
+                    )
                 )
             );
         }

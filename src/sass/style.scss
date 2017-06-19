@@ -1,14 +1,16 @@
 $color-background: grey;
 
+html { overflow: hidden; }
+
 body {
     background-color: $color-background;
+    margin: 0;
 }
 
 .chat-log {
     height: 80vh;
     margin-bottom: auto;
     background-color: white;
-    padding: 6px;
     overflow-y: scroll;
 }
 
@@ -21,4 +23,21 @@ body {
     input {
         width: 100%;
     }
+}
+
+.chat-area {
+    position: absolute;
+    left: 200px;
+    height: 100vh;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    min-width: 600px;
+}
+
+.channel-list {
+    width: 200px;
+    background-color: blue;
+    height: 100vh;
+    position: absolute;
 }

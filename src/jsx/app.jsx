@@ -1,12 +1,19 @@
 import React from 'react';
 import reactDOM from 'react-dom';
-const irc = require('irc');
 const client = require('electron').remote.getGlobal('client');
 
 class Message extends React.Component {
     render() {
         return(
             <div className="message"><span>{ this.props.sender }</span>: { this.props.message }</div>
+        )
+    }
+}
+
+class ChannelList extends React.Component {
+    render() {
+        return(
+            <div className="channel-list"></div>
         )
     }
 }
@@ -56,12 +63,15 @@ class App extends React.Component {
         });
         return(
             <div>
-               <div className="chat-log" ref={ (el) => { this.messagesContainer = el; } }>
+                <ChannelList />
+                <div className="chat-area">
+                    <div className="chat-log" ref={ (el) => { this.messagesContainer = el; } }>
                     { messages }
+                    </div>
+                    <div className="chat-input">
+                        <input value={ this.state.input } onKeyPress={ this.handleSendKey } onChange={ this.handleInput }></input>
+                    </div> 
                 </div>
-                <div className="chat-input">
-                    <input value={ this.state.input } onKeyPress={ this.handleSendKey } onChange={ this.handleInput }></input>
-                </div> 
             </div>
         )
     }

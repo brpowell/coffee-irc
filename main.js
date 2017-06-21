@@ -6,7 +6,7 @@ require('electron-reload')(__dirname);
 const irc = require('irc')
 
 let win;
-let props = { width: 1100, height: 700, minWidth: 500, minHeight: 400 };
+let props = { width: 1100, height: 700, minWidth: 600, minHeight: 450 };
 
 app.on('ready', () => {
     win = new BrowserWindow(props);

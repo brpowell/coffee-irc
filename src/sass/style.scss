@@ -1,5 +1,38 @@
 $color-background: grey;
 
+@font-face {
+  font-family: 'Salesforce Sans';
+  src: url("assets/fonts/webfonts/SalesforceSans-Light.woff2") format("woff2"), url("assets/fonts/webfonts/SalesforceSans-Light.woff") format("woff");
+  font-weight: 300; }
+
+@font-face {
+  font-family: 'Salesforce Sans';
+  src: url("assets/fonts/webfonts/SalesforceSans-LightItalic.woff2") format("woff2"), url("assets/fonts/webfonts/SalesforceSans-LightItalic.woff") format("woff");
+  font-style: italic;
+  font-weight: 300; }
+
+@font-face {
+  font-family: 'Salesforce Sans';
+  src: url("assets/fonts/webfonts/SalesforceSans-Regular.woff2") format("woff2"), url("assets/fonts/webfonts/SalesforceSans-Regular.woff") format("woff");
+  font-weight: 400; }
+
+@font-face {
+  font-family: 'Salesforce Sans';
+  src: url("assets/fonts/webfonts/SalesforceSans-Italic.woff2") format("woff2"), url("assets/fonts/webfonts/SalesforceSans-Italic.woff") format("woff");
+  font-style: italic;
+  font-weight: 400; }
+
+@font-face {
+  font-family: 'Salesforce Sans';
+  src: url("assets/fonts/webfonts/SalesforceSans-Bold.woff2") format("woff2"), url("assets/fonts/webfonts/SalesforceSans-Bold.woff") format("woff");
+  font-weight: 700; }
+
+@font-face {
+  font-family: 'Salesforce Sans';
+  src: url("assets/fonts/webfonts/SalesforceSans-BoldItalic.woff2") format("woff2"), url("assets/fonts/webfonts/SalesforceSans-BoldItalic.woff") format("woff");
+  font-style: italic;
+  font-weight: 700; }
+
 html { overflow: hidden; }
 
 body {
@@ -12,16 +45,30 @@ body {
     margin-bottom: auto;
     background-color: white;
     overflow-y: scroll;
+    padding: 8px;
 }
 
 .message {
-    span { font-weight: bold; }
 }
 
 .chat-input {
-    padding: 6px;
+    padding: 8px 18px 6px 6px;
+    background-color: #d8edff;
+    height: 100%;
+    
     input {
         width: 100%;
+        height: 34px;
+        border-radius: 8px;
+        border: solid 2px lightgray;
+        font-size: medium;
+        padding-left: 8px;
+        transition: border-color 0.25s;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #005fb2;
     }
 }
 
@@ -33,11 +80,13 @@ body {
     bottom: 0;
     top: 0;
     min-width: 600px;
+    background-color: rgb(253, 253, 253);
+    font-family: "Salesforce Sans", "Ariel";
 }
 
 .channel-list {
     width: 200px;
-    background-color: blue;
+    background-color: #0070d2;
     height: 100vh;
     position: absolute;
 }

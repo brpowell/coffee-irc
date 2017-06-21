@@ -38,9 +38,15 @@ var Message = function (_React$Component) {
                 _react2.default.createElement(
                     'span',
                     null,
-                    this.props.sender
+                    this.props.timestamp,
+                    '  ',
+                    _react2.default.createElement(
+                        'b',
+                        null,
+                        this.props.sender
+                    ),
+                    ': '
                 ),
-                ': ',
                 this.props.message
             );
         }
@@ -68,86 +74,230 @@ var ChannelList = function (_React$Component2) {
     return ChannelList;
 }(_react2.default.Component);
 
-var App = function (_React$Component3) {
-    _inherits(App, _React$Component3);
+var ChatInput = function (_React$Component3) {
+    _inherits(ChatInput, _React$Component3);
 
-    function App(props) {
-        _classCallCheck(this, App);
+    function ChatInput(props) {
+        _classCallCheck(this, ChatInput);
 
-        var _this3 = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (ChatInput.__proto__ || Object.getPrototypeOf(ChatInput)).call(this, props));
 
-        _this3.state = { input: "", messages: [] };
+        _this3.state = { input: "" };
         _this3.handleInput = _this3.handleInput.bind(_this3);
         _this3.handleSendKey = _this3.handleSendKey.bind(_this3);
         return _this3;
     }
 
-    _createClass(App, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            var _this4 = this;
+    _createClass(ChatInput, [{
+        key: 'handleInput',
+        value: function handleInput(event) {
+            this.setState({ input: event.target.value });
+        }
+    }, {
+        key: 'handleSendKey',
+        value: function handleSendKey(event) {
+            if (event.key === 'Enter' && this.state.input.length > 0) {
+                client.say('#cool', this.state.input);
+                this.props.addMessage(client.nick, this.state.input);
+                this.setState({ input: "" });
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'chat-input' },
+                _react2.default.createElement('input', {
+                    value: this.state.input,
+                    onKeyPress: this.handleSendKey,
+                    onChange: this.handleInput })
+            );
+        }
+    }]);
 
-            client.join('#cool');
-            client.addListener('message', function (sender, to, message) {
-                console.log(sender + " => " + to + ": " + message);
-                _this4.addMessage(sender, message);
-            });
-        }
-    }, {
-        key: 'addMessage',
-        value: function addMessage(sender, message) {
-            var messages = this.state.messages;
-            messages.push({ sender: sender, message: message });
-            this.setState({ messages: messages });
-        }
-    }, {
+    return ChatInput;
+}(_react2.default.Component);
+
+var ChatLog = function (_React$Component4) {
+    _inherits(ChatLog, _React$Component4);
+
+    function ChatLog() {
+        _classCallCheck(this, ChatLog);
+
+        return _possibleConstructorReturn(this, (ChatLog.__proto__ || Object.getPrototypeOf(ChatLog)).apply(this, arguments));
+    }
+
+    _createClass(ChatLog, [{
         key: 'componentDidUpdate',
         value: function componentDidUpdate() {
             var node = _reactDom2.default.findDOMNode(this.messagesContainer);
             node.scrollTop = node.scrollHeight;
         }
     }, {
-        key: 'handleSendKey',
-        value: function handleSendKey(event) {
-            if (event.key === 'Enter') {
-                client.say('#cool', this.state.input);
-                this.addMessage(client.nick, this.state.input);
-                this.setState({ input: "" });
-            }
-        }
-    }, {
-        key: 'handleInput',
-        value: function handleInput(event) {
-            this.setState({ input: event.target.value });
-        }
-    }, {
         key: 'render',
         value: function render() {
             var _this5 = this;
 
-            var messages = this.state.messages.map(function (message) {
-                return _react2.default.createElement(Message, { sender: message.sender, message: message.message });
+            return _react2.default.createElement(
+                'div',
+                { className: 'chat-log', ref: function ref(el) {
+                        _this5.messagesContainer = el;
+                    } },
+                this.props.messages
+            );
+        }
+    }]);
+
+    return ChatLog;
+}(_react2.default.Component);
+
+var ChatArea = function (_React$Component5) {
+    _inherits(ChatArea, _React$Component5);
+
+    function ChatArea(props) {
+        _classCallCheck(this, ChatArea);
+
+        var _this6 = _possibleConstructorReturn(this, (ChatArea.__proto__ || Object.getPrototypeOf(ChatArea)).call(this, props));
+
+        _this6.state = { messages: [] };
+        _this6.addMessage = _this6.addMessage.bind(_this6);
+        return _this6;
+    }
+
+    _createClass(ChatArea, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this7 = this;
+
+            client.addListener('message', function (sender, to, message) {
+                _this7.addMessage(sender, message);
             });
+        }
+    }, {
+        key: 'addMessage',
+        value: function addMessage(sender, message) {
+            var messages = this.state.messages;
+            messages.push({
+                sender: sender,
+                message: message,
+                timestamp: this.getTimestamp()
+            });
+            console.log(messages);
+            this.setState({ messages: messages });
+        }
+    }, {
+        key: 'getTimestamp',
+        value: function getTimestamp() {
+            var date = new Date();
+
+            var hour = date.getHours();
+            var period;
+            if (hour > 11) {
+                hour = hour % 12;
+                period = 'PM';
+            } else {
+                hour = hour < 10 ? '0' + hour : hour;
+                period = 'AM';
+            }
+
+            var min = date.getMinutes();
+            min = min < 10 ? '0' + min : min;
+
+            return hour + ':' + min + ' ' + period;
+        }
+
+        // handleInput(event) {
+        //     this.setState({ input: event.target.value });
+        // }
+
+        // handleSendKey(event) {
+        //     if(event.key === 'Enter' && this.state.input.length > 0) {
+        //         client.say('#cool', this.state.input )
+        //         this.addMessage(client.nick, this.state.input);
+        //         this.setState({ input: "" });
+        //     }
+        // }
+
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this8 = this;
+
+            var messages = this.state.messages.map(function (message, index) {
+                var prevMsg = null;
+                if (_this8.state.messages.length > 1) {
+                    prevMsg = _this8.state.messages[_this8.state.messages.length - 1];
+                }
+                return _react2.default.createElement(Message, {
+                    key: index,
+                    sender: message.sender,
+                    message: message.message,
+                    timestamp: message.timestamp,
+                    prevMessage: prevMsg });
+            });
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'chat-area' },
+                _react2.default.createElement(ChatLog, { messages: messages }),
+                _react2.default.createElement(ChatInput, { addMessage: this.addMessage })
+            );
+        }
+    }]);
+
+    return ChatArea;
+}(_react2.default.Component);
+
+var App = function (_React$Component6) {
+    _inherits(App, _React$Component6);
+
+    function App(props) {
+        _classCallCheck(this, App);
+
+        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        // this.state = { input: "", messages: [] };
+        // this.handleInput = this.handleInput.bind(this);
+        // this.handleSendKey = this.handleSendKey.bind(this);
+    }
+
+    _createClass(App, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            client.join('#cool');
+        }
+
+        // addMessage(sender, message) {
+        //     var messages = this.state.messages;
+        //     messages.push({ sender: sender, message: message });
+        //     this.setState({ messages: messages });
+        // }
+
+        // componentDidUpdate() {
+        //     const node = reactDOM.findDOMNode(this.messagesContainer);
+        //     node.scrollTop = node.scrollHeight;
+        // }
+
+        // handleSendKey(event) {
+        //     if(event.key === 'Enter') {
+        //         client.say('#cool', this.state.input )
+        //         this.addMessage(client.nick, this.state.input);
+        //         this.setState({ input: "" });
+        //     }
+        // }
+
+        // handleInput(event) {
+        //     this.setState({ input: event.target.value });
+        // }
+
+    }, {
+        key: 'render',
+        value: function render() {
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(ChannelList, null),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'chat-area' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'chat-log', ref: function ref(el) {
-                                _this5.messagesContainer = el;
-                            } },
-                        messages
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'chat-input' },
-                        _react2.default.createElement('input', { value: this.state.input, onKeyPress: this.handleSendKey, onChange: this.handleInput })
-                    )
-                )
+                _react2.default.createElement(ChatArea, null)
             );
         }
     }]);

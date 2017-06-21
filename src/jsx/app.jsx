@@ -3,12 +3,21 @@ import reactDOM from 'react-dom';
 const client = require('electron').remote.getGlobal('client');
 
 class Message extends React.Component {
-    
-
     render() {
+        var className = "message";
+        var prevMessage = this.props.prevMessage;
+        var stamp;
+
+        if(prevMessage == null || this.props.sender !== prevMessage.sender) {
+            stamp = <span>
+                <b>{ this.props.sender }</b><i>{ this.props.timestamp }</i><br/>
+            </span>
+            className += " message-stamp";
+        }
+
         return(
-            <div className="message">
-                <span>{ this.props.timestamp }  <b>{ this.props.sender }</b>: </span>
+            <div className={ className }>
+                { stamp }
                 { this.props.message }
             </div>
         )
@@ -91,7 +100,6 @@ class ChatArea extends React.Component {
             message: message,
             timestamp: this.getTimestamp()
         });
-        console.log(messages)
         this.setState({ messages: messages });
     }
 
@@ -115,23 +123,11 @@ class ChatArea extends React.Component {
         return hour + ':' + min + ' ' + period;
     }
 
-    // handleInput(event) {
-    //     this.setState({ input: event.target.value });
-    // }
-
-    // handleSendKey(event) {
-    //     if(event.key === 'Enter' && this.state.input.length > 0) {
-    //         client.say('#cool', this.state.input )
-    //         this.addMessage(client.nick, this.state.input);
-    //         this.setState({ input: "" });
-    //     }
-    // }
-
     render() {
         var messages = this.state.messages.map((message, index) => {
             let prevMsg = null;
             if(this.state.messages.length > 1) {
-                prevMsg = this.state.messages[this.state.messages.length - 1];
+                prevMsg = this.state.messages[index - 1];
             }
             return <Message 
                         key={ index }
@@ -151,40 +147,9 @@ class ChatArea extends React.Component {
 }
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-        // this.state = { input: "", messages: [] };
-        // this.handleInput = this.handleInput.bind(this);
-        // this.handleSendKey = this.handleSendKey.bind(this);
-    }
-
     componentDidMount() {
        client.join('#cool');
-       
     }
-
-    // addMessage(sender, message) {
-    //     var messages = this.state.messages;
-    //     messages.push({ sender: sender, message: message });
-    //     this.setState({ messages: messages });
-    // }
-
-    // componentDidUpdate() {
-    //     const node = reactDOM.findDOMNode(this.messagesContainer);
-    //     node.scrollTop = node.scrollHeight;
-    // }
-
-    // handleSendKey(event) {
-    //     if(event.key === 'Enter') {
-    //         client.say('#cool', this.state.input )
-    //         this.addMessage(client.nick, this.state.input);
-    //         this.setState({ input: "" });
-    //     }
-    // }
-
-    // handleInput(event) {
-    //     this.setState({ input: event.target.value });
-    // }
 
     render() {
         return(

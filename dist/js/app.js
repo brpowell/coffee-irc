@@ -32,21 +32,33 @@ var Message = function (_React$Component) {
     _createClass(Message, [{
         key: 'render',
         value: function render() {
-            return _react2.default.createElement(
-                'div',
-                { className: 'message' },
-                _react2.default.createElement(
+            var className = "message";
+            var prevMessage = this.props.prevMessage;
+            var stamp;
+
+            if (prevMessage == null || this.props.sender !== prevMessage.sender) {
+                stamp = _react2.default.createElement(
                     'span',
                     null,
-                    this.props.timestamp,
-                    '  ',
                     _react2.default.createElement(
                         'b',
                         null,
                         this.props.sender
                     ),
-                    ': '
-                ),
+                    _react2.default.createElement(
+                        'i',
+                        null,
+                        this.props.timestamp
+                    ),
+                    _react2.default.createElement('br', null)
+                );
+                className += " message-stamp";
+            }
+
+            return _react2.default.createElement(
+                'div',
+                { className: className },
+                stamp,
                 this.props.message
             );
         }
@@ -183,7 +195,6 @@ var ChatArea = function (_React$Component5) {
                 message: message,
                 timestamp: this.getTimestamp()
             });
-            console.log(messages);
             this.setState({ messages: messages });
         }
     }, {
@@ -206,19 +217,6 @@ var ChatArea = function (_React$Component5) {
 
             return hour + ':' + min + ' ' + period;
         }
-
-        // handleInput(event) {
-        //     this.setState({ input: event.target.value });
-        // }
-
-        // handleSendKey(event) {
-        //     if(event.key === 'Enter' && this.state.input.length > 0) {
-        //         client.say('#cool', this.state.input )
-        //         this.addMessage(client.nick, this.state.input);
-        //         this.setState({ input: "" });
-        //     }
-        // }
-
     }, {
         key: 'render',
         value: function render() {
@@ -227,7 +225,7 @@ var ChatArea = function (_React$Component5) {
             var messages = this.state.messages.map(function (message, index) {
                 var prevMsg = null;
                 if (_this8.state.messages.length > 1) {
-                    prevMsg = _this8.state.messages[_this8.state.messages.length - 1];
+                    prevMsg = _this8.state.messages[index - 1];
                 }
                 return _react2.default.createElement(Message, {
                     key: index,
@@ -252,13 +250,10 @@ var ChatArea = function (_React$Component5) {
 var App = function (_React$Component6) {
     _inherits(App, _React$Component6);
 
-    function App(props) {
+    function App() {
         _classCallCheck(this, App);
 
-        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
-        // this.state = { input: "", messages: [] };
-        // this.handleInput = this.handleInput.bind(this);
-        // this.handleSendKey = this.handleSendKey.bind(this);
+        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
     }
 
     _createClass(App, [{
@@ -266,30 +261,6 @@ var App = function (_React$Component6) {
         value: function componentDidMount() {
             client.join('#cool');
         }
-
-        // addMessage(sender, message) {
-        //     var messages = this.state.messages;
-        //     messages.push({ sender: sender, message: message });
-        //     this.setState({ messages: messages });
-        // }
-
-        // componentDidUpdate() {
-        //     const node = reactDOM.findDOMNode(this.messagesContainer);
-        //     node.scrollTop = node.scrollHeight;
-        // }
-
-        // handleSendKey(event) {
-        //     if(event.key === 'Enter') {
-        //         client.say('#cool', this.state.input )
-        //         this.addMessage(client.nick, this.state.input);
-        //         this.setState({ input: "" });
-        //     }
-        // }
-
-        // handleInput(event) {
-        //     this.setState({ input: event.target.value });
-        // }
-
     }, {
         key: 'render',
         value: function render() {

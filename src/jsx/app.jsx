@@ -2,6 +2,47 @@ import React from 'react';
 import reactDOM from 'react-dom';
 const client = require('electron').remote.getGlobal('client');
 
+class ChannelList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { channels: this.props.channels, active: this.props.channels[0] };
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(event) {
+        var channel = event.target.textContent;
+        // client.join(channel);
+        this.setState({ active: event.target.textContent })
+    }
+
+    render() {
+        var channels = this.state.channels.map((channel, index) => {
+            return(<li 
+                    className={ channel === this.state.active ? "active" : "" }
+                    onClick={ this.handleClick }>{ channel }</li>)
+        })
+        return(
+            <ul className="channel-list">
+                { channels }
+            </ul>
+        )
+    }
+}
+
+class SideBar extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return(
+            <div className="sidebar">
+                <ChannelList channels={ this.props.channels } />
+            </div>
+        )
+    }
+}
+
 class Message extends React.Component {
     render() {
         var className = "message";
@@ -10,24 +51,17 @@ class Message extends React.Component {
 
         if(prevMessage == null || this.props.sender !== prevMessage.sender) {
             stamp = <span>
-                <b>{ this.props.sender }</b><i>{ this.props.timestamp }</i><br/>
+                <b>{ this.props.sender }</b><i className="timestamp-first">{ this.props.timestamp }</i><br/>
             </span>
             className += " message-stamp";
         }
-
+        var style = { float: 'right' };
         return(
             <div className={ className }>
                 { stamp }
                 { this.props.message }
+                <span className="timestamp">{ this.props.timestamp }</span>
             </div>
-        )
-    }
-}
-
-class ChannelList extends React.Component {
-    render() {
-        return(
-            <div className="channel-list"></div>
         )
     }
 }
@@ -152,9 +186,10 @@ class App extends React.Component {
     }
 
     render() {
+        var channels = ['#cool', '#release', '#random'];
         return(
             <div>
-                <ChannelList />
+                <SideBar channels={ channels }/>
                 <ChatArea />
             </div>
         )

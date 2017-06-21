@@ -36,7 +36,8 @@ html {
 
 body {
   background-color: grey;
-  margin: 0; }
+  margin: 0;
+  font-family: "Salesforce Sans", "Arial"; }
 
 .chat-log {
   height: 86vh;
@@ -46,10 +47,15 @@ body {
   padding-left: 8px;
   padding-right: 8px; }
 
-.message i {
+.timestamp-first {
+  margin-left: 8px;
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.4);
-  margin-left: 8px; }
+  color: rgba(0, 0, 0, 0.4); }
+
+.timestamp {
+  float: right;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.4); }
 
 .message-stamp {
   margin-top: 6px; }
@@ -78,11 +84,23 @@ body {
   bottom: 0;
   top: 0;
   min-width: 600px;
-  background-color: #fdfdfd;
-  font-family: "Salesforce Sans", "Ariel"; }
+  background-color: #fdfdfd; }
 
-.channel-list {
+.sidebar {
   width: 200px;
   background-color: #0070d2;
   height: 100vh;
   position: absolute; }
+
+.channel-list {
+  list-style-type: none;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.8); }
+  .channel-list li {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;
+    cursor: pointer; }
+
+.active {
+  color: white; }

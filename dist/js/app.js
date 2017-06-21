@@ -20,8 +20,76 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var client = require('electron').remote.getGlobal('client');
 
-var Message = function (_React$Component) {
-    _inherits(Message, _React$Component);
+var ChannelList = function (_React$Component) {
+    _inherits(ChannelList, _React$Component);
+
+    function ChannelList(props) {
+        _classCallCheck(this, ChannelList);
+
+        var _this = _possibleConstructorReturn(this, (ChannelList.__proto__ || Object.getPrototypeOf(ChannelList)).call(this, props));
+
+        _this.state = { channels: _this.props.channels, active: _this.props.channels[0] };
+        _this.handleClick = _this.handleClick.bind(_this);
+        return _this;
+    }
+
+    _createClass(ChannelList, [{
+        key: 'handleClick',
+        value: function handleClick(event) {
+            var channel = event.target.textContent;
+            // client.join(channel);
+            this.setState({ active: event.target.textContent });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var channels = this.state.channels.map(function (channel, index) {
+                return _react2.default.createElement(
+                    'li',
+                    {
+                        className: channel === _this2.state.active ? "active" : "",
+                        onClick: _this2.handleClick },
+                    channel
+                );
+            });
+            return _react2.default.createElement(
+                'ul',
+                { className: 'channel-list' },
+                channels
+            );
+        }
+    }]);
+
+    return ChannelList;
+}(_react2.default.Component);
+
+var SideBar = function (_React$Component2) {
+    _inherits(SideBar, _React$Component2);
+
+    function SideBar(props) {
+        _classCallCheck(this, SideBar);
+
+        return _possibleConstructorReturn(this, (SideBar.__proto__ || Object.getPrototypeOf(SideBar)).call(this, props));
+    }
+
+    _createClass(SideBar, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'sidebar' },
+                _react2.default.createElement(ChannelList, { channels: this.props.channels })
+            );
+        }
+    }]);
+
+    return SideBar;
+}(_react2.default.Component);
+
+var Message = function (_React$Component3) {
+    _inherits(Message, _React$Component3);
 
     function Message() {
         _classCallCheck(this, Message);
@@ -47,19 +115,24 @@ var Message = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'i',
-                        null,
+                        { className: 'timestamp-first' },
                         this.props.timestamp
                     ),
                     _react2.default.createElement('br', null)
                 );
                 className += " message-stamp";
             }
-
+            var style = { float: 'right' };
             return _react2.default.createElement(
                 'div',
                 { className: className },
                 stamp,
-                this.props.message
+                this.props.message,
+                _react2.default.createElement(
+                    'span',
+                    { className: 'timestamp' },
+                    this.props.timestamp
+                )
             );
         }
     }]);
@@ -67,37 +140,18 @@ var Message = function (_React$Component) {
     return Message;
 }(_react2.default.Component);
 
-var ChannelList = function (_React$Component2) {
-    _inherits(ChannelList, _React$Component2);
-
-    function ChannelList() {
-        _classCallCheck(this, ChannelList);
-
-        return _possibleConstructorReturn(this, (ChannelList.__proto__ || Object.getPrototypeOf(ChannelList)).apply(this, arguments));
-    }
-
-    _createClass(ChannelList, [{
-        key: 'render',
-        value: function render() {
-            return _react2.default.createElement('div', { className: 'channel-list' });
-        }
-    }]);
-
-    return ChannelList;
-}(_react2.default.Component);
-
-var ChatInput = function (_React$Component3) {
-    _inherits(ChatInput, _React$Component3);
+var ChatInput = function (_React$Component4) {
+    _inherits(ChatInput, _React$Component4);
 
     function ChatInput(props) {
         _classCallCheck(this, ChatInput);
 
-        var _this3 = _possibleConstructorReturn(this, (ChatInput.__proto__ || Object.getPrototypeOf(ChatInput)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (ChatInput.__proto__ || Object.getPrototypeOf(ChatInput)).call(this, props));
 
-        _this3.state = { input: "" };
-        _this3.handleInput = _this3.handleInput.bind(_this3);
-        _this3.handleSendKey = _this3.handleSendKey.bind(_this3);
-        return _this3;
+        _this5.state = { input: "" };
+        _this5.handleInput = _this5.handleInput.bind(_this5);
+        _this5.handleSendKey = _this5.handleSendKey.bind(_this5);
+        return _this5;
     }
 
     _createClass(ChatInput, [{
@@ -131,8 +185,8 @@ var ChatInput = function (_React$Component3) {
     return ChatInput;
 }(_react2.default.Component);
 
-var ChatLog = function (_React$Component4) {
-    _inherits(ChatLog, _React$Component4);
+var ChatLog = function (_React$Component5) {
+    _inherits(ChatLog, _React$Component5);
 
     function ChatLog() {
         _classCallCheck(this, ChatLog);
@@ -149,12 +203,12 @@ var ChatLog = function (_React$Component4) {
     }, {
         key: 'render',
         value: function render() {
-            var _this5 = this;
+            var _this7 = this;
 
             return _react2.default.createElement(
                 'div',
                 { className: 'chat-log', ref: function ref(el) {
-                        _this5.messagesContainer = el;
+                        _this7.messagesContainer = el;
                     } },
                 this.props.messages
             );
@@ -164,26 +218,26 @@ var ChatLog = function (_React$Component4) {
     return ChatLog;
 }(_react2.default.Component);
 
-var ChatArea = function (_React$Component5) {
-    _inherits(ChatArea, _React$Component5);
+var ChatArea = function (_React$Component6) {
+    _inherits(ChatArea, _React$Component6);
 
     function ChatArea(props) {
         _classCallCheck(this, ChatArea);
 
-        var _this6 = _possibleConstructorReturn(this, (ChatArea.__proto__ || Object.getPrototypeOf(ChatArea)).call(this, props));
+        var _this8 = _possibleConstructorReturn(this, (ChatArea.__proto__ || Object.getPrototypeOf(ChatArea)).call(this, props));
 
-        _this6.state = { messages: [] };
-        _this6.addMessage = _this6.addMessage.bind(_this6);
-        return _this6;
+        _this8.state = { messages: [] };
+        _this8.addMessage = _this8.addMessage.bind(_this8);
+        return _this8;
     }
 
     _createClass(ChatArea, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            var _this7 = this;
+            var _this9 = this;
 
             client.addListener('message', function (sender, to, message) {
-                _this7.addMessage(sender, message);
+                _this9.addMessage(sender, message);
             });
         }
     }, {
@@ -220,12 +274,12 @@ var ChatArea = function (_React$Component5) {
     }, {
         key: 'render',
         value: function render() {
-            var _this8 = this;
+            var _this10 = this;
 
             var messages = this.state.messages.map(function (message, index) {
                 var prevMsg = null;
-                if (_this8.state.messages.length > 1) {
-                    prevMsg = _this8.state.messages[index - 1];
+                if (_this10.state.messages.length > 1) {
+                    prevMsg = _this10.state.messages[index - 1];
                 }
                 return _react2.default.createElement(Message, {
                     key: index,
@@ -247,8 +301,8 @@ var ChatArea = function (_React$Component5) {
     return ChatArea;
 }(_react2.default.Component);
 
-var App = function (_React$Component6) {
-    _inherits(App, _React$Component6);
+var App = function (_React$Component7) {
+    _inherits(App, _React$Component7);
 
     function App() {
         _classCallCheck(this, App);
@@ -264,10 +318,11 @@ var App = function (_React$Component6) {
     }, {
         key: 'render',
         value: function render() {
+            var channels = ['#cool', '#release', '#random'];
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(ChannelList, null),
+                _react2.default.createElement(SideBar, { channels: channels }),
                 _react2.default.createElement(ChatArea, null)
             );
         }

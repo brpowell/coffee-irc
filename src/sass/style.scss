@@ -5,6 +5,7 @@ html { overflow: hidden; }
 body {
     background-color: $color-background;
     margin: 0;
+    font-family: $font-family;
 }
 
 .chat-log {
@@ -17,11 +18,19 @@ body {
 }
 
 .message {
-    i {
-        font-size: 14px;
-        color: rgba(0, 0, 0, 0.4);
-        margin-left: 8px;
-    }
+
+}
+
+.timestamp-first {
+    margin-left: 8px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.timestamp {
+    float: right;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.4);
 }
 
 .message-stamp {
@@ -58,12 +67,30 @@ body {
     top: 0;
     min-width: 600px;
     background-color: rgb(253, 253, 253);
-    font-family: "Salesforce Sans", "Ariel";
+    
 }
 
-.channel-list {
+.sidebar {
     width: 200px;
     background-color: #0070d2;
     height: 100vh;
     position: absolute;
+}
+
+.channel-list {
+    // background-color: green;
+    list-style-type: none;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.8);
+
+    li {
+        padding-top: 6px;
+        padding-bottom: 6px;
+        padding-left: 10px;
+        cursor: pointer;
+    }
+}
+
+.active {
+    color: white;
 }

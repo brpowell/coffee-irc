@@ -1,0 +1,23 @@
+.chat-input {
+    padding: 8px 18px 6px 6px;
+    background-color: #d8edff;
+    height: 45px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    
+    input {
+        width: calc(100% - 10px);
+        height: 34px;
+        border-radius: 8px;
+        border: solid 2px lightgray;
+        font-size: medium;
+        padding-left: 8px;
+        transition: border-color 0.25s;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #005fb2;
+    }
+}

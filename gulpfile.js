@@ -5,24 +5,10 @@ var babel = require('gulp-babel');
 // var babelify = require('babelify');
 // var source = require('vinyl-source-stream');
 
-// gulp.task('bundle', () => {
-//     return browserify({
-//         extensions: ['.js', '.jsx'],
-//         entries: './src/index.js',
-//     })
-//     .transform(babelify.configure({
-//         ignore: /(node_modules)/
-//     }))
-//     .bundle()
-//     .on("error", (err) => { console.log("Error : " + err.message); })
-//     .pipe(source('bundle.js'))
-//     .pipe(gulp.dest('./dist'));
-// });
-
-gulp.task('babel', () => {
-    return gulp.src('./src/jsx/**/*.jsx')
+gulp.task('transform', () => {
+    return gulp.src('./src/**/*.{js,jsx}')
             .pipe(babel())
-            .pipe(gulp.dest('./dist/js/'))
+            .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('copy-index', () => {
@@ -31,16 +17,15 @@ gulp.task('copy-index', () => {
 });
 
 gulp.task('style', () => {
-    return gulp.src('./src/sass/**/*.scss')
+    return gulp.src('./src/sass/main.scss')
             .pipe(sass())
             .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('watch', () => {
-    gulp.watch('./src/sass/**/*.scss', ['style']);
-    gulp.watch('./src/jsx/**/*.jsx', ['babel']);
-    gulp.watch('./src/index.js', ['babel']);
+    gulp.watch('./src/**/*.scss', ['style']);
+    gulp.watch('./src/**/*.{js,jsx}', ['transform']);
     gulp.watch('./src/index.html', ['copy-index']);
 })
 
-gulp.task('default', ['babel', 'copy-index', 'style']);
+gulp.task('default', ['transform', 'copy-index', 'style']);

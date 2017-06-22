@@ -1,0 +1,21 @@
+.channel-list {
+    // background-color: green;
+    list-style-type: none;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.5);
+
+    li {
+        padding-top: 6px;
+        padding-bottom: 6px;
+        padding-left: 10px;
+        cursor: pointer;
+    }
+}
+
+.joined {
+    color: white;
+}
+
+.active {
+    background-color: lightseagreen;
+}

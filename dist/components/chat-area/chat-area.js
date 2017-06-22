@@ -45,7 +45,7 @@ var ChatArea = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (ChatArea.__proto__ || Object.getPrototypeOf(ChatArea)).call(this, props));
 
         _this.state = { messages: [] };
-        _this.addMessage = _this.addMessage.bind(_this);
+        // this.addMessage = this.addMessage.bind(this);
         return _this;
     }
 
@@ -59,46 +59,30 @@ var ChatArea = function (_React$Component) {
                 _this2.addMessage(sender, message);
             });
         }
-    }, {
-        key: 'addMessage',
-        value: function addMessage(sender, message) {
-            var messages = this.state.messages;
-            messages.push({
-                sender: sender,
-                message: message,
-                timestamp: this.getTimestamp()
-            });
-            this.setState({ messages: messages });
-        }
-    }, {
-        key: 'getTimestamp',
-        value: function getTimestamp() {
-            var date = new Date();
 
-            var hour = date.getHours();
-            var period;
-            if (hour > 11) {
-                hour = hour != 12 ? hour % 12 : 12;
-                period = 'PM';
-            } else {
-                hour = hour < 10 ? '0' + hour : hour;
-                period = 'AM';
-            }
+        // addMessage(sender, message) {
+        //     var messages = this.state.messages;
+        //     messages.push({ 
+        //         sender: sender, 
+        //         message: message,
+        //         timestamp: this.getTimestamp()
+        //     });
+        //     this.setState({ messages: messages });
+        // }
 
-            var min = date.getMinutes();
-            min = min < 10 ? '0' + min : min;
-
-            return hour + ':' + min + ' ' + period;
-        }
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
-
-            var messages = this.state.messages.map(function (message, index) {
+            var activeChannelMessages;
+            if (this.props.activeChannel in this.props.messages) {
+                activeChannelMessages = this.props.messages[this.props.activeChannel];
+            } else {
+                activeChannelMessages = [];
+            }
+            var messages = activeChannelMessages.map(function (message, index) {
                 var prevMsg = null;
-                if (_this3.state.messages.length > 1) {
-                    prevMsg = _this3.state.messages[index - 1];
+                if (activeChannelMessages.length > 1) {
+                    prevMsg = activeChannelMessages[index - 1];
                 }
                 return _react2.default.createElement(_message2.default, {
                     key: index,
@@ -112,7 +96,7 @@ var ChatArea = function (_React$Component) {
                 'div',
                 { className: 'chat-area' },
                 _react2.default.createElement(_chatLog2.default, { messages: messages }),
-                _react2.default.createElement(_chatInput2.default, { activeChannel: this.props.activeChannel, addMessage: this.addMessage })
+                _react2.default.createElement(_chatInput2.default, { activeChannel: this.props.activeChannel, addMessage: this.props.addMessage })
             );
         }
     }]);

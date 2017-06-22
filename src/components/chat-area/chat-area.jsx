@@ -10,7 +10,7 @@ export default class ChatArea extends React.Component {
     constructor(props) {
         super(props);
         this.state = { messages: [] };
-        this.addMessage = this.addMessage.bind(this);
+        // this.addMessage = this.addMessage.bind(this);
     }
     
     componentDidMount() {
@@ -20,41 +20,28 @@ export default class ChatArea extends React.Component {
         });
     }
 
-    addMessage(sender, message) {
-        var messages = this.state.messages;
-        messages.push({ 
-            sender: sender, 
-            message: message,
-            timestamp: this.getTimestamp()
-        });
-        this.setState({ messages: messages });
-    }
-
-    getTimestamp() {
-        var date = new Date();
-
-        var hour = date.getHours();
-        var period;
-        if(hour > 11) {
-            hour = hour != 12 ? hour % 12 : 12;
-            period = 'PM';
-        }
-        else {
-            hour = hour < 10 ? '0' + hour : hour;
-            period = 'AM';
-        }
-        
-        var min = date.getMinutes();
-        min = min < 10 ? '0' + min : min;
-
-        return hour + ':' + min + ' ' + period;
-    }
+    // addMessage(sender, message) {
+    //     var messages = this.state.messages;
+    //     messages.push({ 
+    //         sender: sender, 
+    //         message: message,
+    //         timestamp: this.getTimestamp()
+    //     });
+    //     this.setState({ messages: messages });
+    // }
 
     render() {
-        var messages = this.state.messages.map((message, index) => {
+        var activeChannelMessages;
+        if(this.props.activeChannel in this.props.messages) {
+            activeChannelMessages = this.props.messages[this.props.activeChannel];
+        }
+        else {
+            activeChannelMessages = [];
+        }
+        var messages = activeChannelMessages.map((message, index) => {
             let prevMsg = null;
-            if(this.state.messages.length > 1) {
-                prevMsg = this.state.messages[index - 1];
+            if(activeChannelMessages.length > 1) {
+                prevMsg = activeChannelMessages[index - 1];
             }
             return <Message 
                         key={ index }
@@ -67,7 +54,7 @@ export default class ChatArea extends React.Component {
         return(
             <div className="chat-area">
                 <ChatLog messages={ messages } />
-                <ChatInput activeChannel={ this.props.activeChannel } addMessage={ this.addMessage } />
+                <ChatInput activeChannel={ this.props.activeChannel } addMessage={ this.props.addMessage } />
             </div>
         )
     }

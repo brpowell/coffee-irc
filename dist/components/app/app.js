@@ -36,12 +36,23 @@ var App = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-        _this.state = { activeChannel: "", joinedChannels: [] };
+        _this.state = { activeChannel: "", joinedChannels: [], messages: {} };
         _this.enterChannel = _this.enterChannel.bind(_this);
+        _this.addMessage = _this.addMessage.bind(_this);
         return _this;
     }
 
     _createClass(App, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            client.addListener('message', function (sender, to, message) {
+                console.log(sender + " " + to + " " + message);
+                _this2.addMessage(sender, to, message);
+            });
+        }
+    }, {
         key: 'enterChannel',
         value: function enterChannel(channel) {
             var joined = this.state.joinedChannels;
@@ -50,6 +61,42 @@ var App = function (_React$Component) {
                 joined.push(channel);
             }
             this.setState({ activeChannel: channel, joinedChannels: joined });
+        }
+    }, {
+        key: 'addMessage',
+        value: function addMessage(sender, to, message) {
+            var messages = this.state.messages;
+            var newMessage = {
+                sender: sender,
+                message: message,
+                timestamp: this.getTimestamp()
+            };
+            if (to in messages) {
+                messages[to].push(newMessage);
+            } else {
+                messages[to] = [newMessage];
+            }
+            this.setState({ messages: messages });
+        }
+    }, {
+        key: 'getTimestamp',
+        value: function getTimestamp() {
+            var date = new Date();
+
+            var hour = date.getHours();
+            var period;
+            if (hour > 11) {
+                hour = hour != 12 ? hour % 12 : 12;
+                period = 'PM';
+            } else {
+                hour = hour < 10 ? '0' + hour : hour;
+                period = 'AM';
+            }
+
+            var min = date.getMinutes();
+            min = min < 10 ? '0' + min : min;
+
+            return hour + ':' + min + ' ' + period;
         }
     }, {
         key: 'render',
@@ -63,7 +110,10 @@ var App = function (_React$Component) {
                     channels: channels,
                     joinedChannels: this.state.joinedChannels,
                     enterChannel: this.enterChannel }),
-                _react2.default.createElement(_chatArea2.default, { activeChannel: this.state.activeChannel })
+                _react2.default.createElement(_chatArea2.default, {
+                    addMessage: this.addMessage,
+                    activeChannel: this.state.activeChannel,
+                    messages: this.state.messages })
             );
         }
     }]);

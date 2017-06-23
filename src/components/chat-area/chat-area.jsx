@@ -12,23 +12,6 @@ export default class ChatArea extends React.Component {
         this.state = { messages: [] };
         // this.addMessage = this.addMessage.bind(this);
     }
-    
-    componentDidMount() {
-        client.addListener('message', (sender, to, message) => {
-            console.log(sender + " " + to + " " + message);
-           this.addMessage(sender, message);
-        });
-    }
-
-    // addMessage(sender, message) {
-    //     var messages = this.state.messages;
-    //     messages.push({ 
-    //         sender: sender, 
-    //         message: message,
-    //         timestamp: this.getTimestamp()
-    //     });
-    //     this.setState({ messages: messages });
-    // }
 
     render() {
         var activeChannelMessages;

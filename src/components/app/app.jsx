@@ -41,7 +41,7 @@ export default class App extends React.Component {
         else {
             messages[to] = [newMessage];
         }
-        this.setState({ messages: messages });
+        this.setState({ messages: messages, newMessage: to });
     }
 
     getTimestamp() {

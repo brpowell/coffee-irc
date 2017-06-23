@@ -52,6 +52,7 @@ var ChannelList = function (_React$Component) {
                         className += " active";
                     }
                 }
+
                 return _react2.default.createElement(
                     'li',
                     {

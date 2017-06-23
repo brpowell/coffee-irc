@@ -26,19 +26,28 @@ var Message = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).call(this, props));
 
-        _this.handleHover = _this.handleHover.bind(_this);
+        _this.state = { showTimestamp: false };
+        _this.handleMouseEnter = _this.handleMouseEnter.bind(_this);
+        _this.handleMouseLeave = _this.handleMouseLeave.bind(_this);
         return _this;
     }
 
     _createClass(Message, [{
-        key: "handleHover",
-        value: function handleHover(event) {}
+        key: "handleMouseEnter",
+        value: function handleMouseEnter(event) {
+            this.setState({ showTimestamp: true });
+        }
+    }, {
+        key: "handleMouseLeave",
+        value: function handleMouseLeave(event) {
+            this.setState({ showTimestamp: false });
+        }
     }, {
         key: "render",
         value: function render() {
             var className = "message";
             var prevMessage = this.props.prevMessage;
-            var stamp;
+            var stamp = null;
 
             if (prevMessage == null || this.props.sender !== prevMessage.sender) {
                 stamp = _react2.default.createElement(
@@ -61,14 +70,17 @@ var Message = function (_React$Component) {
             var style = { float: 'right' };
             return _react2.default.createElement(
                 "div",
-                { className: className, onMouseEnter: this.handleHover },
+                {
+                    className: className,
+                    onMouseEnter: this.handleMouseEnter,
+                    onMouseLeave: this.handleMouseLeave },
                 stamp,
                 this.props.message,
-                _react2.default.createElement(
-                    "span",
+                this.state.showTimestamp && stamp == null ? _react2.default.createElement(
+                    "i",
                     { className: "timestamp" },
                     this.props.timestamp
-                )
+                ) : null
             );
         }
     }]);

@@ -50,27 +50,6 @@ var ChatArea = function (_React$Component) {
     }
 
     _createClass(ChatArea, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            var _this2 = this;
-
-            client.addListener('message', function (sender, to, message) {
-                console.log(sender + " " + to + " " + message);
-                _this2.addMessage(sender, message);
-            });
-        }
-
-        // addMessage(sender, message) {
-        //     var messages = this.state.messages;
-        //     messages.push({ 
-        //         sender: sender, 
-        //         message: message,
-        //         timestamp: this.getTimestamp()
-        //     });
-        //     this.setState({ messages: messages });
-        // }
-
-    }, {
         key: 'render',
         value: function render() {
             var activeChannelMessages;

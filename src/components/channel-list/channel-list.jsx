@@ -23,6 +23,7 @@ export default class ChannelList extends React.Component {
                     className += " active";
                 }
             }
+
             return(<li 
                     key={ index }
                     className={ className }

@@ -3,16 +3,23 @@ import React from 'react';
 export default class Message extends React.Component {
     constructor(props) {
         super(props);
-        this.handleHover = this.handleHover.bind(this);
+        this.state = { showTimestamp: false };
+        this.handleMouseEnter = this.handleMouseEnter.bind(this);
+        this.handleMouseLeave = this.handleMouseLeave.bind(this);
     }
 
-    handleHover(event) {
+    handleMouseEnter(event) {
+        this.setState({ showTimestamp: true });
+    }
+
+    handleMouseLeave(event) {
+        this.setState({ showTimestamp: false });
     }
 
     render() {
         var className = "message";
         var prevMessage = this.props.prevMessage;
-        var stamp;
+        var stamp = null;
 
         if(prevMessage == null || this.props.sender !== prevMessage.sender) {
             stamp = <span>
@@ -22,10 +29,14 @@ export default class Message extends React.Component {
         }
         var style = { float: 'right' };
         return(
-            <div className={ className } onMouseEnter={ this.handleHover }>
+            <div 
+                className={ className }
+                onMouseEnter={ this.handleMouseEnter }
+                onMouseLeave={ this.handleMouseLeave }>
+
                 { stamp }
                 { this.props.message }
-                <span className="timestamp">{ this.props.timestamp }</span>
+                { this.state.showTimestamp && stamp == null ? <i className="timestamp">{ this.props.timestamp }</i> : null }
             </div>
         )
     }

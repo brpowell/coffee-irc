@@ -1,5 +1,4 @@
 .channel-list {
-    // background-color: green;
     list-style-type: none;
     padding: 0;
     color: rgba(255, 255, 255, 0.5);
@@ -21,9 +20,9 @@
 }
 
 .active {
-    background-color: lightseagreen;
+    background-color: #4bca81;
 }
 
-.new-message {
+.alert-new {
     font-weight: bold !important;
 }

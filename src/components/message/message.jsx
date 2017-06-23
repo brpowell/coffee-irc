@@ -36,7 +36,7 @@ export default class Message extends React.Component {
 
                 { stamp }
                 { this.props.message }
-                { this.state.showTimestamp && stamp == null ? <i className="timestamp">{ this.props.timestamp }</i> : null }
+                { this.state.showTimestamp ? <i className="timestamp">{ this.props.timestamp }</i> : null }
             </div>
         )
     }

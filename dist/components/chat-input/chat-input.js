@@ -51,13 +51,15 @@ var ChatInput = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var placeholder = "Send message to " + this.props.activeChannel;
             return _react2.default.createElement(
                 'div',
                 { className: 'chat-input' },
                 _react2.default.createElement('input', {
                     value: this.state.input,
                     onKeyPress: this.handleSendKey,
-                    onChange: this.handleInput })
+                    onChange: this.handleInput,
+                    placeholder: placeholder })
             );
         }
     }]);

@@ -18,6 +18,8 @@ var _chatArea = require('../chat-area/chat-area.js');
 
 var _chatArea2 = _interopRequireDefault(_chatArea);
 
+var _util = require('./util');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -36,7 +38,7 @@ var App = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-        _this.state = { activeChannel: "", joinedChannels: [], messages: {} };
+        _this.state = { activeChannel: "", joinedChannels: [], messages: {}, alertNew: [] };
         _this.enterChannel = _this.enterChannel.bind(_this);
         _this.addMessage = _this.addMessage.bind(_this);
         return _this;
@@ -51,6 +53,10 @@ var App = function (_React$Component) {
                 console.log(sender + " " + to + " " + message);
                 _this2.addMessage(sender, to, message);
             });
+
+            client.addListener('join', function (channel, nick, message) {
+                console.log(nick + " has joined " + channel);
+            });
         }
     }, {
         key: 'enterChannel',
@@ -60,7 +66,12 @@ var App = function (_React$Component) {
                 client.join(channel);
                 joined.push(channel);
             }
-            this.setState({ activeChannel: channel, joinedChannels: joined });
+
+            var index = this.state.alertNew.indexOf(channel);
+            var alertNew = this.state.alertNew;
+            if (index > -1) alertNew.splice(index, 1);
+
+            this.setState({ activeChannel: channel, joinedChannels: joined, alertNew: alertNew });
         }
     }, {
         key: 'addMessage',
@@ -69,34 +80,17 @@ var App = function (_React$Component) {
             var newMessage = {
                 sender: sender,
                 message: message,
-                timestamp: this.getTimestamp()
+                timestamp: (0, _util.getTimestamp)()
             };
-            if (to in messages) {
-                messages[to].push(newMessage);
-            } else {
-                messages[to] = [newMessage];
-            }
-            this.setState({ messages: messages, newMessage: to });
-        }
-    }, {
-        key: 'getTimestamp',
-        value: function getTimestamp() {
-            var date = new Date();
 
-            var hour = date.getHours();
-            var period;
-            if (hour > 11) {
-                hour = hour != 12 ? hour % 12 : 12;
-                period = 'PM';
-            } else {
-                hour = hour < 10 ? '0' + hour : hour;
-                period = 'AM';
+            if (to in messages) messages[to].push(newMessage);else messages[to] = [newMessage];
+
+            var alertNew = this.state.alertNew;
+            if (alertNew.indexOf(to) == -1 && this.state.activeChannel != to) {
+                alertNew.push(to);
             }
 
-            var min = date.getMinutes();
-            min = min < 10 ? '0' + min : min;
-
-            return hour + ':' + min + ' ' + period;
+            this.setState({ messages: messages, alertNew: alertNew });
         }
     }, {
         key: 'render',
@@ -109,7 +103,8 @@ var App = function (_React$Component) {
                     activeChannel: this.state.activeChannel,
                     channels: channels,
                     joinedChannels: this.state.joinedChannels,
-                    enterChannel: this.enterChannel }),
+                    enterChannel: this.enterChannel,
+                    alertNew: this.state.alertNew }),
                 _react2.default.createElement(_chatArea2.default, {
                     addMessage: this.addMessage,
                     activeChannel: this.state.activeChannel,

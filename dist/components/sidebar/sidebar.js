@@ -41,7 +41,8 @@ var SideBar = function (_React$Component) {
                     activeChannel: this.props.activeChannel,
                     joinedChannels: this.props.joinedChannels,
                     enterChannel: this.props.enterChannel,
-                    channels: this.props.channels })
+                    channels: this.props.channels,
+                    alertNew: this.props.alertNew })
             );
         }
     }]);

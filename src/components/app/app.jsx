@@ -1,13 +1,14 @@
 import React from 'react';
 import SideBar from '../sidebar/sidebar.js';
 import ChatArea from '../chat-area/chat-area.js';
+import {getTimestamp} from './util';
 
 var client = require('electron').remote.getGlobal('client');
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { activeChannel: "", joinedChannels: [], messages: {} };
+        this.state = { activeChannel: "", joinedChannels: [], messages: {}, alertNew: [] };
         this.enterChannel = this.enterChannel.bind(this);
         this.addMessage = this.addMessage.bind(this);
     }
@@ -17,6 +18,10 @@ export default class App extends React.Component {
             console.log(sender + " " + to + " " + message);
             this.addMessage(sender, to, message);
         });
+
+        client.addListener('join', (channel, nick, message) => {
+            console.log(nick + " has joined " + channel);
+        })
     }
 
     enterChannel(channel) {
@@ -25,7 +30,12 @@ export default class App extends React.Component {
             client.join(channel);
             joined.push(channel);
         }
-        this.setState({ activeChannel: channel, joinedChannels: joined });
+
+        var index = this.state.alertNew.indexOf(channel);
+        var alertNew = this.state.alertNew;
+        if(index > -1) alertNew.splice(index, 1);
+
+        this.setState({ activeChannel: channel, joinedChannels: joined, alertNew: alertNew });
     }
 
     addMessage(sender, to, message) {
@@ -33,35 +43,20 @@ export default class App extends React.Component {
         var newMessage = { 
             sender: sender, 
             message: message,
-            timestamp: this.getTimestamp()
+            timestamp: getTimestamp()
         };
-        if(to in messages) {
+
+        if(to in messages)
             messages[to].push(newMessage);
-        }
-        else {
+        else
             messages[to] = [newMessage];
-        }
-        this.setState({ messages: messages, newMessage: to });
-    }
-
-    getTimestamp() {
-        var date = new Date();
-
-        var hour = date.getHours();
-        var period;
-        if(hour > 11) {
-            hour = hour != 12 ? hour % 12 : 12;
-            period = 'PM';
-        }
-        else {
-            hour = hour < 10 ? '0' + hour : hour;
-            period = 'AM';
+        
+        var alertNew = this.state.alertNew;
+        if(alertNew.indexOf(to) == -1 && this.state.activeChannel != to) {
+            alertNew.push(to);
         }
         
-        var min = date.getMinutes();
-        min = min < 10 ? '0' + min : min;
-
-        return hour + ':' + min + ' ' + period;
+        this.setState({ messages: messages, alertNew: alertNew });
     }
 
     render() {
@@ -72,7 +67,8 @@ export default class App extends React.Component {
                     activeChannel={ this.state.activeChannel }
                     channels={ channels }
                     joinedChannels={ this.state.joinedChannels }
-                    enterChannel= { this.enterChannel }/>
+                    enterChannel= { this.enterChannel }
+                    alertNew={ this.state.alertNew }/>
                 <ChatArea 
                     addMessage={ this.addMessage }
                     activeChannel={ this.state.activeChannel }

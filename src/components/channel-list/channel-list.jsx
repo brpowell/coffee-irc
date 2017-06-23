@@ -24,6 +24,8 @@ export default class ChannelList extends React.Component {
                 }
             }
 
+            if(this.props.alertNew.indexOf(channel) > -1) className += " alert-new"
+
             return(<li 
                     key={ index }
                     className={ className }

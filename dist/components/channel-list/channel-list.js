@@ -53,6 +53,8 @@ var ChannelList = function (_React$Component) {
                     }
                 }
 
+                if (_this2.props.alertNew.indexOf(channel) > -1) className += " alert-new";
+
                 return _react2.default.createElement(
                     'li',
                     {

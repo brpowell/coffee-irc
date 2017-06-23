@@ -76,7 +76,7 @@ var Message = function (_React$Component) {
                     onMouseLeave: this.handleMouseLeave },
                 stamp,
                 this.props.message,
-                this.state.showTimestamp && stamp == null ? _react2.default.createElement(
+                this.state.showTimestamp ? _react2.default.createElement(
                     "i",
                     { className: "timestamp" },
                     this.props.timestamp

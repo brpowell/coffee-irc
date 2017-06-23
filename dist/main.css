@@ -57,9 +57,9 @@ body {
   color: white; }
 
 .active {
-  background-color: lightseagreen; }
+  background-color: #4bca81; }
 
-.new-message {
+.alert-new {
   font-weight: bold !important; }
 
 .chat-area {

@@ -23,12 +23,14 @@ export default class ChatInput extends React.Component {
     }
 
     render() {
+        var placeholder = "Send message to " + this.props.activeChannel;
         return(
             <div className="chat-input">
                 <input 
                     value={ this.state.input }
                     onKeyPress={ this.handleSendKey }
-                    onChange={ this.handleInput }>
+                    onChange={ this.handleInput }
+                    placeholder={ placeholder }>
                 </input>
             </div>
         )

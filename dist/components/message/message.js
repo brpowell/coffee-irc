@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -33,56 +33,56 @@ var Message = function (_React$Component) {
     }
 
     _createClass(Message, [{
-        key: "handleMouseEnter",
+        key: 'handleMouseEnter',
         value: function handleMouseEnter(event) {
             this.setState({ showTimestamp: true });
         }
     }, {
-        key: "handleMouseLeave",
+        key: 'handleMouseLeave',
         value: function handleMouseLeave(event) {
             this.setState({ showTimestamp: false });
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
             var className = "message";
             var prevMessage = this.props.prevMessage;
             var stamp = null;
-
-            if (prevMessage == null || this.props.sender !== prevMessage.sender) {
+            console.log(this.props.type);
+            if (this.props.type === 'status' || prevMessage == null || this.props.sender !== prevMessage.sender || this.props.sender === prevMessage.sender && this.props.type === 'message' && prevMessage.type === 'status') {
                 stamp = _react2.default.createElement(
-                    "span",
+                    'span',
                     null,
                     _react2.default.createElement(
-                        "b",
+                        'b',
                         null,
                         this.props.sender
                     ),
                     _react2.default.createElement(
-                        "i",
-                        { className: "timestamp-first" },
+                        'i',
+                        { className: 'timestamp-first' },
                         this.props.timestamp
                     ),
-                    _react2.default.createElement("br", null)
+                    _react2.default.createElement('br', null)
                 );
                 className += " message-stamp";
             }
 
             return _react2.default.createElement(
-                "div",
+                'div',
                 {
                     className: className,
                     onMouseEnter: this.handleMouseEnter,
                     onMouseLeave: this.handleMouseLeave },
                 stamp,
                 _react2.default.createElement(
-                    "div",
+                    'div',
                     { className: this.props.type === 'status' ? 'status' : '' },
                     this.props.message
                 ),
                 this.state.showTimestamp ? _react2.default.createElement(
-                    "i",
-                    { className: "timestamp" },
+                    'i',
+                    { className: 'timestamp' },
                     this.props.timestamp
                 ) : null
             );

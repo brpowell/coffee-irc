@@ -50,12 +50,17 @@ var App = function (_React$Component) {
             var _this2 = this;
 
             client.addListener('message', function (sender, to, message) {
-                console.log(sender + " " + to + " " + message);
                 _this2.addMessage(sender, to, message);
             });
 
-            client.addListener('join', function (channel, nick, message) {
-                console.log(nick + " has joined " + channel);
+            client.addListener('join', function (channel, nick) {
+                var message = "has joined " + channel;
+                _this2.addMessage(nick, channel, message, 'status');
+            });
+
+            client.addListener('part', function (channel, nick) {
+                var message = "has left " + channel;
+                _this2.addMessage(nick, channel, message, 'status');
             });
         }
     }, {
@@ -76,11 +81,14 @@ var App = function (_React$Component) {
     }, {
         key: 'addMessage',
         value: function addMessage(sender, to, message) {
+            var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'message';
+
             var messages = this.state.messages;
             var newMessage = {
                 sender: sender,
                 message: message,
-                timestamp: (0, _util.getTimestamp)()
+                timestamp: (0, _util.getTimestamp)(),
+                type: type
             };
 
             if (to in messages) messages[to].push(newMessage);else messages[to] = [newMessage];

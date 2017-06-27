@@ -67,7 +67,7 @@ var Message = function (_React$Component) {
                 );
                 className += " message-stamp";
             }
-            var style = { float: 'right' };
+
             return _react2.default.createElement(
                 "div",
                 {
@@ -75,7 +75,11 @@ var Message = function (_React$Component) {
                     onMouseEnter: this.handleMouseEnter,
                     onMouseLeave: this.handleMouseLeave },
                 stamp,
-                this.props.message,
+                _react2.default.createElement(
+                    "div",
+                    { className: this.props.type === 'status' ? 'status' : '' },
+                    this.props.message
+                ),
                 this.state.showTimestamp ? _react2.default.createElement(
                     "i",
                     { className: "timestamp" },

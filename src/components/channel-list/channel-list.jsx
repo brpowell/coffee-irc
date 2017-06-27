@@ -33,6 +33,7 @@ export default class ChannelList extends React.Component {
         })
         return(
             <ul className="channel-list">
+                <div className="title">CHANNELS</div>
                 { channels }
             </ul>
         )

@@ -1,5 +1,6 @@
 import React from 'react';
 import remote from 'electron';
+import ChatHeader from '../chat-header/chat-header.js';
 import ChatLog from '../chat-log/chat-log.js';
 import ChatInput from '../chat-input/chat-input.js';
 import Message from '../message/message.js';
@@ -7,12 +8,6 @@ import Message from '../message/message.js';
 var client = require('electron').remote.getGlobal('client');
 
 export default class ChatArea extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { messages: [] };
-        // this.addMessage = this.addMessage.bind(this);
-    }
-
     render() {
         var activeChannelMessages;
         if(this.props.activeChannel in this.props.messages) {
@@ -31,11 +26,13 @@ export default class ChatArea extends React.Component {
                         sender={ message.sender }
                         message={ message.message }
                         timestamp={ message.timestamp }
-                        prevMessage={ prevMsg } />
+                        prevMessage={ prevMsg }
+                        type={ message.type } />
         });
 
         return(
             <div className="chat-area">
+                <ChatHeader activeChannel={ this.props.activeChannel } />
                 <ChatLog messages={ messages } />
                 <ChatInput activeChannel={ this.props.activeChannel } addMessage={ this.props.addMessage } />
             </div>

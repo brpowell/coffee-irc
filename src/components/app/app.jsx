@@ -15,12 +15,17 @@ export default class App extends React.Component {
 
     componentDidMount() {
         client.addListener('message', (sender, to, message) => {
-            console.log(sender + " " + to + " " + message);
             this.addMessage(sender, to, message);
         });
 
-        client.addListener('join', (channel, nick, message) => {
-            console.log(nick + " has joined " + channel);
+        client.addListener('join', (channel, nick) => {
+            let message = "has joined " + channel;
+            this.addMessage(nick, channel, message, 'status');
+        });
+
+        client.addListener('part', (channel, nick) => {
+            let message = "has left " + channel;
+            this.addMessage(nick, channel, message, 'status');
         })
     }
 
@@ -38,12 +43,13 @@ export default class App extends React.Component {
         this.setState({ activeChannel: channel, joinedChannels: joined, alertNew: alertNew });
     }
 
-    addMessage(sender, to, message) {
+    addMessage(sender, to, message, type='message') {
         var messages = this.state.messages;
         var newMessage = { 
             sender: sender, 
             message: message,
-            timestamp: getTimestamp()
+            timestamp: getTimestamp(),
+            type: type
         };
 
         if(to in messages)

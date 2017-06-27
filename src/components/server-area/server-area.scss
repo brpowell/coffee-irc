@@ -1,0 +1,20 @@
+.server-area {
+    // border-bottom: 1px solid lightgrey;
+    padding: 10px;
+}
+
+.server-area:hover {
+    background-color: #1069b7;
+    cursor: pointer;
+}
+
+.server-info {
+    color: white;
+    font-size: 16px;
+}
+
+.user-info {
+    color: lightgrey;
+    font-size: 12px;
+    margin-top: 2px;
+}

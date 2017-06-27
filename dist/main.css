@@ -31,6 +31,10 @@
   font-style: italic;
   font-weight: 700; }
 
+.icon-settings {
+  width: 16px;
+  fill: red; }
+
 html {
   overflow: hidden; }
 
@@ -43,9 +47,14 @@ body {
   list-style-type: none;
   padding: 0;
   color: rgba(255, 255, 255, 0.5); }
+  .channel-list .title {
+    color: white;
+    font-size: 14px;
+    padding-left: 10px;
+    margin-bottom: 3px; }
   .channel-list li {
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     padding-left: 10px;
     cursor: pointer;
     width: 88%;
@@ -61,6 +70,13 @@ body {
 
 .alert-new {
   font-weight: bold !important; }
+
+.chat-header {
+  height: 42px;
+  border-bottom: 1px solid lightgrey; }
+  .chat-header div {
+    padding-top: 10px;
+    padding-left: 8px; }
 
 .chat-area {
   position: absolute;
@@ -116,8 +132,28 @@ body {
   padding-left: 8px;
   padding-right: 8px; }
 
+.status {
+  font-style: italic;
+  color: #54698d; }
+
 .sidebar {
   width: 200px;
   background-color: #0070d2;
   height: 100vh;
   position: absolute; }
+
+.server-area {
+  padding: 10px; }
+
+.server-area:hover {
+  background-color: #1069b7;
+  cursor: pointer; }
+
+.server-info {
+  color: white;
+  font-size: 16px; }
+
+.user-info {
+  color: lightgrey;
+  font-size: 12px;
+  margin-top: 2px; }

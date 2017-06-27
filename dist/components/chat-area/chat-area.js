@@ -14,6 +14,10 @@ var _electron = require('electron');
 
 var _electron2 = _interopRequireDefault(_electron);
 
+var _chatHeader = require('../chat-header/chat-header.js');
+
+var _chatHeader2 = _interopRequireDefault(_chatHeader);
+
 var _chatLog = require('../chat-log/chat-log.js');
 
 var _chatLog2 = _interopRequireDefault(_chatLog);
@@ -39,14 +43,10 @@ var client = require('electron').remote.getGlobal('client');
 var ChatArea = function (_React$Component) {
     _inherits(ChatArea, _React$Component);
 
-    function ChatArea(props) {
+    function ChatArea() {
         _classCallCheck(this, ChatArea);
 
-        var _this = _possibleConstructorReturn(this, (ChatArea.__proto__ || Object.getPrototypeOf(ChatArea)).call(this, props));
-
-        _this.state = { messages: [] };
-        // this.addMessage = this.addMessage.bind(this);
-        return _this;
+        return _possibleConstructorReturn(this, (ChatArea.__proto__ || Object.getPrototypeOf(ChatArea)).apply(this, arguments));
     }
 
     _createClass(ChatArea, [{
@@ -68,12 +68,14 @@ var ChatArea = function (_React$Component) {
                     sender: message.sender,
                     message: message.message,
                     timestamp: message.timestamp,
-                    prevMessage: prevMsg });
+                    prevMessage: prevMsg,
+                    type: message.type });
             });
 
             return _react2.default.createElement(
                 'div',
                 { className: 'chat-area' },
+                _react2.default.createElement(_chatHeader2.default, { activeChannel: this.props.activeChannel }),
                 _react2.default.createElement(_chatLog2.default, { messages: messages }),
                 _react2.default.createElement(_chatInput2.default, { activeChannel: this.props.activeChannel, addMessage: this.props.addMessage })
             );

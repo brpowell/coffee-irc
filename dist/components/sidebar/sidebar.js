@@ -14,6 +14,10 @@ var _channelList = require('../channel-list/channel-list.js');
 
 var _channelList2 = _interopRequireDefault(_channelList);
 
+var _serverArea = require('../server-area/server-area.js');
+
+var _serverArea2 = _interopRequireDefault(_serverArea);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37,6 +41,7 @@ var SideBar = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'sidebar' },
+                _react2.default.createElement(_serverArea2.default, null),
                 _react2.default.createElement(_channelList2.default, {
                     activeChannel: this.props.activeChannel,
                     joinedChannels: this.props.joinedChannels,

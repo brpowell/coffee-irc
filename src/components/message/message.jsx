@@ -23,11 +23,11 @@ export default class Message extends React.Component {
 
         if(prevMessage == null || this.props.sender !== prevMessage.sender) {
             stamp = <span>
-                <b>{ this.props.sender }</b><i className="timestamp-first">{ this.props.timestamp }</i><br/>
+            <b>{ this.props.sender }</b><i className="timestamp-first">{ this.props.timestamp }</i><br/>
             </span>
             className += " message-stamp";
         }
-        var style = { float: 'right' };
+
         return(
             <div 
                 className={ className }
@@ -35,7 +35,7 @@ export default class Message extends React.Component {
                 onMouseLeave={ this.handleMouseLeave }>
 
                 { stamp }
-                { this.props.message }
+                <div className={ this.props.type === 'status' ? 'status' : '' }>{ this.props.message }</div>
                 { this.state.showTimestamp ? <i className="timestamp">{ this.props.timestamp }</i> : null }
             </div>
         )

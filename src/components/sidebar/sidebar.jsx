@@ -1,5 +1,6 @@
 import React from 'react';
 import ChannelList from '../channel-list/channel-list.js';
+import ServerArea from '../server-area/server-area.js';
 
 export default class SideBar extends React.Component {
     constructor(props) {
@@ -9,6 +10,7 @@ export default class SideBar extends React.Component {
     render() {
         return(
             <div className="sidebar">
+                <ServerArea />
                 <ChannelList 
                     activeChannel={ this.props.activeChannel }
                     joinedChannels={ this.props.joinedChannels }

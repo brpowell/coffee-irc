@@ -17,4 +17,21 @@
     color: lightgrey;
     font-size: 12px;
     margin-top: 2px;
+
+    div {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        float: right;
+        margin-right: 12px;
+        margin-top: 4px;
+    }
+
+    .online {
+        background-color: greenyellow;
+    }
+
+    .offline {
+        background-color: red;
+    }
 }

@@ -5,7 +5,7 @@ export default class ServerArea extends React.Component {
         return(
             <div className="server-area">
                 <div className="server-info">irc.bryan.net <span>∨</span></div>
-                <div className="user-info">@bryan</div>
+                <div className="user-info">@bryan <div className="online"></div></div>
             </div>
         )
     }

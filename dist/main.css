@@ -104,31 +104,31 @@ body {
   font-size: 15px; }
 
 .chat-input {
-  padding: 8px 18px 6px 6px;
-  background-color: #d8edff;
-  height: 45px;
+  height: 52px;
   position: fixed;
-  width: 100%;
-  bottom: 0; }
+  width: calc(100% - 200px);
+  bottom: 0;
+  min-width: 600px; }
   .chat-input input {
-    width: calc(100% - 10px);
+    width: calc(100% - 36px);
     height: 34px;
     border-radius: 8px;
     border: solid 2px lightgray;
     font-size: medium;
     padding-left: 8px;
-    transition: border-color 0.25s; }
+    transition: border-color 0.25s;
+    margin-left: 12px; }
   .chat-input input:focus {
     outline: none;
     border-color: #005fb2; }
 
 .chat-log {
-  position: absolute;
-  height: 100%;
   width: 100%;
-  margin-bottom: auto;
+  height: calc(100% - 95px);
   background-color: white;
-  overflow-y: scroll; }
+  overflow-y: scroll;
+  word-wrap: break-word;
+  min-width: 600px; }
 
 .timestamp-first {
   margin-left: 8px;
@@ -176,3 +176,14 @@ body {
   color: lightgrey;
   font-size: 12px;
   margin-top: 2px; }
+  .user-info div {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    float: right;
+    margin-right: 12px;
+    margin-top: 4px; }
+  .user-info .online {
+    background-color: greenyellow; }
+  .user-info .offline {
+    background-color: red; }

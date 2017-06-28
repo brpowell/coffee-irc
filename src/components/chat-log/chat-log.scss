@@ -1,9 +1,8 @@
 .chat-log {
-    position: absolute;
-    height: 100%;
     width: 100%;
-
-    margin-bottom: auto;
+    height: calc(100% - 95px);
     background-color: white;
     overflow-y: scroll;
+    word-wrap: break-word;
+    min-width: 600px;
 }

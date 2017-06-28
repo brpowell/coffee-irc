@@ -46,7 +46,8 @@ var ServerArea = function (_React$Component) {
                 _react2.default.createElement(
                     "div",
                     { className: "user-info" },
-                    "@bryan"
+                    "@bryan ",
+                    _react2.default.createElement("div", { className: "online" })
                 )
             );
         }

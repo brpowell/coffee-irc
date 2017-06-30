@@ -20,6 +20,10 @@ var _chatArea2 = _interopRequireDefault(_chatArea);
 
 var _util = require('./util');
 
+var _coffeeClient = require('../../api/coffee-client.js');
+
+var _coffeeClient2 = _interopRequireDefault(_coffeeClient);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27,8 +31,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var client = require('electron').remote.getGlobal('client');
 
 var App = function (_React$Component) {
     _inherits(App, _React$Component);
@@ -38,7 +40,12 @@ var App = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-        _this.state = { activeChannel: "", joinedChannels: [], messages: {}, alertNew: [] };
+        _this.state = {
+            activeChannel: "",
+            joinedChannels: [],
+            messages: {},
+            alertNew: [],
+            channels: _coffeeClient2.default.getChannels() };
         _this.enterChannel = _this.enterChannel.bind(_this);
         _this.addMessage = _this.addMessage.bind(_this);
         return _this;
@@ -49,18 +56,23 @@ var App = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            client.addListener('message', function (sender, to, message) {
+            _coffeeClient2.default.on('message', function (sender, to, message) {
                 _this2.addMessage(sender, to, message);
             });
 
-            client.addListener('join', function (channel, nick) {
+            _coffeeClient2.default.on('join', function (channel, nick) {
+                if (nick === _coffeeClient2.default.getNick()) _this2.enterChannel(channel);
                 var message = "has joined " + channel;
                 _this2.addMessage(nick, channel, message, 'status');
             });
 
-            client.addListener('part', function (channel, nick) {
+            _coffeeClient2.default.on('part', function (channel, nick) {
                 var message = "has left " + channel;
                 _this2.addMessage(nick, channel, message, 'status');
+            });
+
+            _coffeeClient2.default.on('error', function (error) {
+                console.log(error);
             });
         }
     }, {
@@ -68,15 +80,20 @@ var App = function (_React$Component) {
         value: function enterChannel(channel) {
             var joined = this.state.joinedChannels;
             if (joined.indexOf(channel) == -1) {
-                client.join(channel);
+                _coffeeClient2.default.join(channel);
                 joined.push(channel);
+            }
+
+            var channels = this.state.channels;
+            if (channels.indexOf(channel) == -1) {
+                channels.push(channel);
             }
 
             var index = this.state.alertNew.indexOf(channel);
             var alertNew = this.state.alertNew;
             if (index > -1) alertNew.splice(index, 1);
 
-            this.setState({ activeChannel: channel, joinedChannels: joined, alertNew: alertNew });
+            this.setState({ activeChannel: channel, joinedChannels: joined, alertNew: alertNew, channels: channels });
         }
     }, {
         key: 'addMessage',
@@ -103,13 +120,12 @@ var App = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var channels = ['#cool', '#release', '#random'];
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(_sidebar2.default, {
                     activeChannel: this.state.activeChannel,
-                    channels: channels,
+                    channels: this.state.channels,
                     joinedChannels: this.state.joinedChannels,
                     enterChannel: this.enterChannel,
                     alertNew: this.state.alertNew }),

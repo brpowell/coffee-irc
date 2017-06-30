@@ -29,9 +29,11 @@
 
     .online {
         background-color: greenyellow;
+        transition: background-color 0.5s;
     }
 
     .offline {
         background-color: red;
+        transition: background-color 0.5s;
     }
 }

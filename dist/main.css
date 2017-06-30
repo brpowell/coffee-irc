@@ -39,7 +39,6 @@ html {
   overflow: hidden; }
 
 body {
-  background-color: grey;
   margin: 0;
   font-family: "Salesforce Sans", "Arial"; }
 
@@ -184,6 +183,8 @@ body {
     margin-right: 12px;
     margin-top: 4px; }
   .user-info .online {
-    background-color: greenyellow; }
+    background-color: greenyellow;
+    transition: background-color 0.5s; }
   .user-info .offline {
-    background-color: red; }
+    background-color: red;
+    transition: background-color 0.5s; }

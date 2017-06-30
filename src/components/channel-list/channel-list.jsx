@@ -1,21 +1,22 @@
 import React from 'react';
-
-var client = require('electron').remote.getGlobal('client');
+import Client from '../../api/coffee-client.js';
 
 export default class ChannelList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { channels: this.props.channels };
+        // this.state = { channels: this.props.channels };
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(event) {
-        var channel = event.target.textContent;
-        this.props.enterChannel(channel);
+        if(Client.isConnected()) {
+            var channel = event.target.textContent;
+            this.props.enterChannel(channel);
+        }
     }
 
     render() {
-        var channels = this.state.channels.map((channel, index) => {
+        var channels = this.props.channels.map((channel, index) => {
             var className = "";
             if(this.props.joinedChannels.indexOf(channel) != -1) {
                 className += "joined";

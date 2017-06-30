@@ -20,7 +20,6 @@ export default class Message extends React.Component {
         var className = "message";
         var prevMessage = this.props.prevMessage;
         var stamp = null;
-        console.log(this.props.type);
         if(this.props.type === 'status' || prevMessage == null || this.props.sender !== prevMessage.sender || (this.props.sender === prevMessage.sender && this.props.type === 'message' && prevMessage.type === 'status')) {
             stamp = <span>
             <b>{ this.props.sender }</b><i className="timestamp-first">{ this.props.timestamp }</i><br/>

@@ -2,45 +2,59 @@ import React from 'react';
 import SideBar from '../sidebar/sidebar.js';
 import ChatArea from '../chat-area/chat-area.js';
 import {getTimestamp} from './util';
-
-var client = require('electron').remote.getGlobal('client');
+import Client from '../../api/coffee-client.js';
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { activeChannel: "", joinedChannels: [], messages: {}, alertNew: [] };
+        this.state = {
+            activeChannel: "",
+            joinedChannels: [],
+            messages: {},
+            alertNew: [],
+            channels: Client.getChannels() };
         this.enterChannel = this.enterChannel.bind(this);
         this.addMessage = this.addMessage.bind(this);
     }
 
     componentDidMount() {
-        client.addListener('message', (sender, to, message) => {
+        Client.on('message', (sender, to, message) => {
             this.addMessage(sender, to, message);
         });
 
-        client.addListener('join', (channel, nick) => {
+        Client.on('join', (channel, nick) => {
+            if(nick === Client.getNick()) this.enterChannel(channel);
             let message = "has joined " + channel;
             this.addMessage(nick, channel, message, 'status');
         });
 
-        client.addListener('part', (channel, nick) => {
+        Client.on('part', (channel, nick) => {
             let message = "has left " + channel;
             this.addMessage(nick, channel, message, 'status');
+        })
+
+        Client.on('error', error => {
+            console.log(error);
         })
     }
 
     enterChannel(channel) {
         var joined = this.state.joinedChannels;
         if(joined.indexOf(channel) == -1) {
-            client.join(channel);
+            Client.join(channel);
             joined.push(channel);
+        }
+
+        var channels = this.state.channels;
+        if(channels.indexOf(channel) == -1) {
+            channels.push(channel);
         }
 
         var index = this.state.alertNew.indexOf(channel);
         var alertNew = this.state.alertNew;
         if(index > -1) alertNew.splice(index, 1);
 
-        this.setState({ activeChannel: channel, joinedChannels: joined, alertNew: alertNew });
+        this.setState({ activeChannel: channel, joinedChannels: joined, alertNew: alertNew, channels: channels });
     }
 
     addMessage(sender, to, message, type='message') {
@@ -66,12 +80,11 @@ export default class App extends React.Component {
     }
 
     render() {
-        var channels = ['#cool', '#release', '#random'];
         return(
             <div>
                 <SideBar 
                     activeChannel={ this.state.activeChannel }
-                    channels={ channels }
+                    channels={ this.state.channels }
                     joinedChannels={ this.state.joinedChannels }
                     enterChannel= { this.enterChannel }
                     alertNew={ this.state.alertNew }/>

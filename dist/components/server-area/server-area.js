@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6,9 +6,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _coffeeClient = require('../../api/coffee-client.js');
+
+var _coffeeClient2 = _interopRequireDefault(_coffeeClient);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21,33 +25,47 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ServerArea = function (_React$Component) {
     _inherits(ServerArea, _React$Component);
 
-    function ServerArea() {
+    function ServerArea(props) {
         _classCallCheck(this, ServerArea);
 
-        return _possibleConstructorReturn(this, (ServerArea.__proto__ || Object.getPrototypeOf(ServerArea)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (ServerArea.__proto__ || Object.getPrototypeOf(ServerArea)).call(this, props));
+
+        _this.state = { connected: false };
+        return _this;
     }
 
     _createClass(ServerArea, [{
-        key: "render",
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            _coffeeClient2.default.on('motd', function (motd) {
+                _this2.setState({ connected: true });
+            });
+        }
+    }, {
+        key: 'render',
         value: function render() {
+            var nick = _coffeeClient2.default.getNick();
             return _react2.default.createElement(
-                "div",
-                { className: "server-area" },
+                'div',
+                { className: 'server-area' },
                 _react2.default.createElement(
-                    "div",
-                    { className: "server-info" },
-                    "irc.bryan.net ",
+                    'div',
+                    { className: 'server-info' },
+                    _coffeeClient2.default.current,
+                    ' ',
                     _react2.default.createElement(
-                        "span",
+                        'span',
                         null,
-                        "\u2228"
+                        '\u2228'
                     )
                 ),
                 _react2.default.createElement(
-                    "div",
-                    { className: "user-info" },
-                    "@bryan ",
-                    _react2.default.createElement("div", { className: "online" })
+                    'div',
+                    { className: 'user-info' },
+                    nick ? "@" + nick : "Connecting...",
+                    _react2.default.createElement('div', { className: this.state.connected ? "online" : "offline" })
                 )
             );
         }

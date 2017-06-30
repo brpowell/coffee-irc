@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _coffeeClient = require('../../api/coffee-client.js');
+
+var _coffeeClient2 = _interopRequireDefault(_coffeeClient);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18,17 +22,15 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var client = require('electron').remote.getGlobal('client');
-
 var ChannelList = function (_React$Component) {
     _inherits(ChannelList, _React$Component);
 
     function ChannelList(props) {
         _classCallCheck(this, ChannelList);
 
+        // this.state = { channels: this.props.channels };
         var _this = _possibleConstructorReturn(this, (ChannelList.__proto__ || Object.getPrototypeOf(ChannelList)).call(this, props));
 
-        _this.state = { channels: _this.props.channels };
         _this.handleClick = _this.handleClick.bind(_this);
         return _this;
     }
@@ -36,15 +38,17 @@ var ChannelList = function (_React$Component) {
     _createClass(ChannelList, [{
         key: 'handleClick',
         value: function handleClick(event) {
-            var channel = event.target.textContent;
-            this.props.enterChannel(channel);
+            if (_coffeeClient2.default.isConnected()) {
+                var channel = event.target.textContent;
+                this.props.enterChannel(channel);
+            }
         }
     }, {
         key: 'render',
         value: function render() {
             var _this2 = this;
 
-            var channels = this.state.channels.map(function (channel, index) {
+            var channels = this.props.channels.map(function (channel, index) {
                 var className = "";
                 if (_this2.props.joinedChannels.indexOf(channel) != -1) {
                     className += "joined";

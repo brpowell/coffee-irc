@@ -48,7 +48,6 @@ var Message = function (_React$Component) {
             var className = "message";
             var prevMessage = this.props.prevMessage;
             var stamp = null;
-            console.log(this.props.type);
             if (this.props.type === 'status' || prevMessage == null || this.props.sender !== prevMessage.sender || this.props.sender === prevMessage.sender && this.props.type === 'message' && prevMessage.type === 'status') {
                 stamp = _react2.default.createElement(
                     'span',

@@ -5,8 +5,6 @@ import ChatLog from '../chat-log/chat-log.js';
 import ChatInput from '../chat-input/chat-input.js';
 import Message from '../message/message.js';
 
-var client = require('electron').remote.getGlobal('client');
-
 export default class ChatArea extends React.Component {
     render() {
         var activeChannelMessages;

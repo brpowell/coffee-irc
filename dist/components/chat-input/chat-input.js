@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _coffeeClient = require('../../api/coffee-client.js');
+
+var _coffeeClient2 = _interopRequireDefault(_coffeeClient);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18,7 +22,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var client = require('electron').remote.getGlobal('client');
+// var client = require('electron').remote.getGlobal('client');
+
 
 var ChatInput = function (_React$Component) {
     _inherits(ChatInput, _React$Component);
@@ -43,15 +48,20 @@ var ChatInput = function (_React$Component) {
         key: 'handleSendKey',
         value: function handleSendKey(event) {
             if (event.key === 'Enter' && this.state.input.length > 0) {
-                client.say(this.props.activeChannel, this.state.input);
-                this.props.addMessage(client.nick, this.props.activeChannel, this.state.input);
+                if (this.state.input.startsWith('/')) {
+                    _coffeeClient2.default.command(this.state.input);
+                } else {
+                    _coffeeClient2.default.send(this.props.activeChannel, this.state.input);
+                    this.props.addMessage(_coffeeClient2.default.getNick(), this.props.activeChannel, this.state.input);
+                }
                 this.setState({ input: "" });
             }
         }
     }, {
         key: 'render',
         value: function render() {
-            var placeholder = "Send to " + this.props.activeChannel;
+            var placeholder = this.props.activeChannel ? "Send to " + this.props.activeChannel : "";
+            var disabled = this.props.activeChannel ? false : true;
             return _react2.default.createElement(
                 'div',
                 { className: 'chat-input' },
@@ -59,7 +69,8 @@ var ChatInput = function (_React$Component) {
                     value: this.state.input,
                     onKeyPress: this.handleSendKey,
                     onChange: this.handleInput,
-                    placeholder: placeholder })
+                    placeholder: placeholder,
+                    disabled: disabled })
             );
         }
     }]);

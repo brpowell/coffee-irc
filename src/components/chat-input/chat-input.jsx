@@ -1,6 +1,4 @@
 import React from 'react';
-
-// var client = require('electron').remote.getGlobal('client');
 import Client from '../../api/coffee-client.js';
 
 export default class ChatInput extends React.Component {
@@ -18,7 +16,7 @@ export default class ChatInput extends React.Component {
     handleSendKey(event) {
         if(event.key === 'Enter' && this.state.input.length > 0) {
             if(this.state.input.startsWith('/')) {
-                Client.command(this.state.input);
+                Client.handleCommand(this.state.input, this.props.activeChannel);
             }
             else {
                 Client.send(this.props.activeChannel, this.state.input);

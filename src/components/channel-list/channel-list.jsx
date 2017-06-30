@@ -4,14 +4,14 @@ import Client from '../../api/coffee-client.js';
 export default class ChannelList extends React.Component {
     constructor(props) {
         super(props);
-        // this.state = { channels: this.props.channels };
         this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(event) {
         if(Client.isConnected()) {
             var channel = event.target.textContent;
-            this.props.enterChannel(channel);
+            Client.join(channel);
+            if(this.props.activeChannel !== channel) this.props.enterChannel(channel);
         }
     }
 

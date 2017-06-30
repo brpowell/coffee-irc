@@ -67,6 +67,7 @@ var App = function (_React$Component) {
             });
 
             _coffeeClient2.default.on('part', function (channel, nick) {
+                if (nick === _coffeeClient2.default.getNick()) _this2.leaveChannel(channel);
                 var message = "has left " + channel;
                 _this2.addMessage(nick, channel, message, 'status');
             });
@@ -80,7 +81,6 @@ var App = function (_React$Component) {
         value: function enterChannel(channel) {
             var joined = this.state.joinedChannels;
             if (joined.indexOf(channel) == -1) {
-                _coffeeClient2.default.join(channel);
                 joined.push(channel);
             }
 
@@ -94,6 +94,16 @@ var App = function (_React$Component) {
             if (index > -1) alertNew.splice(index, 1);
 
             this.setState({ activeChannel: channel, joinedChannels: joined, alertNew: alertNew, channels: channels });
+        }
+    }, {
+        key: 'leaveChannel',
+        value: function leaveChannel(channel) {
+            var remove = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+            var joined = this.state.joinedChannels;
+            var i = joined.indexOf(channel);
+            if (i != -1) joined.splice(i, 1);
+            this.setState({ channels: _coffeeClient2.default.getChannels(), joinedChannels: joined });
         }
     }, {
         key: 'addMessage',

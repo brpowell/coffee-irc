@@ -22,9 +22,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// var client = require('electron').remote.getGlobal('client');
-
-
 var ChatInput = function (_React$Component) {
     _inherits(ChatInput, _React$Component);
 
@@ -49,7 +46,7 @@ var ChatInput = function (_React$Component) {
         value: function handleSendKey(event) {
             if (event.key === 'Enter' && this.state.input.length > 0) {
                 if (this.state.input.startsWith('/')) {
-                    _coffeeClient2.default.command(this.state.input);
+                    _coffeeClient2.default.handleCommand(this.state.input, this.props.activeChannel);
                 } else {
                     _coffeeClient2.default.send(this.props.activeChannel, this.state.input);
                     this.props.addMessage(_coffeeClient2.default.getNick(), this.props.activeChannel, this.state.input);

@@ -6,7 +6,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var irc = require('irc');
 var settings = require('electron-settings');
-var handleCommand = require('./commands.js');
 
 var ClientManager = function () {
     function ClientManager() {
@@ -55,12 +54,15 @@ var ClientManager = function () {
             c.say(target, message);
         }
     }, {
-        key: 'command',
-        value: function command(_command) {
-            // var s = command.split(' ');
-            // if(s[0].substring(1) === 'join') this.join('#'+s[1]);
-            handleCommand(_command, this.conns[this.current].conn);
-            return true;
+        key: 'handleCommand',
+        value: function handleCommand(input, activeChannel) {
+            var rx = /\/\w+/;
+            var command = input.match(rx)[0].substring(1);
+            var arg = input.replace(input.match(rx)[0] + ' ', '');
+            var context = { arg: arg, client: this.conns[this.current].conn, activeChannel: activeChannel };
+            if (command in commands) {
+                commands[command](context);
+            }
         }
     }, {
         key: 'getNick',
@@ -78,10 +80,31 @@ var ClientManager = function () {
         value: function join(channel) {
             var c = this.conns[this.current].conn;
             c.join(channel);
+            this.saveChannel(channel);
+        }
+    }, {
+        key: 'saveChannel',
+        value: function saveChannel(channel) {
             var path = 'servers.' + this.current + '.channels';
             var channels = settings.get(path, []);
             if (channels.indexOf(channel) == -1) {
                 channels.push(channel);
+            }
+            settings.set(path, channels);
+        }
+    }, {
+        key: 'removeChannel',
+        value: function removeChannel(channel) {
+            var i = this.conns[this.current].channels.indexOf(channel);
+            if (i != -1) {
+                this.conns[this.current].channels.splice(i, 1);
+            }
+
+            var path = 'servers.' + this.current + '.channels';
+            var channels = settings.get(path, []);
+            var i = channels.indexOf(channel);
+            if (i != -1) {
+                channels.splice(i, 1);
             }
             settings.set(path, channels);
         }
@@ -102,4 +125,17 @@ var ClientManager = function () {
 }();
 
 var Client = new ClientManager();
+
+var commands = {
+    join: function join(context) {
+        Client.join('#' + context.arg);
+    },
+    leave: function leave(context) {
+        if (context.arg === 'remove') {
+            Client.removeChannel(context.activeChannel);
+        }
+        context.client.part(context.activeChannel);
+    }
+};
+
 module.exports = Client;

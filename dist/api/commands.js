@@ -5,7 +5,7 @@ var commands = {
         client.join('#' + arg);
     },
     leave: function leave(arg, client) {
-        client.part(arg);
+        client.part('#' + arg);
     }
 };
 

@@ -1,7 +1,5 @@
 const irc = require('irc')
 const settings = require('electron-settings');
-const handleCommand = require('./commands.js');
-
 
 class ClientManager {
     constructor() {
@@ -42,11 +40,14 @@ class ClientManager {
         c.say(target, message);
     }
 
-    command(command) {
-        // var s = command.split(' ');
-        // if(s[0].substring(1) === 'join') this.join('#'+s[1]);
-        handleCommand(command, this.conns[this.current].conn);
-        return true;
+    handleCommand(input, activeChannel) {
+        var rx = /\/\w+/;
+        var command = input.match(rx)[0].substring(1);
+        var arg = input.replace(input.match(rx)[0]+' ', '');
+        var context = {arg: arg, client: this.conns[this.current].conn, activeChannel: activeChannel};
+        if(command in commands) {
+            commands[command](context);
+        }
     }
 
     getNick() {
@@ -61,10 +62,29 @@ class ClientManager {
     join(channel) {
         var c = this.conns[this.current].conn;
         c.join(channel);
+        this.saveChannel(channel);
+    }
+
+    saveChannel(channel) {
         var path = 'servers.' + this.current + '.channels'
         var channels = settings.get(path, []);
         if(channels.indexOf(channel) == -1) {
             channels.push(channel);
+        }
+        settings.set(path, channels);
+    }
+
+    removeChannel(channel) {
+        var i = this.conns[this.current].channels.indexOf(channel);
+        if(i != -1) {
+            this.conns[this.current].channels.splice(i, 1);
+        }
+
+        var path = 'servers.' + this.current + '.channels'
+        var channels = settings.get(path, []);
+        var i = channels.indexOf(channel);
+        if(i != -1) {
+            channels.splice(i, 1);
         }
         settings.set(path, channels);
     }
@@ -80,4 +100,17 @@ class ClientManager {
 }
 
 var Client = new ClientManager();
+
+const commands = {
+    join: (context) => {
+        Client.join('#'+context.arg);
+    },
+    leave: (context) => {
+        if(context.arg === 'remove') {
+            Client.removeChannel(context.activeChannel);
+        }
+        context.client.part(context.activeChannel);
+    }
+}
+
 module.exports = Client;

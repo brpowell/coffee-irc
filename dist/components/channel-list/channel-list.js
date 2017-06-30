@@ -28,7 +28,6 @@ var ChannelList = function (_React$Component) {
     function ChannelList(props) {
         _classCallCheck(this, ChannelList);
 
-        // this.state = { channels: this.props.channels };
         var _this = _possibleConstructorReturn(this, (ChannelList.__proto__ || Object.getPrototypeOf(ChannelList)).call(this, props));
 
         _this.handleClick = _this.handleClick.bind(_this);
@@ -40,7 +39,8 @@ var ChannelList = function (_React$Component) {
         value: function handleClick(event) {
             if (_coffeeClient2.default.isConnected()) {
                 var channel = event.target.textContent;
-                this.props.enterChannel(channel);
+                _coffeeClient2.default.join(channel);
+                if (this.props.activeChannel !== channel) this.props.enterChannel(channel);
             }
         }
     }, {

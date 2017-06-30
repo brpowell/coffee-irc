@@ -29,6 +29,7 @@ export default class App extends React.Component {
         });
 
         Client.on('part', (channel, nick) => {
+            if(nick === Client.getNick()) this.leaveChannel(channel);
             let message = "has left " + channel;
             this.addMessage(nick, channel, message, 'status');
         })
@@ -41,7 +42,6 @@ export default class App extends React.Component {
     enterChannel(channel) {
         var joined = this.state.joinedChannels;
         if(joined.indexOf(channel) == -1) {
-            Client.join(channel);
             joined.push(channel);
         }
 
@@ -55,6 +55,13 @@ export default class App extends React.Component {
         if(index > -1) alertNew.splice(index, 1);
 
         this.setState({ activeChannel: channel, joinedChannels: joined, alertNew: alertNew, channels: channels });
+    }
+
+    leaveChannel(channel, remove=false) {
+        var joined = this.state.joinedChannels;
+        var i = joined.indexOf(channel);
+        if(i != -1) joined.splice(i, 1);
+        this.setState({ channels: Client.getChannels(), joinedChannels: joined });
     }
 
     addMessage(sender, to, message, type='message') {

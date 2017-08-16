@@ -55,7 +55,7 @@ var ChatArea = function ChatArea(props) {
   return _react2.default.createElement(
     'div',
     { className: 'chat-area' },
-    _react2.default.createElement(_chatHeader2.default, { activeChannel: props.activeChannel }),
+    _react2.default.createElement(_chatHeader2.default, { activeChannel: props.activeChannel, users: props.users }),
     _react2.default.createElement(_chatLog2.default, { messages: messages }),
     _react2.default.createElement(_chatInput2.default, { activeChannel: props.activeChannel, addMessage: props.addMessage })
   );

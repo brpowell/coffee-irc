@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Client from '../../api/client-manager';
 
 export default class Message extends React.Component {
   constructor(props) {
@@ -23,7 +24,8 @@ export default class Message extends React.Component {
     let stamp = null;
     if (this.props.type === 'status' || prevMessage == null || this.props.sender !== prevMessage.sender || (this.props.sender === prevMessage.sender && this.props.type === 'message' && prevMessage.type === 'status')) {
       stamp = (<span>
-        <b>{ this.props.sender }</b><i className="timestamp-first">{ this.props.timestamp }</i><br />
+        <b className={this.props.sender === Client.getNick() ? 'sender-name' : ''}>{ this.props.sender }</b>
+        <i className="timestamp-first">{ this.props.timestamp }</i><br />
       </span>);
       className += ' message-stamp';
     }

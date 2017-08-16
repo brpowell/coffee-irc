@@ -81,6 +81,8 @@ class ClientManager {
     const context = { arg, target, client: this, conn: this.conns[this.current].conn };
     if (command in commands) {
       commands[command](context);
+    } else {
+      context.conn.send(input);
     }
   }
 

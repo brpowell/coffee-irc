@@ -12,6 +12,7 @@ export default class App extends React.Component {
       joinedChannels: [],
       messages: {},
       alertNew: [],
+      users: {},
       channels: Client.getChannels() };
     this.enterChannel = this.enterChannel.bind(this);
     this.addMessage = this.addMessage.bind(this);
@@ -36,6 +37,12 @@ export default class App extends React.Component {
 
     Client.on('error', (error) => {
       console.log(error);
+    });
+
+    Client.on('names', (channel, nicks) => {
+      const users = this.state.users;
+      users[channel] = nicks;
+      this.setState({ users });
     });
   }
 
@@ -110,6 +117,7 @@ export default class App extends React.Component {
           addMessage={this.addMessage}
           activeChannel={this.state.activeChannel}
           messages={this.state.messages}
+          users={this.state.users[this.state.activeChannel]}
         />
       </div>
     );

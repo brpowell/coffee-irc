@@ -29,7 +29,7 @@ const ChatArea = (props) => {
 
   return (
     <div className="chat-area">
-      <ChatHeader activeChannel={props.activeChannel} />
+      <ChatHeader activeChannel={props.activeChannel} users={props.users} />
       <ChatLog messages={messages} />
       <ChatInput activeChannel={props.activeChannel} addMessage={props.addMessage} />
     </div>

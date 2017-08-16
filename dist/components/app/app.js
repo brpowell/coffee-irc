@@ -45,6 +45,7 @@ var App = function (_React$Component) {
       joinedChannels: [],
       messages: {},
       alertNew: [],
+      users: {},
       channels: _clientManager2.default.getChannels() };
     _this.enterChannel = _this.enterChannel.bind(_this);
     _this.addMessage = _this.addMessage.bind(_this);
@@ -74,6 +75,12 @@ var App = function (_React$Component) {
 
       _clientManager2.default.on('error', function (error) {
         console.log(error);
+      });
+
+      _clientManager2.default.on('names', function (channel, nicks) {
+        var users = _this2.state.users;
+        users[channel] = nicks;
+        _this2.setState({ users: users });
       });
     }
   }, {
@@ -154,7 +161,8 @@ var App = function (_React$Component) {
         _react2.default.createElement(_chatArea2.default, {
           addMessage: this.addMessage,
           activeChannel: this.state.activeChannel,
-          messages: this.state.messages
+          messages: this.state.messages,
+          users: this.state.users[this.state.activeChannel]
         })
       );
     }

@@ -121,6 +121,8 @@ var ClientManager = function () {
       var context = { arg: arg, target: target, client: this, conn: this.conns[this.current].conn };
       if (command in _commands2.default) {
         _commands2.default[command](context);
+      } else {
+        context.conn.send(input);
       }
     }
 

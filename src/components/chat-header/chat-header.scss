@@ -13,3 +13,16 @@
         b { font-size: 20px; }
     }
 }
+
+.user-count {
+    float: right;
+    padding-right: 10px;
+    padding-top: 5px !important;
+    
+    img {
+        position: relative;
+        top: 1px;
+        width: 15px;
+        height: 15px;
+    }
+}

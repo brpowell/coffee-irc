@@ -91,6 +91,16 @@ body {
     .chat-header div b {
       font-size: 20px; }
 
+.user-count {
+  float: right;
+  padding-right: 10px;
+  padding-top: 5px !important; }
+  .user-count img {
+    position: relative;
+    top: 1px;
+    width: 15px;
+    height: 15px; }
+
 .chat-area {
   position: absolute;
   left: 200px;
@@ -145,10 +155,15 @@ body {
 .message {
   padding-left: 8px;
   padding-right: 8px; }
+  .message b {
+    color: red; }
 
 .status {
   font-style: italic;
   opacity: 0.4; }
+
+.sender-name {
+  color: blue !important; }
 
 .sidebar {
   width: 200px;

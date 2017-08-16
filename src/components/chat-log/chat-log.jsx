@@ -1,17 +1,20 @@
 import React from 'react';
-import reactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 export default class ChatLog extends React.Component {
-    componentDidUpdate() {
-        const node = reactDOM.findDOMNode(this.messagesContainer);
-        node.scrollTop = node.scrollHeight;
-    }
+  componentDidUpdate() {
+    this.node.scrollTop = this.node.scrollHeight;
+  }
 
-    render() {
-        return(
-            <div className="chat-log" ref={ (el) => { this.messagesContainer = el; } }>
-                { this.props.messages }
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div className="chat-log" ref={(node) => { this.node = node; }}>
+        { this.props.messages }
+      </div>
+    );
+  }
 }
+
+ChatLog.propTypes = {
+  messages: PropTypes.element.isRequired,
+};

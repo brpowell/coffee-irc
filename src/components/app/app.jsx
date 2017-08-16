@@ -1,105 +1,116 @@
 import React from 'react';
 import SideBar from '../sidebar/sidebar.js';
 import ChatArea from '../chat-area/chat-area.js';
-import {getTimestamp} from './util';
+import { getTimestamp } from './util';
 import Client from '../../api/coffee-client.js';
 
 export default class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            activeChannel: "",
-            joinedChannels: [],
-            messages: {},
-            alertNew: [],
-            channels: Client.getChannels() };
-        this.enterChannel = this.enterChannel.bind(this);
-        this.addMessage = this.addMessage.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeChannel: '',
+      joinedChannels: [],
+      messages: {},
+      alertNew: [],
+      channels: Client.getChannels() };
+    this.enterChannel = this.enterChannel.bind(this);
+    this.addMessage = this.addMessage.bind(this);
+  }
+
+  componentDidMount() {
+    Client.on('message', (sender, to, message) => {
+      this.addMessage(sender, to, message);
+    });
+
+    Client.on('join', (channel, nick) => {
+      const message = `has joined ${channel}`;
+      this.addMessage(nick, channel, message, 'status');
+      if (nick === Client.getNick()) this.enterChannel(channel);
+    });
+
+    Client.on('part', (channel, nick) => {
+      const message = `has left ${channel}`;
+      this.addMessage(nick, channel, message, 'status');
+      if (nick === Client.getNick()) this.leaveChannel(channel);
+    });
+
+    Client.on('error', (error) => {
+      console.log(error);
+    });
+  }
+
+  enterChannel(channel) {
+    const joined = this.state.joinedChannels;
+    if (joined.indexOf(channel) === -1) {
+      joined.push(channel);
     }
 
-    componentDidMount() {
-        Client.on('message', (sender, to, message) => {
-            this.addMessage(sender, to, message);
-        });
-
-        Client.on('join', (channel, nick) => {
-            if(nick === Client.getNick()) this.enterChannel(channel);
-            let message = "has joined " + channel;
-            this.addMessage(nick, channel, message, 'status');
-        });
-
-        Client.on('part', (channel, nick) => {
-            if(nick === Client.getNick()) this.leaveChannel(channel);
-            let message = "has left " + channel;
-            this.addMessage(nick, channel, message, 'status');
-        })
-
-        Client.on('error', error => {
-            console.log(error);
-        })
+    const channels = this.state.channels;
+    if (channels.indexOf(channel) === -1) {
+      channels.push(channel);
     }
 
-    enterChannel(channel) {
-        var joined = this.state.joinedChannels;
-        if(joined.indexOf(channel) == -1) {
-            joined.push(channel);
-        }
+    const index = this.state.alertNew.indexOf(channel);
+    const alertNew = this.state.alertNew;
+    if (index > -1) alertNew.splice(index, 1);
 
-        var channels = this.state.channels;
-        if(channels.indexOf(channel) == -1) {
-            channels.push(channel);
-        }
+    this.setState({ activeChannel: channel, joinedChannels: joined, alertNew, channels });
+  }
 
-        var index = this.state.alertNew.indexOf(channel);
-        var alertNew = this.state.alertNew;
-        if(index > -1) alertNew.splice(index, 1);
+  leaveChannel(channel) {
+    const joined = this.state.joinedChannels;
+    const i = joined.indexOf(channel);
+    let newActive = '';
+    if (i !== -1) joined.splice(i, 1);
+    if (this.state.joinedChannels.length > 0) {
+      const newIndex = i == 0 ? this.state.joinedChannels.length - 1 : i - 1;
+      newActive = this.state.joinedChannels[newIndex];
+    }
+    this.setState({
+      channels: Client.getChannels(),
+      joinedChannels: joined,
+      activeChannel: newActive });
+  }
 
-        this.setState({ activeChannel: channel, joinedChannels: joined, alertNew: alertNew, channels: channels });
+  addMessage(sender, to, message, type = 'message') {
+    const messages = this.state.messages;
+    const newMessage = {
+      sender,
+      message,
+      timestamp: getTimestamp(),
+      type,
+    };
+
+    if (to in messages) {
+      messages[to].push(newMessage);
+    } else {
+      messages[to] = [newMessage];
     }
 
-    leaveChannel(channel, remove=false) {
-        var joined = this.state.joinedChannels;
-        var i = joined.indexOf(channel);
-        if(i != -1) joined.splice(i, 1);
-        this.setState({ channels: Client.getChannels(), joinedChannels: joined });
+    const alertNew = this.state.alertNew;
+    if (alertNew.indexOf(to) === -1 && this.state.activeChannel !== to) {
+      alertNew.push(to);
     }
 
-    addMessage(sender, to, message, type='message') {
-        var messages = this.state.messages;
-        var newMessage = { 
-            sender: sender, 
-            message: message,
-            timestamp: getTimestamp(),
-            type: type
-        };
+    this.setState({ messages, alertNew });
+  }
 
-        if(to in messages)
-            messages[to].push(newMessage);
-        else
-            messages[to] = [newMessage];
-        
-        var alertNew = this.state.alertNew;
-        if(alertNew.indexOf(to) == -1 && this.state.activeChannel != to) {
-            alertNew.push(to);
-        }
-        
-        this.setState({ messages: messages, alertNew: alertNew });
-    }
-
-    render() {
-        return(
-            <div>
-                <SideBar 
-                    activeChannel={ this.state.activeChannel }
-                    channels={ this.state.channels }
-                    joinedChannels={ this.state.joinedChannels }
-                    enterChannel= { this.enterChannel }
-                    alertNew={ this.state.alertNew }/>
-                <ChatArea 
-                    addMessage={ this.addMessage }
-                    activeChannel={ this.state.activeChannel }
-                    messages={ this.state.messages }/>
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <SideBar
+          activeChannel={this.state.activeChannel}
+          channels={this.state.channels}
+          joinedChannels={this.state.joinedChannels}
+          enterChannel={this.enterChannel}
+          alertNew={this.state.alertNew}
+        />
+        <ChatArea
+          addMessage={this.addMessage}
+          activeChannel={this.state.activeChannel}
+          messages={this.state.messages}
+        />
+      </div>
+    );
+  }
 }

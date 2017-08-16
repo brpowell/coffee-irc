@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -23,55 +23,55 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var ServerArea = function (_React$Component) {
-    _inherits(ServerArea, _React$Component);
+  _inherits(ServerArea, _React$Component);
 
-    function ServerArea(props) {
-        _classCallCheck(this, ServerArea);
+  function ServerArea(props) {
+    _classCallCheck(this, ServerArea);
 
-        var _this = _possibleConstructorReturn(this, (ServerArea.__proto__ || Object.getPrototypeOf(ServerArea)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (ServerArea.__proto__ || Object.getPrototypeOf(ServerArea)).call(this, props));
 
-        _this.state = { connected: false };
-        return _this;
+    _this.state = { connected: false };
+    return _this;
+  }
+
+  _createClass(ServerArea, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      _coffeeClient2.default.on('motd', function () {
+        _this2.setState({ connected: true });
+      });
     }
+  }, {
+    key: 'render',
+    value: function render() {
+      var nick = _coffeeClient2.default.getNick();
+      return _react2.default.createElement(
+        'div',
+        { className: 'server-area' },
+        _react2.default.createElement(
+          'div',
+          { className: 'server-info' },
+          _coffeeClient2.default.current,
+          ' ',
+          _react2.default.createElement(
+            'span',
+            null,
+            '\u2228'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'user-info' },
+          nick ? '@' + nick : 'Connecting...',
+          _react2.default.createElement('div', { className: this.state.connected ? 'online' : 'offline' })
+        )
+      );
+    }
+  }]);
 
-    _createClass(ServerArea, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            var _this2 = this;
-
-            _coffeeClient2.default.on('motd', function (motd) {
-                _this2.setState({ connected: true });
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var nick = _coffeeClient2.default.getNick();
-            return _react2.default.createElement(
-                'div',
-                { className: 'server-area' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'server-info' },
-                    _coffeeClient2.default.current,
-                    ' ',
-                    _react2.default.createElement(
-                        'span',
-                        null,
-                        '\u2228'
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'user-info' },
-                    nick ? "@" + nick : "Connecting...",
-                    _react2.default.createElement('div', { className: this.state.connected ? "online" : "offline" })
-                )
-            );
-        }
-    }]);
-
-    return ServerArea;
+  return ServerArea;
 }(_react2.default.Component);
 
 exports.default = ServerArea;

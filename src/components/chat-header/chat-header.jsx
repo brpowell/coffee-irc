@@ -1,13 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class ChatHeader extends React.Component {
-    render() {
-        return(
-            <div className="chat-header">
-                <div>
-                    <b>{ this.props.activeChannel }</b>
-                </div>
-            </div>
-        );
-    }
-}
+const ChatHeader = props => (
+  <div className="chat-header">
+    <div>
+      <b>{ props.activeChannel }</b>
+    </div>
+  </div>
+);
+
+ChatHeader.propTypes = {
+  activeChannel: PropTypes.string.isRequired,
+};
+
+export default ChatHeader;

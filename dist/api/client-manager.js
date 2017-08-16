@@ -90,13 +90,13 @@ var ClientManager = function () {
     value: function send(message, target) {
       var cb = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
 
-      var wasMessage = true;
+      var wasMessage = false;
       if (message.startsWith('/')) {
         this.handleCommand(message, target);
-        wasMessage = false;
       } else if (target.length > 0) {
         var c = this.conns[this.current].conn;
         c.say(target, message);
+        wasMessage = true;
       }
       if (cb !== undefined) {
         cb();

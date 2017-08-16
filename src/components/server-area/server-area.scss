@@ -8,6 +8,11 @@
     cursor: pointer;
 }
 
+.server-area:focus {
+    background-color: $color-sidebar-hover;
+    outline: none;
+}
+
 .server-info {
     color: white;
     font-size: 16px;

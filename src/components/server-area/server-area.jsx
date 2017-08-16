@@ -1,10 +1,13 @@
 import React from 'react';
-import Client from '../../api/client-manager.js';
+import Popover from 'react-popover';
+import PopoverMenu from '../popover-menu/popover-menu.js';
+import Client from '../../api/client-manager';
 
 export default class ServerArea extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { connected: false };
+    this.state = { connected: false, menuOpen: false };
+    this.toggleMenu = this.toggleMenu.bind(this);
   }
 
   componentDidMount() {
@@ -14,14 +17,26 @@ export default class ServerArea extends React.Component {
     });
   }
 
+  toggleMenu() {
+    this.setState({ menuOpen: !this.state.menuOpen });
+  }
+
   render() {
     const nick = Client.getNick();
+    const menu = <PopoverMenu />;
     return (
-      <div className="server-area">
-        <div className="server-info">{ Client.current } <span>∨</span></div>
-        <div className="user-info">{ nick ? `@${nick}` : 'Connecting...'}
-          <div className={this.state.connected ? 'online' : 'offline'} /></div>
-      </div>
+      <Popover
+        isOpen={this.state.menuOpen}
+        place="below"
+        className="server-menu"
+        body={menu}
+        onOuterAction={this.toggleMenu.bind(null, false)}
+      >
+        <div role="button" className="server-area" onClick={this.toggleMenu} tabIndex={0}>
+          <div className="server-info">{ Client.current }</div>
+          <div className="user-info">{ nick ? `@${nick}` : 'Connecting...'}
+            <div className={this.state.connected ? 'online' : 'offline'} /></div></div>
+      </Popover>
     );
   }
 }

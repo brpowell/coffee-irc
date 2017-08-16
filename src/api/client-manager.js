@@ -53,13 +53,13 @@ class ClientManager {
    * @memberof ClientManager
    */
   send(message, target, cb = undefined) {
-    let wasMessage = true;
+    let wasMessage = false;
     if (message.startsWith('/')) {
       this.handleCommand(message, target);
-      wasMessage = false;
     } else if (target.length > 0) {
       const c = this.conns[this.current].conn;
       c.say(target, message);
+      wasMessage = true;
     }
     if (cb !== undefined) {
       cb();

@@ -10,7 +10,15 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _clientManager = require('../../api/client-manager.js');
+var _reactPopover = require('react-popover');
+
+var _reactPopover2 = _interopRequireDefault(_reactPopover);
+
+var _popoverMenu = require('../popover-menu/popover-menu.js');
+
+var _popoverMenu2 = _interopRequireDefault(_popoverMenu);
+
+var _clientManager = require('../../api/client-manager');
 
 var _clientManager2 = _interopRequireDefault(_clientManager);
 
@@ -30,7 +38,8 @@ var ServerArea = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (ServerArea.__proto__ || Object.getPrototypeOf(ServerArea)).call(this, props));
 
-    _this.state = { connected: false };
+    _this.state = { connected: false, menuOpen: false };
+    _this.toggleMenu = _this.toggleMenu.bind(_this);
     return _this;
   }
 
@@ -45,28 +54,38 @@ var ServerArea = function (_React$Component) {
       });
     }
   }, {
+    key: 'toggleMenu',
+    value: function toggleMenu() {
+      this.setState({ menuOpen: !this.state.menuOpen });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var nick = _clientManager2.default.getNick();
+      var menu = _react2.default.createElement(_popoverMenu2.default, null);
       return _react2.default.createElement(
-        'div',
-        { className: 'server-area' },
+        _reactPopover2.default,
+        {
+          isOpen: this.state.menuOpen,
+          place: 'below',
+          className: 'server-menu',
+          body: menu,
+          onOuterAction: this.toggleMenu.bind(null, false)
+        },
         _react2.default.createElement(
           'div',
-          { className: 'server-info' },
-          _clientManager2.default.current,
-          ' ',
+          { role: 'button', className: 'server-area', onClick: this.toggleMenu, tabIndex: 0 },
           _react2.default.createElement(
-            'span',
-            null,
-            '\u2228'
+            'div',
+            { className: 'server-info' },
+            _clientManager2.default.current
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'user-info' },
+            nick ? '@' + nick : 'Connecting...',
+            _react2.default.createElement('div', { className: this.state.connected ? 'online' : 'offline' })
           )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'user-info' },
-          nick ? '@' + nick : 'Connecting...',
-          _react2.default.createElement('div', { className: this.state.connected ? 'online' : 'offline' })
         )
       );
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Client from '../../api/coffee-client.js';
+import Client from '../../api/client-manager.js';
 
 export default class ChannelList extends React.Component {
   constructor(props) {

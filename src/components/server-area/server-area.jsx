@@ -1,5 +1,5 @@
 import React from 'react';
-import Client from '../../api/coffee-client.js';
+import Client from '../../api/client-manager.js';
 
 export default class ServerArea extends React.Component {
   constructor(props) {
@@ -8,6 +8,7 @@ export default class ServerArea extends React.Component {
   }
 
   componentDidMount() {
+    // TODO: display motd info and server stuff on connect
     Client.on('motd', () => {
       this.setState({ connected: true });
     });

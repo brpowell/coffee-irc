@@ -20,9 +20,9 @@ var _chatArea2 = _interopRequireDefault(_chatArea);
 
 var _util = require('./util');
 
-var _coffeeClient = require('../../api/coffee-client.js');
+var _clientManager = require('../../api/client-manager.js');
 
-var _coffeeClient2 = _interopRequireDefault(_coffeeClient);
+var _clientManager2 = _interopRequireDefault(_clientManager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45,7 +45,7 @@ var App = function (_React$Component) {
       joinedChannels: [],
       messages: {},
       alertNew: [],
-      channels: _coffeeClient2.default.getChannels() };
+      channels: _clientManager2.default.getChannels() };
     _this.enterChannel = _this.enterChannel.bind(_this);
     _this.addMessage = _this.addMessage.bind(_this);
     return _this;
@@ -56,23 +56,23 @@ var App = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      _coffeeClient2.default.on('message', function (sender, to, message) {
+      _clientManager2.default.on('message', function (sender, to, message) {
         _this2.addMessage(sender, to, message);
       });
 
-      _coffeeClient2.default.on('join', function (channel, nick) {
+      _clientManager2.default.on('join', function (channel, nick) {
         var message = 'has joined ' + channel;
         _this2.addMessage(nick, channel, message, 'status');
-        if (nick === _coffeeClient2.default.getNick()) _this2.enterChannel(channel);
+        if (nick === _clientManager2.default.getNick()) _this2.enterChannel(channel);
       });
 
-      _coffeeClient2.default.on('part', function (channel, nick) {
+      _clientManager2.default.on('part', function (channel, nick) {
         var message = 'has left ' + channel;
         _this2.addMessage(nick, channel, message, 'status');
-        if (nick === _coffeeClient2.default.getNick()) _this2.leaveChannel(channel);
+        if (nick === _clientManager2.default.getNick()) _this2.leaveChannel(channel);
       });
 
-      _coffeeClient2.default.on('error', function (error) {
+      _clientManager2.default.on('error', function (error) {
         console.log(error);
       });
     }
@@ -107,7 +107,7 @@ var App = function (_React$Component) {
         newActive = this.state.joinedChannels[newIndex];
       }
       this.setState({
-        channels: _coffeeClient2.default.getChannels(),
+        channels: _clientManager2.default.getChannels(),
         joinedChannels: joined,
         activeChannel: newActive });
     }
@@ -118,6 +118,7 @@ var App = function (_React$Component) {
 
       var messages = this.state.messages;
       var newMessage = {
+        id: to in messages ? messages[to].length : 0,
         sender: sender,
         message: message,
         timestamp: (0, _util.getTimestamp)(),

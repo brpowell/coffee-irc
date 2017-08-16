@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Client from '../../api/coffee-client.js';
+import Client from '../../api/client-manager';
 
 export default class ChatInput extends React.Component {
   constructor(props) {
@@ -16,10 +16,7 @@ export default class ChatInput extends React.Component {
 
   handleSendKey(event) {
     if (event.key === 'Enter' && this.state.input.length > 0) {
-      if (this.state.input.startsWith('/')) {
-        Client.handleCommand(this.state.input, this.props.activeChannel);
-      } else if (this.props.activeChannel.length > 0) {
-        Client.send(this.props.activeChannel, this.state.input);
+      if (Client.send(this.state.input, this.props.activeChannel)) {
         this.props.addMessage(Client.getNick(), this.props.activeChannel, this.state.input);
       }
       this.setState({ input: '' });

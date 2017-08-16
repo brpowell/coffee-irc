@@ -99,8 +99,12 @@ var Message = function (_React$Component) {
 exports.default = Message;
 
 
+Message.defaultProps = {
+  prevMessage: null
+};
+
 Message.propTypes = {
-  prevMessage: _propTypes2.default.objectOf(_propTypes2.default.string).isRequired,
+  prevMessage: _propTypes2.default.objectOf(_propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number])),
   sender: _propTypes2.default.string.isRequired,
   timestamp: _propTypes2.default.string.isRequired,
   message: _propTypes2.default.string.isRequired

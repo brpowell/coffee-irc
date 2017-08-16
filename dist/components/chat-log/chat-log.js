@@ -58,5 +58,5 @@ exports.default = ChatLog;
 
 
 ChatLog.propTypes = {
-  messages: _propTypes2.default.element.isRequired
+  messages: _propTypes2.default.arrayOf(_propTypes2.default.element).isRequired
 };

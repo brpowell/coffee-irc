@@ -16,5 +16,5 @@ export default class ChatLog extends React.Component {
 }
 
 ChatLog.propTypes = {
-  messages: PropTypes.element.isRequired,
+  messages: PropTypes.arrayOf(PropTypes.element).isRequired,
 };

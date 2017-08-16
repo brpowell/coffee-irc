@@ -43,8 +43,15 @@ export default class Message extends React.Component {
   }
 }
 
+Message.defaultProps = {
+  prevMessage: null,
+};
+
 Message.propTypes = {
-  prevMessage: PropTypes.objectOf(PropTypes.string).isRequired,
+  prevMessage: PropTypes.objectOf(PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ])),
   sender: PropTypes.string.isRequired,
   timestamp: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,

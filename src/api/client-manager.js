@@ -1,5 +1,6 @@
-const irc = require('irc');
-const settings = require('electron-settings');
+import irc from 'irc';
+import settings from 'electron-settings';
+import commands from './commands';
 
 class ClientManager {
   /**
@@ -43,17 +44,27 @@ class ClientManager {
 
   /**
    * Sends a message to the specified target. A target could be a channel
-   * or another user.
-   * @param {string} target 
+   * or another user. The message can also be interpreted as a command. Returns
+   * true if the input was sent as a message
    * @param {string} message 
+   * @param {string} target 
+   * @param {function} callback
+   * @return {boolean} true if text message, false if command
    * @memberof ClientManager
    */
-  send(target, message) {
+  send(message, target, cb = undefined) {
+    let wasMessage = true;
     if (message.startsWith('/')) {
-      this.handleCommand();
+      this.handleCommand(message, target);
+      wasMessage = false;
+    } else if (target.length > 0) {
+      const c = this.conns[this.current].conn;
+      c.say(target, message);
     }
-    const c = this.conns[this.current].conn;
-    c.say(target, message);
+    if (cb !== undefined) {
+      cb();
+    }
+    return wasMessage;
   }
 
   /**
@@ -67,7 +78,7 @@ class ClientManager {
     const rx = /\/\w+/;
     const command = input.match(rx)[0].substring(1);
     const arg = input.replace(`${input.match(rx)[0]} `, '');
-    const context = { arg, client: this.conns[this.current].conn, activeChannel: target };
+    const context = { arg, target, client: this, conn: this.conns[this.current].conn };
     if (command in commands) {
       commands[command](context);
     }
@@ -82,11 +93,23 @@ class ClientManager {
     return this.conns[this.current].conn.nick;
   }
 
+  /**
+   * Add an event listener to the active server 
+   * @param {any} event 
+   * @param {any} cb 
+   * @memberof ClientManager
+   */
   on(event, cb) {
     const c = this.conns[this.current].conn;
     c.addListener(event, cb);
   }
 
+  /**
+   * Join a channel in the active server. Also calls addChanneL()
+   * to add channel to the channel list and save in settings
+   * @param {any} channel 
+   * @memberof ClientManager
+   */
   join(channel) {
     const c = this.conns[this.current].conn;
     c.join(channel);
@@ -136,6 +159,11 @@ class ClientManager {
     return this.conns[this.current].channels;
   }
 
+  /**
+   * Check if the active server is connected
+   * @returns {bool}
+   * @memberof ClientManager
+   */
   isConnected() {
     const c = this.conns[this.current].conn;
     return (c.conn != null && c.motd !== undefined);
@@ -143,17 +171,5 @@ class ClientManager {
 }
 
 const Client = new ClientManager();
-
-const commands = {
-  join: (context) => {
-    Client.join(`#${context.arg}`);
-  },
-  leave: (context) => {
-    if (context.arg === 'remove') {
-      Client.removeChannel(context.activeChannel);
-    }
-    context.client.part(context.activeChannel);
-  },
-};
 
 module.exports = Client;

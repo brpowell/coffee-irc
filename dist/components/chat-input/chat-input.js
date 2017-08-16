@@ -14,9 +14,9 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _coffeeClient = require('../../api/coffee-client.js');
+var _clientManager = require('../../api/client-manager');
 
-var _coffeeClient2 = _interopRequireDefault(_coffeeClient);
+var _clientManager2 = _interopRequireDefault(_clientManager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -49,11 +49,8 @@ var ChatInput = function (_React$Component) {
     key: 'handleSendKey',
     value: function handleSendKey(event) {
       if (event.key === 'Enter' && this.state.input.length > 0) {
-        if (this.state.input.startsWith('/')) {
-          _coffeeClient2.default.handleCommand(this.state.input, this.props.activeChannel);
-        } else if (this.props.activeChannel.length > 0) {
-          _coffeeClient2.default.send(this.props.activeChannel, this.state.input);
-          this.props.addMessage(_coffeeClient2.default.getNick(), this.props.activeChannel, this.state.input);
+        if (_clientManager2.default.send(this.state.input, this.props.activeChannel)) {
+          this.props.addMessage(_clientManager2.default.getNick(), this.props.activeChannel, this.state.input);
         }
         this.setState({ input: '' });
       }

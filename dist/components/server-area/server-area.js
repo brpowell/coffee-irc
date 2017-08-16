@@ -10,9 +10,9 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _coffeeClient = require('../../api/coffee-client.js');
+var _clientManager = require('../../api/client-manager.js');
 
-var _coffeeClient2 = _interopRequireDefault(_coffeeClient);
+var _clientManager2 = _interopRequireDefault(_clientManager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39,21 +39,22 @@ var ServerArea = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      _coffeeClient2.default.on('motd', function () {
+      // TODO: display motd info and server stuff on connect
+      _clientManager2.default.on('motd', function () {
         _this2.setState({ connected: true });
       });
     }
   }, {
     key: 'render',
     value: function render() {
-      var nick = _coffeeClient2.default.getNick();
+      var nick = _clientManager2.default.getNick();
       return _react2.default.createElement(
         'div',
         { className: 'server-area' },
         _react2.default.createElement(
           'div',
           { className: 'server-info' },
-          _coffeeClient2.default.current,
+          _clientManager2.default.current,
           ' ',
           _react2.default.createElement(
             'span',

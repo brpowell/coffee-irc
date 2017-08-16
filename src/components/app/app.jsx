@@ -2,7 +2,7 @@ import React from 'react';
 import SideBar from '../sidebar/sidebar.js';
 import ChatArea from '../chat-area/chat-area.js';
 import { getTimestamp } from './util';
-import Client from '../../api/coffee-client.js';
+import Client from '../../api/client-manager.js';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -75,6 +75,7 @@ export default class App extends React.Component {
   addMessage(sender, to, message, type = 'message') {
     const messages = this.state.messages;
     const newMessage = {
+      id: to in messages ? messages[to].length : 0,
       sender,
       message,
       timestamp: getTimestamp(),

@@ -14,9 +14,9 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _coffeeClient = require('../../api/coffee-client.js');
+var _clientManager = require('../../api/client-manager.js');
 
-var _coffeeClient2 = _interopRequireDefault(_coffeeClient);
+var _clientManager2 = _interopRequireDefault(_clientManager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41,9 +41,9 @@ var ChannelList = function (_React$Component) {
   _createClass(ChannelList, [{
     key: 'handleClick',
     value: function handleClick(event) {
-      if (_coffeeClient2.default.isConnected()) {
+      if (_clientManager2.default.isConnected()) {
         var channel = event.target.textContent;
-        _coffeeClient2.default.join(channel);
+        _clientManager2.default.join(channel);
         if (this.props.activeChannel !== channel) this.props.enterChannel(channel);
       }
     }

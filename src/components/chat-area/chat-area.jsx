@@ -18,6 +18,7 @@ const ChatArea = (props) => {
       prevMsg = activeChannelMessages[index - 1];
     }
     return (<Message
+      key={message.id}
       sender={message.sender}
       message={message.message}
       timestamp={message.timestamp}
@@ -38,7 +39,15 @@ const ChatArea = (props) => {
 ChatArea.propTypes = {
   activeChannel: PropTypes.string.isRequired,
   addMessage: PropTypes.func.isRequired,
-  messages: PropTypes.string.isRequired,
+  messages: PropTypes.shape({
+    channel: PropTypes.string,
+    messages: PropTypes.arrayOf(PropTypes.shape({
+      sender: PropTypes.string,
+      message: PropTypes.string,
+      timestamp: PropTypes.string,
+      type: PropTypes.string,
+    })),
+  }).isRequired,
 };
 
 export default ChatArea;

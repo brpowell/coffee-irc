@@ -43,6 +43,7 @@ var ChatArea = function ChatArea(props) {
       prevMsg = activeChannelMessages[index - 1];
     }
     return _react2.default.createElement(_message2.default, {
+      key: message.id,
       sender: message.sender,
       message: message.message,
       timestamp: message.timestamp,
@@ -63,7 +64,15 @@ var ChatArea = function ChatArea(props) {
 ChatArea.propTypes = {
   activeChannel: _propTypes2.default.string.isRequired,
   addMessage: _propTypes2.default.func.isRequired,
-  messages: _propTypes2.default.string.isRequired
+  messages: _propTypes2.default.shape({
+    channel: _propTypes2.default.string,
+    messages: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+      sender: _propTypes2.default.string,
+      message: _propTypes2.default.string,
+      timestamp: _propTypes2.default.string,
+      type: _propTypes2.default.string
+    }))
+  }).isRequired
 };
 
 exports.default = ChatArea;

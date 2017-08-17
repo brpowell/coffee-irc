@@ -16,6 +16,10 @@ var commands = {
       context.client.removeChannel(context.target);
     }
     context.conn.part(context.target);
+  },
+  disconnect: function disconnect(context) {
+    console.log('got here');
+    context.conn.disconnect();
   }
 };
 

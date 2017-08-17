@@ -61,6 +61,7 @@ var App = function (_React$Component) {
         _this2.addMessage(sender, to, message);
       });
 
+      // TODO: Don't trigger alert new on join (or leave)
       _clientManager2.default.on('join', function (channel, nick) {
         var message = 'has joined ' + channel;
         _this2.addMessage(nick, channel, message, 'status');
@@ -70,6 +71,9 @@ var App = function (_React$Component) {
       _clientManager2.default.on('part', function (channel, nick) {
         var message = 'has left ' + channel;
         _this2.addMessage(nick, channel, message, 'status');
+        var users = _this2.state.users;
+        delete users[channel][nick];
+        _this2.setState({ users: users });
         if (nick === _clientManager2.default.getNick()) _this2.leaveChannel(channel);
       });
 
@@ -77,10 +81,15 @@ var App = function (_React$Component) {
         console.log(error);
       });
 
+      // triggered when user joins but doesn't part...
       _clientManager2.default.on('names', function (channel, nicks) {
         var users = _this2.state.users;
         users[channel] = nicks;
         _this2.setState({ users: users });
+      });
+
+      _clientManager2.default.on('quit', function (nick, reason, channels, message) {
+        console.log('DISCONNECTED');
       });
     }
   }, {

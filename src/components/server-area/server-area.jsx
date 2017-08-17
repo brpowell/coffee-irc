@@ -3,6 +3,12 @@ import Popover from 'react-popover';
 import PopoverMenu from '../popover-menu/popover-menu.js';
 import Client from '../../api/client-manager';
 
+const menuItems = {
+  Disconnect: Client.disconnect,
+  'Set Nickname': null,
+  'Server Settings': null,
+};
+
 export default class ServerArea extends React.Component {
   constructor(props) {
     super(props);
@@ -23,7 +29,7 @@ export default class ServerArea extends React.Component {
 
   render() {
     const nick = Client.getNick();
-    const menu = <PopoverMenu />;
+    const menu = <PopoverMenu menuItems={menuItems} closeAction={this.toggleMenu.bind(null, false)} />;
     return (
       <Popover
         isOpen={this.state.menuOpen}

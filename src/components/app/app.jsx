@@ -23,6 +23,7 @@ export default class App extends React.Component {
       this.addMessage(sender, to, message);
     });
 
+    // TODO: Don't trigger alert new on join (or leave)
     Client.on('join', (channel, nick) => {
       const message = `has joined ${channel}`;
       this.addMessage(nick, channel, message, 'status');
@@ -32,6 +33,9 @@ export default class App extends React.Component {
     Client.on('part', (channel, nick) => {
       const message = `has left ${channel}`;
       this.addMessage(nick, channel, message, 'status');
+      const users = this.state.users;
+      delete users[channel][nick];
+      this.setState({ users });
       if (nick === Client.getNick()) this.leaveChannel(channel);
     });
 
@@ -39,10 +43,15 @@ export default class App extends React.Component {
       console.log(error);
     });
 
+    // triggered when user joins but doesn't part...
     Client.on('names', (channel, nicks) => {
       const users = this.state.users;
       users[channel] = nicks;
       this.setState({ users });
+    });
+
+    Client.on('quit', (nick, reason, channels, message) => {
+      console.log('DISCONNECTED');
     });
   }
 

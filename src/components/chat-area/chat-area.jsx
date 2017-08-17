@@ -26,7 +26,6 @@ const ChatArea = (props) => {
       type={message.type}
     />);
   });
-
   return (
     <div className="chat-area">
       <ChatHeader activeChannel={props.activeChannel} users={props.users} />
@@ -48,6 +47,7 @@ ChatArea.propTypes = {
       type: PropTypes.string,
     })),
   }).isRequired,
+  users: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 export default ChatArea;

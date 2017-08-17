@@ -1,15 +1,25 @@
 import React from 'react';
 
-const PopoverMenu = (props) => {
-  return (
-    <div className="popover-menu">
-      <ul>
-        <li>Disconnect</li>
-        <li>Set Nickname</li>
-        <li>Server Settings</li>
-      </ul>
-    </div>
-  );
-};
+export default class PopoverMenu extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
 
-export default PopoverMenu;
+  handleClick(event) {
+    const itemName = event.target.textContent;
+    this.props.menuItems[itemName]();
+    this.props.closeAction();
+  }
+
+  render() {
+    const menuItems = Object.keys(this.props.menuItems).map(item => <li onClick={this.handleClick}>{item}</li>);
+    return (
+      <div className="popover-menu">
+        <ul>
+          {menuItems}
+        </ul>
+      </div>
+    );
+  }
+}

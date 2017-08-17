@@ -33,6 +33,7 @@ var ClientManager = function () {
 
     this.conns = {};
     this.current = _electronSettings2.default.get('current', '');
+    this.disconnect = this.disconnect.bind(this);
     Object.entries(_electronSettings2.default.get('servers', {})).forEach(function (_ref) {
       var _ref2 = _slicedToArray(_ref, 2),
           name = _ref2[0],
@@ -230,6 +231,15 @@ var ClientManager = function () {
     value: function isConnected() {
       var c = this.conns[this.current].conn;
       return c.conn != null && c.motd !== undefined;
+    }
+  }, {
+    key: 'disconnect',
+    value: function disconnect() {
+      var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
+      var cb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+
+      var c = this.conns[this.current].conn;
+      c.disconnect(message, cb);
     }
   }]);
 

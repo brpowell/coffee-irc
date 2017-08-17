@@ -11,6 +11,7 @@ class ClientManager {
   constructor() {
     this.conns = {};
     this.current = settings.get('current', '');
+    this.disconnect = this.disconnect.bind(this);
     Object.entries(settings.get('servers', {})).forEach(([name, props]) => {
       this.conns[name] = {
         channels: props.channels,
@@ -169,6 +170,11 @@ class ClientManager {
   isConnected() {
     const c = this.conns[this.current].conn;
     return (c.conn != null && c.motd !== undefined);
+  }
+
+  disconnect(message = undefined, cb = undefined) {
+    const c = this.conns[this.current].conn;
+    c.disconnect(message, cb);
   }
 }
 

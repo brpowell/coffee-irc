@@ -51,7 +51,6 @@ var ChatArea = function ChatArea(props) {
       type: message.type
     });
   });
-
   return _react2.default.createElement(
     'div',
     { className: 'chat-area' },
@@ -72,7 +71,8 @@ ChatArea.propTypes = {
       timestamp: _propTypes2.default.string,
       type: _propTypes2.default.string
     }))
-  }).isRequired
+  }).isRequired,
+  users: _propTypes2.default.objectOf(_propTypes2.default.string).isRequired
 };
 
 exports.default = ChatArea;

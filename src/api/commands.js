@@ -13,7 +13,6 @@ const commands = {
     context.conn.part(context.target);
   },
   disconnect: (context) => {
-    console.log('got here');
     context.conn.disconnect();
   },
 };

@@ -18,7 +18,6 @@ var commands = {
     context.conn.part(context.target);
   },
   disconnect: function disconnect(context) {
-    console.log('got here');
     context.conn.disconnect();
   }
 };

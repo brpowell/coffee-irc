@@ -17,7 +17,7 @@ export default class ChatHeader extends React.Component {
   render() {
     let userCount;
     if (this.props.users) {
-      const menu = <PopoverMenu menuItems={Object.keys(this.props.users)} />;
+      const menu = <PopoverMenu menuItems={this.props.users} />;
       userCount = (
         <Popover
           isOpen={this.state.usersShowing}

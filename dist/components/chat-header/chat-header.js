@@ -53,7 +53,7 @@ var ChatHeader = function (_React$Component) {
     value: function render() {
       var userCount = void 0;
       if (this.props.users) {
-        var menu = _react2.default.createElement(_popoverMenu2.default, { menuItems: Object.keys(this.props.users) });
+        var menu = _react2.default.createElement(_popoverMenu2.default, { menuItems: this.props.users });
         userCount = _react2.default.createElement(
           _reactPopover2.default,
           {

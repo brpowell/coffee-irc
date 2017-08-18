@@ -41,11 +41,11 @@ var ChannelList = function (_React$Component) {
   _createClass(ChannelList, [{
     key: 'handleClick',
     value: function handleClick(event) {
+      var channel = event.target.textContent;
       if (_clientManager2.default.isConnected()) {
-        var channel = event.target.textContent;
         _clientManager2.default.join(channel);
-        if (this.props.activeChannel !== channel) this.props.enterChannel(channel);
       }
+      if (this.props.activeChannel !== channel) this.props.enterChannel(channel);
     }
   }, {
     key: 'render',

@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactPopover = require('react-popover');
 
 var _reactPopover2 = _interopRequireDefault(_reactPopover);
@@ -30,12 +34,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var menuItems = {
-  Disconnect: _clientManager2.default.disconnect,
-  'Set Nickname': null,
-  'Server Settings': null
-};
-
 var ServerArea = function (_React$Component) {
   _inherits(ServerArea, _React$Component);
 
@@ -44,7 +42,7 @@ var ServerArea = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (ServerArea.__proto__ || Object.getPrototypeOf(ServerArea)).call(this, props));
 
-    _this.state = { connected: false, menuOpen: false };
+    _this.state = { menuOpen: false };
     _this.toggleMenu = _this.toggleMenu.bind(_this);
     return _this;
   }
@@ -52,12 +50,8 @@ var ServerArea = function (_React$Component) {
   _createClass(ServerArea, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this2 = this;
-
       // TODO: display motd info and server stuff on connect
-      _clientManager2.default.on('motd', function () {
-        _this2.setState({ connected: true });
-      });
+
     }
   }, {
     key: 'toggleMenu',
@@ -67,8 +61,19 @@ var ServerArea = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var nick = _clientManager2.default.getNick();
-      var menu = _react2.default.createElement(_popoverMenu2.default, { menuItems: menuItems, closeAction: this.toggleMenu.bind(null, false) });
+      var menuItems = {
+        'Set Nickname': null,
+        'Server Settings': null
+      };
+      if (this.props.onlineStatus === 'online') {
+        menuItems.Disconnect = this.props.handleDisconnect;
+      } else if (this.props.onlineStatus === 'offline') {
+        menuItems.Connect = this.props.handleConnect;
+      }
+      var menu = _react2.default.createElement(_popoverMenu2.default, {
+        menuItems: menuItems,
+        closeAction: this.toggleMenu.bind(null, false)
+      });
       return _react2.default.createElement(
         _reactPopover2.default,
         {
@@ -89,8 +94,8 @@ var ServerArea = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'user-info' },
-            nick ? '@' + nick : 'Connecting...',
-            _react2.default.createElement('div', { className: this.state.connected ? 'online' : 'offline' })
+            this.props.onlineStatus === 'online' ? '@' + _clientManager2.default.getNick() : this.props.onlineStatus,
+            _react2.default.createElement('div', { className: this.props.onlineStatus })
           )
         )
       );
@@ -101,3 +106,9 @@ var ServerArea = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = ServerArea;
+
+
+ServerArea.propTypes = {
+  onlineStatus: _propTypes2.default.string.isRequired,
+  handleDisconnect: _propTypes2.default.func.isRequired
+};

@@ -49,7 +49,7 @@ var ChatInput = function (_React$Component) {
     key: 'handleSendKey',
     value: function handleSendKey(event) {
       if (event.key === 'Enter' && this.state.input.length > 0) {
-        if (_clientManager2.default.send(this.state.input, this.props.activeChannel)) {
+        if (_clientManager2.default.send(this.state.input, this.props.activeChannel) && _clientManager2.default.isConnected()) {
           this.props.addMessage(_clientManager2.default.getNick(), this.props.activeChannel, this.state.input);
         }
         this.setState({ input: '' });

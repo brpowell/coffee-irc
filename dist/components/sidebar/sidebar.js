@@ -41,7 +41,11 @@ var SideBar = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         { className: 'sidebar' },
-        _react2.default.createElement(_serverArea2.default, null),
+        _react2.default.createElement(_serverArea2.default, {
+          onlineStatus: this.props.onlineStatus,
+          handleDisconnect: this.props.handleDisconnect,
+          handleConnect: this.props.handleConnect
+        }),
         _react2.default.createElement(_channelList2.default, {
           activeChannel: this.props.activeChannel,
           joinedChannels: this.props.joinedChannels,

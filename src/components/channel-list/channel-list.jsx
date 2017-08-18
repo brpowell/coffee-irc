@@ -9,11 +9,11 @@ export default class ChannelList extends React.Component {
   }
 
   handleClick(event) {
+    const channel = event.target.textContent;
     if (Client.isConnected()) {
-      const channel = event.target.textContent;
       Client.join(channel);
-      if (this.props.activeChannel !== channel) this.props.enterChannel(channel);
     }
+    if (this.props.activeChannel !== channel) this.props.enterChannel(channel);
   }
 
   render() {

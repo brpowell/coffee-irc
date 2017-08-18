@@ -1,26 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Popover from 'react-popover';
 import PopoverMenu from '../popover-menu/popover-menu.js';
 import Client from '../../api/client-manager';
 
-const menuItems = {
-  Disconnect: Client.disconnect,
-  'Set Nickname': null,
-  'Server Settings': null,
-};
 
 export default class ServerArea extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { connected: false, menuOpen: false };
+    this.state = { menuOpen: false };
     this.toggleMenu = this.toggleMenu.bind(this);
   }
 
   componentDidMount() {
     // TODO: display motd info and server stuff on connect
-    Client.on('motd', () => {
-      this.setState({ connected: true });
-    });
+
   }
 
   toggleMenu() {
@@ -28,8 +22,19 @@ export default class ServerArea extends React.Component {
   }
 
   render() {
-    const nick = Client.getNick();
-    const menu = <PopoverMenu menuItems={menuItems} closeAction={this.toggleMenu.bind(null, false)} />;
+    const menuItems = {
+      'Set Nickname': null,
+      'Server Settings': null,
+    };
+    if (this.props.onlineStatus === 'online') {
+      menuItems.Disconnect = this.props.handleDisconnect;
+    } else if(this.props.onlineStatus === 'offline') {
+      menuItems.Connect = this.props.handleConnect;
+    }
+    const menu = (<PopoverMenu
+      menuItems={menuItems}
+      closeAction={this.toggleMenu.bind(null, false)}
+    />);
     return (
       <Popover
         isOpen={this.state.menuOpen}
@@ -40,9 +45,14 @@ export default class ServerArea extends React.Component {
       >
         <div role="button" className="server-area" onClick={this.toggleMenu} tabIndex={0}>
           <div className="server-info">{ Client.current }</div>
-          <div className="user-info">{ nick ? `@${nick}` : 'Connecting...'}
-            <div className={this.state.connected ? 'online' : 'offline'} /></div></div>
+          <div className="user-info">{ this.props.onlineStatus === 'online' ? `@${Client.getNick()}` : this.props.onlineStatus }
+            <div className={this.props.onlineStatus} /></div></div>
       </Popover>
     );
   }
 }
+
+ServerArea.propTypes = {
+  onlineStatus: PropTypes.string.isRequired,
+  handleDisconnect: PropTypes.func.isRequired,
+};

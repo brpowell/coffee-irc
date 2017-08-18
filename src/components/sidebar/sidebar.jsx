@@ -10,7 +10,11 @@ export default class SideBar extends React.Component {
   render() {
     return (
       <div className="sidebar">
-        <ServerArea />
+        <ServerArea
+          onlineStatus={this.props.onlineStatus}
+          handleDisconnect={this.props.handleDisconnect}
+          handleConnect={this.props.handleConnect}
+        />
         <ChannelList
           activeChannel={this.props.activeChannel}
           joinedChannels={this.props.joinedChannels}

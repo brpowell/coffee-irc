@@ -46,9 +46,12 @@ var App = function (_React$Component) {
       messages: {},
       alertNew: [],
       users: {},
-      channels: _clientManager2.default.getChannels() };
+      channels: _clientManager2.default.getChannels(),
+      onlineStatus: 'connecting' };
     _this.enterChannel = _this.enterChannel.bind(_this);
     _this.addMessage = _this.addMessage.bind(_this);
+    _this.handleDisconnect = _this.handleDisconnect.bind(_this);
+    _this.handleConnect = _this.handleConnect.bind(_this);
     return _this;
   }
 
@@ -88,9 +91,13 @@ var App = function (_React$Component) {
         _this2.setState({ users: users });
       });
 
-      _clientManager2.default.on('quit', function (nick, reason, channels, message) {
-        console.log('DISCONNECTED');
+      _clientManager2.default.on('motd', function (motd) {
+        _this2.setState({ onlineStatus: 'online' });
       });
+
+      // Only for other users, can't handle self
+      // Client.on('quit', (nick, reason, channels, message) => {
+      // });
     }
   }, {
     key: 'enterChannel',
@@ -155,6 +162,19 @@ var App = function (_React$Component) {
       this.setState({ messages: messages, alertNew: alertNew });
     }
   }, {
+    key: 'handleConnect',
+    value: function handleConnect() {
+      _clientManager2.default.connect();
+      this.setState({ onlineStatus: 'online' });
+    }
+  }, {
+    key: 'handleDisconnect',
+    value: function handleDisconnect() {
+      _clientManager2.default.disconnect();
+      this.setState({ onlineStatus: 'offline' });
+      this.addMessage(_clientManager2.default.getNick(), this.state.activeChannel, 'has disconnected', 'status');
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -165,7 +185,10 @@ var App = function (_React$Component) {
           channels: this.state.channels,
           joinedChannels: this.state.joinedChannels,
           enterChannel: this.enterChannel,
-          alertNew: this.state.alertNew
+          alertNew: this.state.alertNew,
+          onlineStatus: this.state.onlineStatus,
+          handleDisconnect: this.handleDisconnect,
+          handleConnect: this.handleConnect
         }),
         _react2.default.createElement(_chatArea2.default, {
           addMessage: this.addMessage,

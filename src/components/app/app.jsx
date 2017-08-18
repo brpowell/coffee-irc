@@ -13,9 +13,12 @@ export default class App extends React.Component {
       messages: {},
       alertNew: [],
       users: {},
-      channels: Client.getChannels() };
+      channels: Client.getChannels(),
+      onlineStatus: 'connecting' };
     this.enterChannel = this.enterChannel.bind(this);
     this.addMessage = this.addMessage.bind(this);
+    this.handleDisconnect = this.handleDisconnect.bind(this);
+    this.handleConnect = this.handleConnect.bind(this);
   }
 
   componentDidMount() {
@@ -50,9 +53,13 @@ export default class App extends React.Component {
       this.setState({ users });
     });
 
-    Client.on('quit', (nick, reason, channels, message) => {
-      console.log('DISCONNECTED');
+    Client.on('motd', (motd) => {
+      this.setState({ onlineStatus: 'online' });
     });
+
+    // Only for other users, can't handle self
+    // Client.on('quit', (nick, reason, channels, message) => {
+    // });
   }
 
   enterChannel(channel) {
@@ -112,6 +119,17 @@ export default class App extends React.Component {
     this.setState({ messages, alertNew });
   }
 
+  handleConnect() {
+    Client.connect();
+    this.setState({ onlineStatus: 'online' });
+  }
+
+  handleDisconnect() {
+    Client.disconnect();
+    this.setState({ onlineStatus: 'offline' });
+    this.addMessage(Client.getNick(), this.state.activeChannel, 'has disconnected', 'status');
+  }
+
   render() {
     return (
       <div>
@@ -121,6 +139,9 @@ export default class App extends React.Component {
           joinedChannels={this.state.joinedChannels}
           enterChannel={this.enterChannel}
           alertNew={this.state.alertNew}
+          onlineStatus={this.state.onlineStatus}
+          handleDisconnect={this.handleDisconnect}
+          handleConnect={this.handleConnect}
         />
         <ChatArea
           addMessage={this.addMessage}

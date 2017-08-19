@@ -1,5 +1,6 @@
 import React from 'react';
 
+// TODO: Refactor to extend react-popover instead of separate class
 export default class PopoverMenu extends React.Component {
   constructor(props) {
     super(props);

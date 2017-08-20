@@ -27,7 +27,7 @@ export default class ChatHeader extends React.Component {
           onOuterAction={this.toggleUsers.bind(null, false)}
         >
           <div className="header-block user-count" onClick={this.toggleUsers}>
-            <img src="../dist/assets/icons/user.png" alt="" />
+            <img src="../dist/assets/icons/room2.png" alt="" />
             <i> { Object.keys(this.props.users).length }</i>
           </div>
         </Popover>);

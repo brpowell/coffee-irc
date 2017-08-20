@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require("react");
+var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -32,29 +32,32 @@ var PopoverMenu = function (_React$Component) {
   }
 
   _createClass(PopoverMenu, [{
-    key: "handleClick",
+    key: 'handleClick',
     value: function handleClick(event) {
       var itemName = event.target.textContent;
       this.props.menuItems[itemName]();
       this.props.closeAction();
     }
   }, {
-    key: "render",
+    key: 'render',
     value: function render() {
       var _this2 = this;
 
       var menuItems = Object.keys(this.props.menuItems).map(function (item) {
+        if (item === '-') {
+          return _react2.default.createElement('hr', null);
+        }
         return _react2.default.createElement(
-          "li",
+          'li',
           { onClick: _this2.handleClick },
           item
         );
       });
       return _react2.default.createElement(
-        "div",
-        { className: "popover-menu" },
+        'div',
+        { className: 'popover-menu' },
         _react2.default.createElement(
-          "ul",
+          'ul',
           null,
           menuItems
         )

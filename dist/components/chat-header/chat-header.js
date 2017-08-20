@@ -66,7 +66,7 @@ var ChatHeader = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'header-block user-count', onClick: this.toggleUsers },
-            _react2.default.createElement('img', { src: '../dist/assets/icons/user.png', alt: '' }),
+            _react2.default.createElement('img', { src: '../dist/assets/icons/room2.png', alt: '' }),
             _react2.default.createElement(
               'i',
               null,

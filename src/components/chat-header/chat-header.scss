@@ -22,16 +22,22 @@
     float: right;
     padding-right: 10px;
     width: 54px;
-    height: 28px;
-    padding-top: 15px !important;
+    height: 36px;
+    padding-top: 7px !important;
     text-align: center;
     cursor: pointer;
     
     img {
         position: relative;
         top: 1px;
-        width: 15px;
-        height: 15px;
+        width: 26px;
+        height: auto;
+    }
+
+    i {
+        position: relative;
+        bottom: 2px;
+        left: 2px;
     }
 }
 

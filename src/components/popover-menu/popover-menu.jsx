@@ -14,7 +14,12 @@ export default class PopoverMenu extends React.Component {
   }
 
   render() {
-    const menuItems = Object.keys(this.props.menuItems).map(item => <li onClick={this.handleClick}>{item}</li>);
+    const menuItems = Object.keys(this.props.menuItems).map((item) => {
+      if (item === '-') {
+        return <hr />;
+      }
+      return <li onClick={this.handleClick}>{item}</li>;
+    });
     return (
       <div className="popover-menu">
         <ul>

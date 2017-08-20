@@ -22,15 +22,16 @@ export default class ServerArea extends React.Component {
   }
 
   render() {
-    const menuItems = {
-      'Set Nickname': null,
-      'Server Settings': null,
-    };
+    const menuItems = {};
     if (this.props.onlineStatus === 'online') {
       menuItems.Disconnect = this.props.handleDisconnect;
-    } else if(this.props.onlineStatus === 'offline') {
+    } else if (this.props.onlineStatus === 'offline') {
       menuItems.Connect = this.props.handleConnect;
     }
+    menuItems['-'] = null;
+    menuItems['Set Nickname'] = null;
+    menuItems['Server Settings'] = null;
+
     const menu = (<PopoverMenu
       menuItems={menuItems}
       closeAction={this.toggleMenu.bind(null, false)}

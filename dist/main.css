@@ -99,15 +99,19 @@ body {
   float: right;
   padding-right: 10px;
   width: 54px;
-  height: 28px;
-  padding-top: 15px !important;
+  height: 36px;
+  padding-top: 7px !important;
   text-align: center;
   cursor: pointer; }
   .user-count img {
     position: relative;
     top: 1px;
-    width: 15px;
-    height: 15px; }
+    width: 26px;
+    height: auto; }
+  .user-count i {
+    position: relative;
+    bottom: 2px;
+    left: 2px; }
 
 .user-count:hover {
   background-color: lightgrey; }
@@ -247,9 +251,12 @@ body {
       background-color: #4bca81;
       color: white;
       text-shadow: 0px 1px 12px black; }
+    .popover-menu ul hr {
+      border: 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
 
 .Popover-tip {
-  fill: white; }
+  display: none; }
 
 .modal {
   background-color: white;

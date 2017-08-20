@@ -61,15 +61,16 @@ var ServerArea = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var menuItems = {
-        'Set Nickname': null,
-        'Server Settings': null
-      };
+      var menuItems = {};
       if (this.props.onlineStatus === 'online') {
         menuItems.Disconnect = this.props.handleDisconnect;
       } else if (this.props.onlineStatus === 'offline') {
         menuItems.Connect = this.props.handleConnect;
       }
+      menuItems['-'] = null;
+      menuItems['Set Nickname'] = null;
+      menuItems['Server Settings'] = null;
+
       var menu = _react2.default.createElement(_popoverMenu2.default, {
         menuItems: menuItems,
         closeAction: this.toggleMenu.bind(null, false)

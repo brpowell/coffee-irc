@@ -183,6 +183,10 @@ class ClientManager {
     const c = this.conns[this.current].conn;
     c.connect(cb);
   }
+
+  getCurrentSettings() {
+    return settings.get(`servers.${this.current}`);
+  }
 }
 
 const Client = new ClientManager();

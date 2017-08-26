@@ -1,11 +1,32 @@
 .modal-backdrop {
-  // position: 'fixed';
-  // top: 0;
-  // bottom: 0;
-  // left: 0;
-  // right: 0;
-  // padding: 50;
-  // background-color: grey;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 50px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  
+  height: 50px;
+
+  button {
+    float: right;
+    margin-right: 12px;
+    margin-top: 12px;
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.modal-form {
+  padding: 8px;
 }
 
 .modal {
@@ -14,4 +35,53 @@
   height: 100%;
   margin: 0 auto;
   padding: 30;
+  border-radius: 6px;
+
+  .modal-form {
+    width: 50%;
+    margin: auto;
+  }
+
+  form {
+    // text-align: center;
+
+    input {
+      width: 260px;
+      height: 32px;
+      font-size: 16px;
+      border-bottom: 2px solid lightseagreen;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      transition: border-bottom-color 250ms linear;
+    }
+
+    input:focus {
+      border-bottom-color: blue;
+      outline: none;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+    }
+  }
+}
+
+.modalt-enter {
+  opacity: 0;
+}
+
+.modalt-enter.modalt-enter-active {
+  opacity: 1;
+  transition: 150ms ease-in;
+}
+
+.modalt-leave {
+  opacity: 1;
+}
+
+.modalt-leave.modalt-leave-active {
+  opacity: 0;
+  transition: opacity 150ms ease-out;
 }

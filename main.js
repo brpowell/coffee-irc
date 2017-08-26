@@ -2,7 +2,9 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 require('electron-reload')(__dirname);
+
 const { app, BrowserWindow } = electron;
+const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 
 // const Client = require('./src/api/coffee-client.js');
 
@@ -22,4 +24,11 @@ app.on('ready', () => {
   win.on('ready-to-show', () => {
     win.show();
   });
+
+  installExtension(REACT_DEVELOPER_TOOLS).then((name) => {
+    console.log(`Added Extension:  ${name}`);
+  })
+    .catch((err) => {
+      console.log('An error occurred: ', err);
+    });
 });

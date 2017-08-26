@@ -14,6 +14,7 @@ export default class SideBar extends React.Component {
           onlineStatus={this.props.onlineStatus}
           handleDisconnect={this.props.handleDisconnect}
           handleConnect={this.props.handleConnect}
+          toggleModal={this.props.toggleModal}
         />
         <ChannelList
           activeChannel={this.props.activeChannel}

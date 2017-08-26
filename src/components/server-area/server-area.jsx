@@ -30,7 +30,7 @@ export default class ServerArea extends React.Component {
     }
     menuItems['-'] = null;
     menuItems['Set Nickname'] = null;
-    menuItems['Server Settings'] = null;
+    menuItems['Server Settings'] = this.props.toggleModal;
 
     const menu = (<PopoverMenu
       menuItems={menuItems}

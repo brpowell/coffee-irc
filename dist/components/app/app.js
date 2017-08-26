@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactAddonsCssTransitionGroup = require('react-addons-css-transition-group');
+
+var _reactAddonsCssTransitionGroup2 = _interopRequireDefault(_reactAddonsCssTransitionGroup);
+
 var _sidebar = require('../sidebar/sidebar.js');
 
 var _sidebar2 = _interopRequireDefault(_sidebar);
@@ -17,6 +21,10 @@ var _sidebar2 = _interopRequireDefault(_sidebar);
 var _chatArea = require('../chat-area/chat-area.js');
 
 var _chatArea2 = _interopRequireDefault(_chatArea);
+
+var _modal = require('../modal/modal.js');
+
+var _modal2 = _interopRequireDefault(_modal);
 
 var _util = require('./util');
 
@@ -47,11 +55,13 @@ var App = function (_React$Component) {
       alertNew: [],
       users: {},
       channels: _clientManager2.default.getChannels(),
-      onlineStatus: 'connecting' };
+      onlineStatus: 'connecting',
+      showModal: false };
     _this.enterChannel = _this.enterChannel.bind(_this);
     _this.addMessage = _this.addMessage.bind(_this);
     _this.handleDisconnect = _this.handleDisconnect.bind(_this);
     _this.handleConnect = _this.handleConnect.bind(_this);
+    _this.toggleModal = _this.toggleModal.bind(_this);
     return _this;
   }
 
@@ -64,7 +74,7 @@ var App = function (_React$Component) {
         _this2.addMessage(sender, to, message);
       });
 
-      // TODO: Don't trigger alert new on join (or leave)
+      // FIXME: Don't trigger alert new on join (or leave)
       _clientManager2.default.on('join', function (channel, nick) {
         var message = 'has joined ' + channel;
         _this2.addMessage(nick, channel, message, 'status');
@@ -175,8 +185,19 @@ var App = function (_React$Component) {
       this.addMessage(_clientManager2.default.getNick(), this.state.activeChannel, 'has disconnected', 'status');
     }
   }, {
+    key: 'toggleModal',
+    value: function toggleModal() {
+      this.setState({
+        showModal: !this.state.showModal
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var modal = void 0;
+      if (this.state.showModal) {
+        modal = _react2.default.createElement(_modal2.default, { key: 0, onClose: this.toggleModal });
+      }
       return _react2.default.createElement(
         'div',
         null,
@@ -188,14 +209,28 @@ var App = function (_React$Component) {
           alertNew: this.state.alertNew,
           onlineStatus: this.state.onlineStatus,
           handleDisconnect: this.handleDisconnect,
-          handleConnect: this.handleConnect
+          handleConnect: this.handleConnect,
+          toggleModal: this.toggleModal
         }),
         _react2.default.createElement(_chatArea2.default, {
           addMessage: this.addMessage,
           activeChannel: this.state.activeChannel,
           messages: this.state.messages,
           users: this.state.users[this.state.activeChannel]
-        })
+        }),
+        _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            _reactAddonsCssTransitionGroup2.default,
+            {
+              transitionName: 'modalt',
+              transitionEnterTimeout: 150,
+              transitionLeaveTimeout: 150
+            },
+            modal
+          )
+        )
       );
     }
   }]);

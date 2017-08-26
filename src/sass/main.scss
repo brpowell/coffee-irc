@@ -2,6 +2,8 @@
 @import 'fonts';
 @import 'icons';
 
+// FIXME: More scalable scss solution
+
 @import '../components/app/app.scss';
 @import '../components/channel-list/channel-list.scss';
 @import '../components/chat-header/chat-header.scss';

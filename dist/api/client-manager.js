@@ -250,6 +250,11 @@ var ClientManager = function () {
       var c = this.conns[this.current].conn;
       c.connect(cb);
     }
+  }, {
+    key: 'getCurrentSettings',
+    value: function getCurrentSettings() {
+      return _electronSettings2.default.get('servers.' + this.current);
+    }
   }]);
 
   return ClientManager;

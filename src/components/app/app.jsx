@@ -1,8 +1,11 @@
 import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import SideBar from '../sidebar/sidebar.js';
 import ChatArea from '../chat-area/chat-area.js';
+import Modal from '../modal/modal.js';
 import { getTimestamp } from './util';
 import Client from '../../api/client-manager.js';
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -14,11 +17,13 @@ export default class App extends React.Component {
       alertNew: [],
       users: {},
       channels: Client.getChannels(),
-      onlineStatus: 'connecting' };
+      onlineStatus: 'connecting',
+      showModal: false };
     this.enterChannel = this.enterChannel.bind(this);
     this.addMessage = this.addMessage.bind(this);
     this.handleDisconnect = this.handleDisconnect.bind(this);
     this.handleConnect = this.handleConnect.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   componentDidMount() {
@@ -26,7 +31,7 @@ export default class App extends React.Component {
       this.addMessage(sender, to, message);
     });
 
-    // TODO: Don't trigger alert new on join (or leave)
+    // FIXME: Don't trigger alert new on join (or leave)
     Client.on('join', (channel, nick) => {
       const message = `has joined ${channel}`;
       this.addMessage(nick, channel, message, 'status');
@@ -130,7 +135,17 @@ export default class App extends React.Component {
     this.addMessage(Client.getNick(), this.state.activeChannel, 'has disconnected', 'status');
   }
 
+  toggleModal() {
+    this.setState({
+      showModal: !this.state.showModal,
+    });
+  }
+
   render() {
+    let modal;
+    if (this.state.showModal) {
+      modal = <Modal key={0} onClose={this.toggleModal}></Modal>;
+    }
     return (
       <div>
         <SideBar
@@ -142,6 +157,7 @@ export default class App extends React.Component {
           onlineStatus={this.state.onlineStatus}
           handleDisconnect={this.handleDisconnect}
           handleConnect={this.handleConnect}
+          toggleModal={this.toggleModal}
         />
         <ChatArea
           addMessage={this.addMessage}
@@ -149,6 +165,15 @@ export default class App extends React.Component {
           messages={this.state.messages}
           users={this.state.users[this.state.activeChannel]}
         />
+        <div>
+          <ReactCSSTransitionGroup
+            transitionName="modalt"
+            transitionEnterTimeout={150}
+            transitionLeaveTimeout={150}
+          >
+            {modal}
+          </ReactCSSTransitionGroup>
+        </div>
       </div>
     );
   }

@@ -65,6 +65,21 @@
       display: block;
       font-weight: bold;
     }
+
+    button {
+      width: 102px;
+      height: 40px;
+      background-color: white;
+      border: 1px solid $color-highlighted;
+      border-radius: 6px;
+      font-family: $font-family;
+      font-size: 18px;
+      transition: background-color 250ms linear;
+    }
+
+    button:hover {
+      background-color: $color-highlighted;
+    }
   }
 }
 

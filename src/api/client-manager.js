@@ -187,6 +187,11 @@ class ClientManager {
   getCurrentSettings() {
     return settings.get(`servers.${this.current}`);
   }
+
+  writeSettings(settings) {
+    const path = `servers.${this.current}`;
+    settings.set(path, settings);
+  }
 }
 
 const Client = new ClientManager();

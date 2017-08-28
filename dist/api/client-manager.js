@@ -255,6 +255,12 @@ var ClientManager = function () {
     value: function getCurrentSettings() {
       return _electronSettings2.default.get('servers.' + this.current);
     }
+  }, {
+    key: 'writeSettings',
+    value: function writeSettings(settings) {
+      var path = 'servers.' + this.current;
+      settings.set(path, settings);
+    }
   }]);
 
   return ClientManager;

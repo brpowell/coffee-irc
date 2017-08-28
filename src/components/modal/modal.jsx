@@ -3,23 +3,32 @@ import PropTypes from 'prop-types';
 import Client from '../../api/client-manager';
 
 export default class Modal extends React.Component {
+  handleSave() {
+    Client.writeSettings();
+  }
+
   renderServerSettings() {
+    console.log(this.props);
     const settings = Client.getCurrentSettings();
+    const formElements = {
+      name: { label: 'Display Name', placeholder: 'ExampleNET', defaultValue: Client.current },
+      address: { label: 'Server Address', placeholder: 'irc.example.net', defaultValue: settings.address },
+      port: { label: 'Port', placeholder: '6667', defaultValue: settings.options.port ? settings.options.port : 6667 },
+    };
+    const nodes = Object.entries(formElements).map(([key, group]) => (
+      <div key={key} className="form-group">
+        <label>{group.label}</label>
+        <input type="text" placeholder={group.placeholder} defaultValue={group.defaultValue} />
+      </div>
+    ));
     return (
       <div className="modal-form">
         <form>
-          <div className="form-group">
-            <label>Display Name</label>
-            <input type="text" placeholder="e.g. Quakenet" value={Client.current} />
-          </div>
-          <div className="form-group">
-            <label>Server Address</label>
-            <input type="text" placeholder="0.0.0.0" value={settings.address} />
-          </div>
-          <div className="form-group">
-            <label>Port</label>
-            <input type="text" placeholder="Port" value={settings.options.port ? settings.options.port : 6667} />
-          </div>
+          {nodes}
+          <div role="button">Save</div>
+        </form>
+        <form>
+          {nodes}
         </form>
       </div>
     );

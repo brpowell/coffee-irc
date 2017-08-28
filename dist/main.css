@@ -307,6 +307,17 @@ body {
   .modal form label {
     display: block;
     font-weight: bold; }
+  .modal form button {
+    width: 102px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid #4bca81;
+    border-radius: 6px;
+    font-family: "Salesforce Sans", "Arial";
+    font-size: 18px;
+    transition: background-color 250ms linear; }
+  .modal form button:hover {
+    background-color: #4bca81; }
 
 .modalt-enter {
   opacity: 0; }

@@ -1,12 +1,8 @@
-import React from 'react';
-import ChannelList from '../channel-list/channel-list.js';
-import ServerArea from '../server-area/server-area.js';
+import React, { Component } from 'react';
+import ServerArea from '../../components/server-area';
+import ChannelList from '../../components/channel-list';
 
-export default class SideBar extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+export default class Sidebar extends Component {
   render() {
     return (
       <div className="sidebar">

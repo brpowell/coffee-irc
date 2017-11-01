@@ -1,8 +1,9 @@
 import React from 'react';
-import SideBar from '../sidebar/sidebar.js';
-import ChatArea from '../chat-area/chat-area.js';
 import { getTimestamp } from './util';
-import Client from '../../api/client-manager.js';
+import Client from '../../api/client-manager';
+
+import Sidebar from '../../containers/sidebar';
+import ChatArea from '../../containers/chat-area';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -133,15 +134,15 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
-        <SideBar
-          activeChannel={this.state.activeChannel}
-          channels={this.state.channels}
-          joinedChannels={this.state.joinedChannels}
-          enterChannel={this.enterChannel}
-          alertNew={this.state.alertNew}
+        <Sidebar
           onlineStatus={this.state.onlineStatus}
           handleDisconnect={this.handleDisconnect}
           handleConnect={this.handleConnect}
+          activeChannel={this.state.activeChannel}
+          joinedChannels={this.state.joinedChannels}
+          enterChannel={this.enterChannel}
+          channels={this.state.channels}
+          alertNew={this.state.alertNew}
         />
         <ChatArea
           addMessage={this.addMessage}

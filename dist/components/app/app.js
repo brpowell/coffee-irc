@@ -10,19 +10,19 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _sidebar = require('../sidebar/sidebar.js');
-
-var _sidebar2 = _interopRequireDefault(_sidebar);
-
 var _chatArea = require('../chat-area/chat-area.js');
 
 var _chatArea2 = _interopRequireDefault(_chatArea);
 
 var _util = require('./util');
 
-var _clientManager = require('../../api/client-manager.js');
+var _clientManager = require('../../api/client-manager');
 
 var _clientManager2 = _interopRequireDefault(_clientManager);
+
+var _sidebar = require('../../containers/sidebar');
+
+var _sidebar2 = _interopRequireDefault(_sidebar);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31,6 +31,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// import ServerArea from '../server-area';
+// import ChannelList from '../channel-list';
 
 var App = function (_React$Component) {
   _inherits(App, _React$Component);
@@ -181,14 +184,14 @@ var App = function (_React$Component) {
         'div',
         null,
         _react2.default.createElement(_sidebar2.default, {
-          activeChannel: this.state.activeChannel,
-          channels: this.state.channels,
-          joinedChannels: this.state.joinedChannels,
-          enterChannel: this.enterChannel,
-          alertNew: this.state.alertNew,
           onlineStatus: this.state.onlineStatus,
           handleDisconnect: this.handleDisconnect,
-          handleConnect: this.handleConnect
+          handleConnect: this.handleConnect,
+          activeChannel: this.state.activeChannel,
+          joinedChannels: this.state.joinedChannels,
+          enterChannel: this.enterChannel,
+          channels: this.state.channels,
+          alertNew: this.state.alertNew
         }),
         _react2.default.createElement(_chatArea2.default, {
           addMessage: this.addMessage,

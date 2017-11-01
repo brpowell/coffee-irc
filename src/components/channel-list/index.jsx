@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Client from '../../api/client-manager.js';
+import Client from '../../api/client-manager';
 
 export default class ChannelList extends React.Component {
   constructor(props) {

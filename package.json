@@ -5,6 +5,9 @@
   "main": "main.js",
   "author": "Bryan Powell",
   "license": "MIT",
+  "scripts": {
+    "start-all": "gulp && electron ."
+  },
   "dependencies": {
     "electron": "^1.6.11",
     "electron-reload": "^1.2.1",

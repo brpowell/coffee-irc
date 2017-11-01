@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'react-popover';
-import PopoverMenu from '../popover-menu/popover-menu.js';
+import PopoverMenu from '../popover-menu';
 import Client from '../../api/client-manager';
 
 

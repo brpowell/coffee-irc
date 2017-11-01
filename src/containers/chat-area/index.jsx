@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ChatHeader from '../chat-header/chat-header.js';
-import ChatLog from '../chat-log/chat-log.js';
-import ChatInput from '../chat-input/chat-input.js';
+import ChatHeader from '../../components/chat-header';
+import ChatLog from '../../components/chat-log';
+import ChatInput from '../../components/chat-input';
 import Message from '../message/message.js';
 
 const ChatArea = (props) => {

@@ -116,17 +116,6 @@ body {
 .user-count:hover {
   background-color: lightgrey; }
 
-.chat-area {
-  position: absolute;
-  left: 200px;
-  height: 100vh;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  min-width: 600px;
-  background-color: #fdfdfd;
-  font-size: 15px; }
-
 .chat-input {
   height: 52px;
   position: fixed;
@@ -179,16 +168,6 @@ body {
 
 .sender-name {
   color: blue !important; }
-
-.sidebar {
-  width: 200px;
-  background-color: #0070d2;
-  height: 100vh;
-  position: absolute;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none; }
 
 .server-area {
   padding: 10px; }
@@ -264,3 +243,24 @@ body {
   height: 100%;
   margin: 0 auto;
   padding: 30; }
+
+.sidebar {
+  width: 200px;
+  background-color: #0070d2;
+  height: 100vh;
+  position: absolute;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+
+.chat-area {
+  position: absolute;
+  left: 200px;
+  height: 100vh;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  min-width: 600px;
+  background-color: #fdfdfd;
+  font-size: 15px; }

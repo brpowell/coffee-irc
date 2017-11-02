@@ -24,7 +24,8 @@ export default class ChatInput extends React.Component {
   }
 
   render() {
-    const placeholder = this.props.activeChannel ? `Send to ${this.props.activeChannel}` : 'join a channel or enter a command';
+    const { activeChannel } = this.props;
+    const placeholder = activeChannel ? `Send to ${activeChannel}` : 'join a channel or enter a command';
     return (
       <div className="chat-input">
         <input

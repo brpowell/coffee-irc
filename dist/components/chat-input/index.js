@@ -58,7 +58,9 @@ var ChatInput = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var placeholder = this.props.activeChannel ? 'Send to ' + this.props.activeChannel : 'join a channel or enter a command';
+      var activeChannel = this.props.activeChannel;
+
+      var placeholder = activeChannel ? 'Send to ' + activeChannel : 'join a channel or enter a command';
       return _react2.default.createElement(
         'div',
         { className: 'chat-input' },

@@ -22,6 +22,7 @@ export default class Message extends React.Component {
     let className = 'message';
     const prevMessage = this.props.prevMessage;
     let stamp = null;
+    // TODO: this is just awful
     if (this.props.type === 'status' || prevMessage == null || this.props.sender !== prevMessage.sender || (this.props.sender === prevMessage.sender && this.props.type === 'message' && prevMessage.type === 'status')) {
       stamp = (<span>
         <b className={this.props.sender === Client.getNick() ? 'sender-name' : ''}>{ this.props.sender }</b>

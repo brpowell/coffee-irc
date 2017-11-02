@@ -16,10 +16,7 @@ export default class App extends React.Component {
       users: {},
       channels: Client.getChannels(),
       onlineStatus: 'connecting' };
-    this.enterChannel = this.enterChannel.bind(this);
-    this.addMessage = this.addMessage.bind(this);
-    this.handleDisconnect = this.handleDisconnect.bind(this);
-    this.handleConnect = this.handleConnect.bind(this);
+    this.bindActions();
   }
 
   componentDidMount() {
@@ -61,6 +58,13 @@ export default class App extends React.Component {
     // Only for other users, can't handle self
     // Client.on('quit', (nick, reason, channels, message) => {
     // });
+  }
+
+  bindActions() {
+    this.enterChannel = this.enterChannel.bind(this);
+    this.addMessage = this.addMessage.bind(this);
+    this.handleDisconnect = this.handleDisconnect.bind(this);
+    this.handleConnect = this.handleConnect.bind(this);
   }
 
   enterChannel(channel) {

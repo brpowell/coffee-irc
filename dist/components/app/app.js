@@ -10,10 +10,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _chatArea = require('../chat-area/chat-area.js');
-
-var _chatArea2 = _interopRequireDefault(_chatArea);
-
 var _util = require('./util');
 
 var _clientManager = require('../../api/client-manager');
@@ -24,6 +20,10 @@ var _sidebar = require('../../containers/sidebar');
 
 var _sidebar2 = _interopRequireDefault(_sidebar);
 
+var _chatArea = require('../../containers/chat-area');
+
+var _chatArea2 = _interopRequireDefault(_chatArea);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -31,9 +31,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// import ServerArea from '../server-area';
-// import ChannelList from '../channel-list';
 
 var App = function (_React$Component) {
   _inherits(App, _React$Component);
@@ -51,10 +48,7 @@ var App = function (_React$Component) {
       users: {},
       channels: _clientManager2.default.getChannels(),
       onlineStatus: 'connecting' };
-    _this.enterChannel = _this.enterChannel.bind(_this);
-    _this.addMessage = _this.addMessage.bind(_this);
-    _this.handleDisconnect = _this.handleDisconnect.bind(_this);
-    _this.handleConnect = _this.handleConnect.bind(_this);
+    _this.bindActions();
     return _this;
   }
 
@@ -101,6 +95,14 @@ var App = function (_React$Component) {
       // Only for other users, can't handle self
       // Client.on('quit', (nick, reason, channels, message) => {
       // });
+    }
+  }, {
+    key: 'bindActions',
+    value: function bindActions() {
+      this.enterChannel = this.enterChannel.bind(this);
+      this.addMessage = this.addMessage.bind(this);
+      this.handleDisconnect = this.handleDisconnect.bind(this);
+      this.handleConnect = this.handleConnect.bind(this);
     }
   }, {
     key: 'enterChannel',

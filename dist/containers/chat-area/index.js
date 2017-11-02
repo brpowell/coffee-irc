@@ -24,39 +24,22 @@ var _chatInput = require('../../components/chat-input');
 
 var _chatInput2 = _interopRequireDefault(_chatInput);
 
-var _message = require('../message/message.js');
-
-var _message2 = _interopRequireDefault(_message);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ChatArea = function ChatArea(props) {
-  var activeChannelMessages = void 0;
-  if (props.activeChannel in props.messages) {
-    activeChannelMessages = props.messages[props.activeChannel];
-  } else {
-    activeChannelMessages = [];
-  }
-  var messages = activeChannelMessages.map(function (message, index) {
-    var prevMsg = null;
-    if (activeChannelMessages.length > 1) {
-      prevMsg = activeChannelMessages[index - 1];
-    }
-    return _react2.default.createElement(_message2.default, {
-      key: message.id,
-      sender: message.sender,
-      message: message.message,
-      timestamp: message.timestamp,
-      prevMessage: prevMsg,
-      type: message.type
-    });
-  });
+  var activeChannel = props.activeChannel,
+      messages = props.messages,
+      users = props.users,
+      addMessage = props.addMessage;
+
+  var channelMessages = activeChannel in messages ? messages[activeChannel] : [];
+
   return _react2.default.createElement(
     'div',
     { className: 'chat-area' },
-    _react2.default.createElement(_chatHeader2.default, { activeChannel: props.activeChannel, users: props.users }),
-    _react2.default.createElement(_chatLog2.default, { messages: messages }),
-    _react2.default.createElement(_chatInput2.default, { activeChannel: props.activeChannel, addMessage: props.addMessage })
+    _react2.default.createElement(_chatHeader2.default, { activeChannel: activeChannel, users: users }),
+    _react2.default.createElement(_chatLog2.default, { messages: channelMessages }),
+    _react2.default.createElement(_chatInput2.default, { activeChannel: activeChannel, addMessage: addMessage })
   );
 };
 

@@ -14,6 +14,10 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _message = require('../message');
+
+var _message2 = _interopRequireDefault(_message);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37,6 +41,23 @@ var ChatLog = function (_React$Component) {
       this.node.scrollTop = this.node.scrollHeight;
     }
   }, {
+    key: 'renderMessages',
+    value: function renderMessages() {
+      var messages = this.props.messages;
+
+      return messages.map(function (message, key) {
+        var prevMessage = messages.length > 1 ? messages[key - 1] : null;
+        return _react2.default.createElement(_message2.default, {
+          key: message.id,
+          sender: message.sender,
+          message: message.message,
+          timestamp: message.timestamp,
+          prevMessage: prevMessage,
+          type: message.type
+        });
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -46,7 +67,7 @@ var ChatLog = function (_React$Component) {
         { className: 'chat-log', ref: function ref(node) {
             _this2.node = node;
           } },
-        this.props.messages
+        this.renderMessages()
       );
     }
   }]);

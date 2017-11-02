@@ -18,22 +18,19 @@ export default class ChannelList extends React.Component {
 
   render() {
     const channels = this.props.channels.map((channel, index) => {
-      let className = '';
-      if (this.props.joinedChannels.indexOf(channel) !== -1) {
-        className += 'joined';
-        if (channel === this.props.activeChannel) {
-          className += ' active';
-        }
-      }
-
-      if (this.props.alertNew.indexOf(channel) > -1) className += ' alert-new';
-
-      return (<li
-        key={index}
-        className={className}
-        onClick={this.handleClick}
-      >{ channel }</li>);
+      const isJoined = this.props.joinedChannels.includes(channel) ? 'joined' : '';
+      const isActive = this.props.activeChannel === channel ? 'active' : '';
+      const newAlert = this.props.alertNew.includes(channel) ? 'alert-new' : '';
+      return (
+        <li
+          key={index}
+          className={`${isJoined} ${isActive} ${newAlert}`}
+          onClick={this.handleClick}>
+          { channel }
+        </li>
+      );
     });
+    
     return (
       <ul className="channel-list">
         <div className="title">CHANNELS</div>

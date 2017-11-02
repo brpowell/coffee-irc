@@ -43,6 +43,10 @@ var ChatHeader = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _props = this.props,
+          users = _props.users,
+          activeChannel = _props.activeChannel;
+
       return _react2.default.createElement(
         'div',
         { className: 'chat-header' },
@@ -52,8 +56,13 @@ var ChatHeader = function (_React$Component) {
           _react2.default.createElement(
             'b',
             null,
-            this.props.activeChannel
+            activeChannel
           )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'user-count' },
+          users ? users.length : ''
         )
       );
     }

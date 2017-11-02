@@ -13,10 +13,14 @@ export default class ChatHeader extends React.Component {
   }
 
   render() {
+    const { users, activeChannel } = this.props;
     return (
       <div className="chat-header">
         <div className="header-block">
-          <b>{ this.props.activeChannel }</b>
+          <b>{ activeChannel }</b>
+        </div>
+        <div className="user-count">
+          {users ? users.length : ''}
         </div>
       </div>
     );

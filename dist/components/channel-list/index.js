@@ -53,26 +53,19 @@ var ChannelList = function (_React$Component) {
       var _this2 = this;
 
       var channels = this.props.channels.map(function (channel, index) {
-        var className = '';
-        if (_this2.props.joinedChannels.indexOf(channel) !== -1) {
-          className += 'joined';
-          if (channel === _this2.props.activeChannel) {
-            className += ' active';
-          }
-        }
-
-        if (_this2.props.alertNew.indexOf(channel) > -1) className += ' alert-new';
-
+        var isJoined = _this2.props.joinedChannels.includes(channel) ? 'joined' : '';
+        var isActive = _this2.props.activeChannel === channel ? 'active' : '';
+        var newAlert = _this2.props.alertNew.includes(channel) ? 'alert-new' : '';
         return _react2.default.createElement(
           'li',
           {
             key: index,
-            className: className,
-            onClick: _this2.handleClick
-          },
+            className: isJoined + ' ' + isActive + ' ' + newAlert,
+            onClick: _this2.handleClick },
           channel
         );
       });
+
       return _react2.default.createElement(
         'ul',
         { className: 'channel-list' },

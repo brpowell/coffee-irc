@@ -52,7 +52,9 @@ var ChannelList = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var channels = this.props.channels.map(function (channel, index) {
+      var channels = this.props.targets.filter(function (target) {
+        return target.startsWith('#');
+      }).map(function (channel, index) {
         var isJoined = _this2.props.joinedChannels.includes(channel) ? 'joined' : '';
         var isActive = _this2.props.activeConversation === channel ? 'active' : '';
         var newAlert = _this2.props.alertNew.includes(channel) ? 'alert-new' : '';
@@ -63,6 +65,21 @@ var ChannelList = function (_React$Component) {
             className: isJoined + ' ' + isActive + ' ' + newAlert,
             onClick: _this2.handleClick },
           channel
+        );
+      });
+
+      var directTargets = this.props.targets.filter(function (target) {
+        return !target.startsWith('#');
+      }).map(function (user, index) {
+        var isActive = _this2.props.activeConversation === user ? 'active' : '';
+        var newAlert = _this2.props.alertNew.includes(user) ? 'alert-new' : '';
+        return _react2.default.createElement(
+          'li',
+          {
+            key: index,
+            className: 'joined ' + isActive + ' ' + newAlert,
+            onClick: _this2.handleClick },
+          user
         );
       });
 
@@ -79,7 +96,8 @@ var ChannelList = function (_React$Component) {
           'div',
           { className: 'title' },
           'Direct Messages'
-        )
+        ),
+        directTargets
       );
     }
   }]);
@@ -93,7 +111,7 @@ exports.default = ChannelList;
 ChannelList.propTypes = {
   activeConversation: _propTypes2.default.string.isRequired,
   joinedChannels: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired,
-  channels: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired,
+  targets: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired,
   enterConversation: _propTypes2.default.func.isRequired,
   alertNew: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired
 };

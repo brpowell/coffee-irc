@@ -48,7 +48,7 @@ var App = function (_React$Component) {
       messages: {},
       alertNew: [],
       users: {},
-      channels: _clientManager2.default.getChannels(),
+      targets: _clientManager2.default.getChannels(),
       onlineStatus: 'connecting' };
     _this.bindActions();
     return _this;
@@ -114,16 +114,16 @@ var App = function (_React$Component) {
         joined.push(target);
       }
 
-      var channels = this.state.channels;
-      if (!channels.includes(target)) {
-        channels.push(target);
+      var targets = this.state.targets;
+      if (!targets.includes(target)) {
+        targets.push(target);
       }
 
       var index = this.state.alertNew.indexOf(target);
       var alertNew = this.state.alertNew;
       if (index > -1) alertNew.splice(index, 1);
 
-      this.setState({ activeConversation: target, joinedChannels: joined, alertNew: alertNew, channels: channels });
+      this.setState({ activeConversation: target, joinedChannels: joined, alertNew: alertNew, targets: targets });
     }
   }, {
     key: 'leaveChannel',
@@ -137,7 +137,7 @@ var App = function (_React$Component) {
         newActive = this.state.joinedChannels[newIndex];
       }
       this.setState({
-        channels: _clientManager2.default.getChannels(),
+        targets: _clientManager2.default.getChannels(),
         joinedChannels: joined,
         activeConversation: newActive });
     }
@@ -154,14 +154,18 @@ var App = function (_React$Component) {
       var _state = this.state,
           messages = _state.messages,
           alertNew = _state.alertNew,
-          activeConversation = _state.activeConversation;
+          activeConversation = _state.activeConversation,
+          targets = _state.targets;
 
       // Check if conversation with channel or direct user
-      // if (to === Client.getNick()) {
-      //   if ()
-      // }
 
-      var targetKey = to === _clientManager2.default.getNick() ? sender : to;
+      var targetKey = to;
+      if (to === _clientManager2.default.getNick()) {
+        if (!targets.includes(sender)) {
+          this.enterConversation(sender);
+        }
+        targetKey = sender;
+      }
 
       var newMessage = {
         id: targetKey in messages ? messages[targetKey].length : 0,
@@ -211,7 +215,7 @@ var App = function (_React$Component) {
           , onlineStatus: this.state.onlineStatus,
           activeConversation: this.state.activeConversation,
           joinedChannels: this.state.joinedChannels,
-          channels: this.state.channels,
+          targets: this.state.targets,
           alertNew: this.state.alertNew
         }),
         _react2.default.createElement(_chatArea2.default, {

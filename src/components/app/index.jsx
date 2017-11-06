@@ -14,7 +14,7 @@ export default class App extends React.Component {
       messages: {},
       alertNew: [],
       users: {},
-      channels: Client.getChannels(),
+      targets: Client.getChannels(),
       onlineStatus: 'connecting' };
     this.bindActions();
   }
@@ -73,16 +73,16 @@ export default class App extends React.Component {
       joined.push(target);
     }
 
-    const channels = this.state.channels;
-    if (!channels.includes(target)) {
-      channels.push(target);
+    const targets = this.state.targets;
+    if (!targets.includes(target)) {
+      targets.push(target);
     }
 
     const index = this.state.alertNew.indexOf(target);
     const alertNew = this.state.alertNew;
     if (index > -1) alertNew.splice(index, 1);
 
-    this.setState({ activeConversation: target, joinedChannels: joined, alertNew, channels });
+    this.setState({ activeConversation: target, joinedChannels: joined, alertNew, targets });
   }
 
   leaveChannel(channel) {
@@ -95,7 +95,7 @@ export default class App extends React.Component {
       newActive = this.state.joinedChannels[newIndex];
     }
     this.setState({
-      channels: Client.getChannels(),
+      targets: Client.getChannels(),
       joinedChannels: joined,
       activeConversation: newActive });
   }
@@ -105,13 +105,16 @@ export default class App extends React.Component {
    * sender, then the sender is marked as a new alert
   */
   addMessage(sender, to, message, type = 'message') {
-    const { messages, alertNew, activeConversation } = this.state;
+    const { messages, alertNew, activeConversation, targets } = this.state;
 
     // Check if conversation with channel or direct user
-    // if (to === Client.getNick()) {
-    //   if ()
-    // }
-    const targetKey = to === Client.getNick() ? sender : to;
+    let targetKey = to;
+    if (targetKey === Client.getNick()) {
+      if (!targets.includes(sender)) {
+        this.enterConversation(sender);
+      }
+      targetKey = sender;
+    }
 
     const newMessage = {
       id: targetKey in messages ? messages[targetKey].length : 0,
@@ -157,7 +160,7 @@ export default class App extends React.Component {
           onlineStatus={this.state.onlineStatus}
           activeConversation={this.state.activeConversation}
           joinedChannels={this.state.joinedChannels}
-          channels={this.state.channels}
+          targets={this.state.targets}
           alertNew={this.state.alertNew}
         />
         <ChatArea

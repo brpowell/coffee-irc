@@ -17,7 +17,8 @@ export default class ChannelList extends React.Component {
   }
 
   render() {
-    const channels = this.props.channels.map((channel, index) => {
+    // TODO: Combine channel and direct logic to avoid repetition
+    const channels = this.props.targets.filter(target => target.startsWith('#')).map((channel, index) => {
       const isJoined = this.props.joinedChannels.includes(channel) ? 'joined' : '';
       const isActive = this.props.activeConversation === channel ? 'active' : '';
       const newAlert = this.props.alertNew.includes(channel) ? 'alert-new' : '';
@@ -30,12 +31,26 @@ export default class ChannelList extends React.Component {
         </li>
       );
     });
-    
+
+    const directTargets = this.props.targets.filter(target => !target.startsWith('#')).map((user, index) => {
+      const isActive = this.props.activeConversation === user ? 'active' : '';
+      const newAlert = this.props.alertNew.includes(user) ? 'alert-new' : '';
+      return (
+        <li
+          key={index}
+          className={`joined ${isActive} ${newAlert}`}
+          onClick={this.handleClick}>
+          { user }
+        </li>
+      );
+    });
+
     return (
       <ul className="channel-list">
         <div className="title">Channels</div>
         { channels }
         <div className="title">Direct Messages</div>
+        { directTargets }
       </ul>
     );
   }
@@ -44,7 +59,7 @@ export default class ChannelList extends React.Component {
 ChannelList.propTypes = {
   activeConversation: PropTypes.string.isRequired,
   joinedChannels: PropTypes.arrayOf(PropTypes.string).isRequired,
-  channels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  targets: PropTypes.arrayOf(PropTypes.string).isRequired,
   enterConversation: PropTypes.func.isRequired,
   alertNew: PropTypes.arrayOf(PropTypes.string).isRequired,
 };

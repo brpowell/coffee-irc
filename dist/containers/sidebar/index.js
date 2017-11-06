@@ -56,7 +56,7 @@ var Sidebar = function (_Component) {
           activeConversation: this.props.activeConversation,
           joinedChannels: this.props.joinedChannels,
           enterConversation: this.props.enterConversation,
-          channels: this.props.channels,
+          targets: this.props.targets,
           alertNew: this.props.alertNew
         })
       );

@@ -44,6 +44,7 @@ var ServerArea = function (_React$Component) {
 
     _this.state = { menuOpen: false };
     _this.toggleMenu = _this.toggleMenu.bind(_this);
+    _this.closeMenu = _this.toggleMenu.bind(null, false);
     return _this;
   }
 
@@ -51,7 +52,25 @@ var ServerArea = function (_React$Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       // TODO: display motd info and server stuff on connect
+    }
+  }, {
+    key: 'createMenu',
+    value: function createMenu() {
+      var menuItems = {};
+      if (this.props.onlineStatus === 'online') {
+        menuItems.Disconnect = this.props.handleDisconnect;
+      } else if (this.props.onlineStatus === 'offline') {
+        menuItems.Connect = this.props.handleConnect;
+      }
 
+      menuItems['-'] = null;
+      menuItems['Set Nickname'] = null;
+      menuItems['Server Settings'] = null;
+
+      return _react2.default.createElement(_popoverMenu2.default, {
+        menuItems: menuItems,
+        closeAction: this.closeMenu
+      });
     }
   }, {
     key: 'toggleMenu',
@@ -61,28 +80,14 @@ var ServerArea = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var menuItems = {};
-      if (this.props.onlineStatus === 'online') {
-        menuItems.Disconnect = this.props.handleDisconnect;
-      } else if (this.props.onlineStatus === 'offline') {
-        menuItems.Connect = this.props.handleConnect;
-      }
-      menuItems['-'] = null;
-      menuItems['Set Nickname'] = null;
-      menuItems['Server Settings'] = null;
-
-      var menu = _react2.default.createElement(_popoverMenu2.default, {
-        menuItems: menuItems,
-        closeAction: this.toggleMenu.bind(null, false)
-      });
       return _react2.default.createElement(
         _reactPopover2.default,
         {
           isOpen: this.state.menuOpen,
           place: 'below',
           className: 'server-menu',
-          body: menu,
-          onOuterAction: this.toggleMenu.bind(null, false)
+          body: this.createMenu(),
+          onOuterAction: this.closeMenu
         },
         _react2.default.createElement(
           'div',
@@ -111,5 +116,6 @@ exports.default = ServerArea;
 
 ServerArea.propTypes = {
   onlineStatus: _propTypes2.default.string.isRequired,
-  handleDisconnect: _propTypes2.default.func.isRequired
+  handleDisconnect: _propTypes2.default.func.isRequired,
+  handleConnect: _propTypes2.default.func.isRequired
 };

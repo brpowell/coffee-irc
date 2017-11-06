@@ -6,7 +6,8 @@
   "author": "Bryan Powell",
   "license": "MIT",
   "scripts": {
-    "start-all": "gulp && electron ."
+    "start": "gulp && electron .",
+    "settings": "open -a /Applications/\"Visual Studio Code.app\" ~/Library/Application\\ Support/coffee-irc/Settings"
   },
   "dependencies": {
     "electron": "^1.6.11",

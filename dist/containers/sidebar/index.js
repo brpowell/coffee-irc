@@ -26,6 +26,12 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+/* 
+Redux plans
+  - state container
+  - mapStateToProps and mapDispatchToProps
+*/
+
 var Sidebar = function (_Component) {
   _inherits(Sidebar, _Component);
 
@@ -47,9 +53,9 @@ var Sidebar = function (_Component) {
           handleConnect: this.props.handleConnect
         }),
         _react2.default.createElement(_channelList2.default, {
-          activeChannel: this.props.activeChannel,
+          activeConversation: this.props.activeConversation,
           joinedChannels: this.props.joinedChannels,
-          enterChannel: this.props.enterChannel,
+          enterConversation: this.props.enterConversation,
           channels: this.props.channels,
           alertNew: this.props.alertNew
         })

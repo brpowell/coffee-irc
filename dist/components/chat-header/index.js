@@ -45,7 +45,7 @@ var ChatHeader = function (_React$Component) {
     value: function render() {
       var _props = this.props,
           users = _props.users,
-          activeChannel = _props.activeChannel;
+          activeConversation = _props.activeConversation;
 
       return _react2.default.createElement(
         'div',
@@ -56,7 +56,7 @@ var ChatHeader = function (_React$Component) {
           _react2.default.createElement(
             'b',
             null,
-            activeChannel
+            activeConversation
           )
         ),
         _react2.default.createElement(
@@ -75,6 +75,6 @@ exports.default = ChatHeader;
 
 
 ChatHeader.propTypes = {
-  activeChannel: _propTypes2.default.string.isRequired,
+  activeConversation: _propTypes2.default.string.isRequired,
   users: _propTypes2.default.objectOf(_propTypes2.default.string).isRequired
 };

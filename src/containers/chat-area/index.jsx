@@ -4,21 +4,27 @@ import ChatHeader from '../../components/chat-header';
 import ChatLog from '../../components/chat-log';
 import ChatInput from '../../components/chat-input';
 
+/* 
+Redux plans
+  - state container
+  - mapStateToProps and pass state to the chat components
+*/
+
 const ChatArea = (props) => {
-  const { activeChannel, messages, users, addMessage } = props;
-  const channelMessages = activeChannel in messages ? messages[activeChannel] : [];
+  const { activeConversation, messages, users, addMessage } = props;
+  const channelMessages = activeConversation in messages ? messages[activeConversation] : [];
 
   return (
     <div className="chat-area">
-      <ChatHeader activeChannel={activeChannel} users={users} />
+      <ChatHeader activeConversation={activeConversation} users={users} />
       <ChatLog messages={channelMessages} />
-      <ChatInput activeChannel={activeChannel} addMessage={addMessage} />
+      <ChatInput activeConversation={activeConversation} addMessage={addMessage} />
     </div>
   );
 };
 
 ChatArea.propTypes = {
-  activeChannel: PropTypes.string.isRequired,
+  activeConversation: PropTypes.string.isRequired,
   addMessage: PropTypes.func.isRequired,
   messages: PropTypes.shape({
     channel: PropTypes.string,

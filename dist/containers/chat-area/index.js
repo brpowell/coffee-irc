@@ -26,25 +26,31 @@ var _chatInput2 = _interopRequireDefault(_chatInput);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* 
+Redux plans
+  - state container
+  - mapStateToProps and pass state to the chat components
+*/
+
 var ChatArea = function ChatArea(props) {
-  var activeChannel = props.activeChannel,
+  var activeConversation = props.activeConversation,
       messages = props.messages,
       users = props.users,
       addMessage = props.addMessage;
 
-  var channelMessages = activeChannel in messages ? messages[activeChannel] : [];
+  var channelMessages = activeConversation in messages ? messages[activeConversation] : [];
 
   return _react2.default.createElement(
     'div',
     { className: 'chat-area' },
-    _react2.default.createElement(_chatHeader2.default, { activeChannel: activeChannel, users: users }),
+    _react2.default.createElement(_chatHeader2.default, { activeConversation: activeConversation, users: users }),
     _react2.default.createElement(_chatLog2.default, { messages: channelMessages }),
-    _react2.default.createElement(_chatInput2.default, { activeChannel: activeChannel, addMessage: addMessage })
+    _react2.default.createElement(_chatInput2.default, { activeConversation: activeConversation, addMessage: addMessage })
   );
 };
 
 ChatArea.propTypes = {
-  activeChannel: _propTypes2.default.string.isRequired,
+  activeConversation: _propTypes2.default.string.isRequired,
   addMessage: _propTypes2.default.func.isRequired,
   messages: _propTypes2.default.shape({
     channel: _propTypes2.default.string,

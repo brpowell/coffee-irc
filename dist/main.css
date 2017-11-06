@@ -45,13 +45,15 @@ body {
 .channel-list {
   list-style-type: none;
   padding: 0;
-  color: rgba(255, 255, 255, 0.5); }
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0; }
   .channel-list .title {
     color: white;
     opacity: 0.8;
     font-size: 14px;
     padding-left: 10px;
-    margin-bottom: 3px;
+    margin-bottom: 6px;
+    margin-top: 6px;
     cursor: default; }
   .channel-list li {
     padding-top: 4px;

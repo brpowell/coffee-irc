@@ -45,7 +45,7 @@ var ChannelList = function (_React$Component) {
       if (_clientManager2.default.isConnected()) {
         _clientManager2.default.join(channel);
       }
-      if (this.props.activeChannel !== channel) this.props.enterChannel(channel);
+      if (this.props.activeConversation !== channel) this.props.enterConversation(channel);
     }
   }, {
     key: 'render',
@@ -54,7 +54,7 @@ var ChannelList = function (_React$Component) {
 
       var channels = this.props.channels.map(function (channel, index) {
         var isJoined = _this2.props.joinedChannels.includes(channel) ? 'joined' : '';
-        var isActive = _this2.props.activeChannel === channel ? 'active' : '';
+        var isActive = _this2.props.activeConversation === channel ? 'active' : '';
         var newAlert = _this2.props.alertNew.includes(channel) ? 'alert-new' : '';
         return _react2.default.createElement(
           'li',
@@ -72,9 +72,14 @@ var ChannelList = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'title' },
-          'CHANNELS'
+          'Channels'
         ),
-        channels
+        channels,
+        _react2.default.createElement(
+          'div',
+          { className: 'title' },
+          'Direct Messages'
+        )
       );
     }
   }]);
@@ -86,9 +91,9 @@ exports.default = ChannelList;
 
 
 ChannelList.propTypes = {
-  activeChannel: _propTypes2.default.string.isRequired,
+  activeConversation: _propTypes2.default.string.isRequired,
   joinedChannels: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired,
   channels: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired,
-  enterChannel: _propTypes2.default.func.isRequired,
+  enterConversation: _propTypes2.default.func.isRequired,
   alertNew: _propTypes2.default.arrayOf(_propTypes2.default.string).isRequired
 };

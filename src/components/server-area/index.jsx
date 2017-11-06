@@ -4,17 +4,36 @@ import Popover from 'react-popover';
 import PopoverMenu from '../popover-menu';
 import Client from '../../api/client-manager';
 
-
 export default class ServerArea extends React.Component {
   constructor(props) {
     super(props);
     this.state = { menuOpen: false };
     this.toggleMenu = this.toggleMenu.bind(this);
+    this.closeMenu = this.toggleMenu.bind(null, false);
   }
 
   componentDidMount() {
     // TODO: display motd info and server stuff on connect
+  }
 
+  createMenu() {
+    const menuItems = {};
+    if (this.props.onlineStatus === 'online') {
+      menuItems.Disconnect = this.props.handleDisconnect;
+    } else if (this.props.onlineStatus === 'offline') {
+      menuItems.Connect = this.props.handleConnect;
+    }
+
+    menuItems['-'] = null;
+    menuItems['Set Nickname'] = null;
+    menuItems['Server Settings'] = null;
+
+    return (
+      <PopoverMenu
+        menuItems={menuItems}
+        closeAction={this.closeMenu}
+      />
+    );
   }
 
   toggleMenu() {
@@ -22,32 +41,21 @@ export default class ServerArea extends React.Component {
   }
 
   render() {
-    const menuItems = {};
-    if (this.props.onlineStatus === 'online') {
-      menuItems.Disconnect = this.props.handleDisconnect;
-    } else if (this.props.onlineStatus === 'offline') {
-      menuItems.Connect = this.props.handleConnect;
-    }
-    menuItems['-'] = null;
-    menuItems['Set Nickname'] = null;
-    menuItems['Server Settings'] = null;
-
-    const menu = (<PopoverMenu
-      menuItems={menuItems}
-      closeAction={this.toggleMenu.bind(null, false)}
-    />);
     return (
       <Popover
         isOpen={this.state.menuOpen}
         place="below"
         className="server-menu"
-        body={menu}
-        onOuterAction={this.toggleMenu.bind(null, false)}
+        body={this.createMenu()}
+        onOuterAction={this.closeMenu}
       >
         <div role="button" className="server-area" onClick={this.toggleMenu} tabIndex={0}>
           <div className="server-info">{ Client.current }</div>
-          <div className="user-info">{ this.props.onlineStatus === 'online' ? `@${Client.getNick()}` : this.props.onlineStatus }
-            <div className={this.props.onlineStatus} /></div></div>
+          <div className="user-info">
+            { this.props.onlineStatus === 'online' ? `@${Client.getNick()}` : this.props.onlineStatus }
+            <div className={this.props.onlineStatus} />
+          </div>
+        </div>
       </Popover>
     );
   }
@@ -56,4 +64,5 @@ export default class ServerArea extends React.Component {
 ServerArea.propTypes = {
   onlineStatus: PropTypes.string.isRequired,
   handleDisconnect: PropTypes.func.isRequired,
+  handleConnect: PropTypes.func.isRequired,
 };

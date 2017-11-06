@@ -155,7 +155,7 @@ var ClientManager = function () {
     }
 
     /**
-     * Join a channel in the active server. Also calls addChanneL()
+     * Join a channel in the active server. Also calls addChannel()
      * to add channel to the channel list and save in settings
      * @param {any} channel 
      * @memberof ClientManager

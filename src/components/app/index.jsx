@@ -1,5 +1,5 @@
 import React from 'react';
-import { getTimestamp } from './util';
+import getTimestamp from './util';
 import Client from '../../api/client-manager';
 
 import Sidebar from '../../containers/sidebar';
@@ -9,7 +9,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeChannel: '',
+      activeConversation: '',
       joinedChannels: [],
       messages: {},
       alertNew: [],
@@ -28,7 +28,7 @@ export default class App extends React.Component {
     Client.on('join', (channel, nick) => {
       const message = `has joined ${channel}`;
       this.addMessage(nick, channel, message, 'status');
-      if (nick === Client.getNick()) this.enterChannel(channel);
+      if (nick === Client.getNick()) this.enterConversation(channel);
     });
 
     Client.on('part', (channel, nick) => {
@@ -61,64 +61,74 @@ export default class App extends React.Component {
   }
 
   bindActions() {
-    this.enterChannel = this.enterChannel.bind(this);
+    this.enterConversation = this.enterConversation.bind(this);
     this.addMessage = this.addMessage.bind(this);
     this.handleDisconnect = this.handleDisconnect.bind(this);
     this.handleConnect = this.handleConnect.bind(this);
   }
 
-  enterChannel(channel) {
+  enterConversation(target) {
     const joined = this.state.joinedChannels;
-    if (joined.indexOf(channel) === -1) {
-      joined.push(channel);
+    if (!joined.includes(target)) {
+      joined.push(target);
     }
 
     const channels = this.state.channels;
-    if (channels.indexOf(channel) === -1) {
-      channels.push(channel);
+    if (!channels.includes(target)) {
+      channels.push(target);
     }
 
-    const index = this.state.alertNew.indexOf(channel);
+    const index = this.state.alertNew.indexOf(target);
     const alertNew = this.state.alertNew;
     if (index > -1) alertNew.splice(index, 1);
 
-    this.setState({ activeChannel: channel, joinedChannels: joined, alertNew, channels });
+    this.setState({ activeConversation: target, joinedChannels: joined, alertNew, channels });
   }
 
   leaveChannel(channel) {
     const joined = this.state.joinedChannels;
-    const i = joined.indexOf(channel);
+    const index = joined.indexOf(channel);
     let newActive = '';
-    if (i !== -1) joined.splice(i, 1);
+    if (index !== -1) joined.splice(index, 1);
     if (this.state.joinedChannels.length > 0) {
-      const newIndex = i == 0 ? this.state.joinedChannels.length - 1 : i - 1;
+      const newIndex = index === 0 ? this.state.joinedChannels.length - 1 : index - 1;
       newActive = this.state.joinedChannels[newIndex];
     }
     this.setState({
       channels: Client.getChannels(),
       joinedChannels: joined,
-      activeChannel: newActive });
+      activeConversation: newActive });
   }
 
+  /*
+   * Adds a message to the app's state. If a user is not browsing the conversation with the
+   * sender, then the sender is marked as a new alert
+  */
   addMessage(sender, to, message, type = 'message') {
-    const messages = this.state.messages;
+    const { messages, alertNew, activeConversation } = this.state;
+
+    // Check if conversation with channel or direct user
+    // if (to === Client.getNick()) {
+    //   if ()
+    // }
+    const targetKey = to === Client.getNick() ? sender : to;
+
     const newMessage = {
-      id: to in messages ? messages[to].length : 0,
+      id: targetKey in messages ? messages[targetKey].length : 0,
       sender,
       message,
       timestamp: getTimestamp(),
       type,
     };
 
-    if (to in messages) {
-      messages[to].push(newMessage);
+    if (targetKey in messages) {
+      messages[targetKey].push(newMessage);
     } else {
-      messages[to] = [newMessage];
+      messages[targetKey] = [newMessage];
     }
 
-    const alertNew = this.state.alertNew;
-    if (alertNew.indexOf(to) === -1 && this.state.activeChannel !== to) {
-      alertNew.push(to);
+    if (!alertNew.includes(targetKey) && activeConversation !== targetKey) {
+      alertNew.push(targetKey);
     }
 
     this.setState({ messages, alertNew });
@@ -132,27 +142,29 @@ export default class App extends React.Component {
   handleDisconnect() {
     Client.disconnect();
     this.setState({ onlineStatus: 'offline' });
-    this.addMessage(Client.getNick(), this.state.activeChannel, 'has disconnected', 'status');
+    this.addMessage(Client.getNick(), this.state.activeConversation, 'has disconnected', 'status');
   }
 
   render() {
     return (
       <div>
         <Sidebar
-          onlineStatus={this.state.onlineStatus}
+          // Actions
+          enterConversation={this.enterConversation}
           handleDisconnect={this.handleDisconnect}
           handleConnect={this.handleConnect}
-          activeChannel={this.state.activeChannel}
+          // State
+          onlineStatus={this.state.onlineStatus}
+          activeConversation={this.state.activeConversation}
           joinedChannels={this.state.joinedChannels}
-          enterChannel={this.enterChannel}
           channels={this.state.channels}
           alertNew={this.state.alertNew}
         />
         <ChatArea
           addMessage={this.addMessage}
-          activeChannel={this.state.activeChannel}
+          activeConversation={this.state.activeConversation}
           messages={this.state.messages}
-          users={this.state.users[this.state.activeChannel]}
+          users={this.state.users[this.state.activeConversation]}
         />
       </div>
     );

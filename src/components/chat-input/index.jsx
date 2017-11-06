@@ -16,16 +16,16 @@ export default class ChatInput extends React.Component {
 
   handleSendKey(event) {
     if (event.key === 'Enter' && this.state.input.length > 0) {
-      if (Client.send(this.state.input, this.props.activeChannel) && Client.isConnected()) {
-        this.props.addMessage(Client.getNick(), this.props.activeChannel, this.state.input);
+      if (Client.send(this.state.input, this.props.activeConversation) && Client.isConnected()) {
+        this.props.addMessage(Client.getNick(), this.props.activeConversation, this.state.input);
       }
       this.setState({ input: '' });
     }
   }
 
   render() {
-    const { activeChannel } = this.props;
-    const placeholder = activeChannel ? `Send to ${activeChannel}` : 'join a channel or enter a command';
+    const { activeConversation } = this.props;
+    const placeholder = activeConversation ? `Send to ${activeConversation}` : 'join a channel or enter a command';
     return (
       <div className="chat-input">
         <input
@@ -40,6 +40,6 @@ export default class ChatInput extends React.Component {
 }
 
 ChatInput.propTypes = {
-  activeChannel: PropTypes.string.isRequired,
+  activeConversation: PropTypes.string.isRequired,
   addMessage: PropTypes.func.isRequired,
 };

@@ -13,11 +13,11 @@ export default class ChatHeader extends React.Component {
   }
 
   render() {
-    const { users, activeChannel } = this.props;
+    const { users, activeConversation } = this.props;
     return (
       <div className="chat-header">
         <div className="header-block">
-          <b>{ activeChannel }</b>
+          <b>{ activeConversation }</b>
         </div>
         <div className="user-count">
           {users ? users.length : ''}
@@ -28,6 +28,6 @@ export default class ChatHeader extends React.Component {
 }
 
 ChatHeader.propTypes = {
-  activeChannel: PropTypes.string.isRequired,
+  activeConversation: PropTypes.string.isRequired,
   users: PropTypes.objectOf(PropTypes.string).isRequired,
 };

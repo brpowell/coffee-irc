@@ -49,8 +49,8 @@ var ChatInput = function (_React$Component) {
     key: 'handleSendKey',
     value: function handleSendKey(event) {
       if (event.key === 'Enter' && this.state.input.length > 0) {
-        if (_clientManager2.default.send(this.state.input, this.props.activeChannel) && _clientManager2.default.isConnected()) {
-          this.props.addMessage(_clientManager2.default.getNick(), this.props.activeChannel, this.state.input);
+        if (_clientManager2.default.send(this.state.input, this.props.activeConversation) && _clientManager2.default.isConnected()) {
+          this.props.addMessage(_clientManager2.default.getNick(), this.props.activeConversation, this.state.input);
         }
         this.setState({ input: '' });
       }
@@ -58,9 +58,9 @@ var ChatInput = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var activeChannel = this.props.activeChannel;
+      var activeConversation = this.props.activeConversation;
 
-      var placeholder = activeChannel ? 'Send to ' + activeChannel : 'join a channel or enter a command';
+      var placeholder = activeConversation ? 'Send to ' + activeConversation : 'join a channel or enter a command';
       return _react2.default.createElement(
         'div',
         { className: 'chat-input' },
@@ -81,6 +81,6 @@ exports.default = ChatInput;
 
 
 ChatInput.propTypes = {
-  activeChannel: _propTypes2.default.string.isRequired,
+  activeConversation: _propTypes2.default.string.isRequired,
   addMessage: _propTypes2.default.func.isRequired
 };

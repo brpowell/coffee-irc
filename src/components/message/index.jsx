@@ -37,7 +37,6 @@ export default class Message extends React.Component {
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
-
         { stamp }
         <div className={this.props.type === 'status' ? 'status' : ''}>{ this.props.message }</div>
         { this.state.showTimestamp ? <i className="timestamp">{ this.props.timestamp }</i> : null }

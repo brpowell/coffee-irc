@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import ServerArea from '../../components/server-area';
 import ChannelList from '../../components/channel-list';
 
+/* 
+Redux plans
+  - state container
+  - mapStateToProps and mapDispatchToProps
+*/
+
 export default class Sidebar extends Component {
   render() {
     return (
@@ -12,9 +18,9 @@ export default class Sidebar extends Component {
           handleConnect={this.props.handleConnect}
         />
         <ChannelList
-          activeChannel={this.props.activeChannel}
+          activeConversation={this.props.activeConversation}
           joinedChannels={this.props.joinedChannels}
-          enterChannel={this.props.enterChannel}
+          enterConversation={this.props.enterConversation}
           channels={this.props.channels}
           alertNew={this.props.alertNew}
         />

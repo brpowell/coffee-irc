@@ -34,6 +34,7 @@ Redux plans
 
 var ChatArea = function ChatArea(props) {
   var activeConversation = props.activeConversation,
+      handleCommand = props.handleCommand,
       messages = props.messages,
       users = props.users,
       addMessage = props.addMessage;
@@ -45,13 +46,18 @@ var ChatArea = function ChatArea(props) {
     { className: 'chat-area' },
     _react2.default.createElement(_chatHeader2.default, { activeConversation: activeConversation, users: users }),
     _react2.default.createElement(_chatLog2.default, { messages: channelMessages }),
-    _react2.default.createElement(_chatInput2.default, { activeConversation: activeConversation, addMessage: addMessage })
+    _react2.default.createElement(_chatInput2.default, {
+      activeConversation: activeConversation,
+      addMessage: addMessage,
+      handleCommand: handleCommand
+    })
   );
 };
 
 ChatArea.propTypes = {
   activeConversation: _propTypes2.default.string.isRequired,
   addMessage: _propTypes2.default.func.isRequired,
+  handleCommand: _propTypes2.default.func.isRequired,
   messages: _propTypes2.default.shape({
     channel: _propTypes2.default.string,
     messages: _propTypes2.default.arrayOf(_propTypes2.default.shape({

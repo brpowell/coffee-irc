@@ -24,6 +24,10 @@ export default class App extends React.Component {
       this.addMessage(sender, to, message);
     });
 
+    Client.on('selfMessage', (to, message) => {
+      this.addMessage(Client.getNick(), to, message);
+    });
+
     // TODO: Don't trigger alert new on join (or leave)
     Client.on('join', (channel, nick) => {
       const message = `has joined ${channel}`;
@@ -42,6 +46,9 @@ export default class App extends React.Component {
 
     Client.on('error', (error) => {
       console.log(error);
+      const { args, rawCommand } = error;
+      const message = `Error (${rawCommand}): ${args[2]}`;
+      this.addMessage(Client.getNick(), this.state.activeConversation, message, 'error');
     });
 
     // triggered when user joins but doesn't part...
@@ -65,9 +72,10 @@ export default class App extends React.Component {
     this.addMessage = this.addMessage.bind(this);
     this.handleDisconnect = this.handleDisconnect.bind(this);
     this.handleConnect = this.handleConnect.bind(this);
+    this.handleCommand = this.handleCommand.bind(this);
   }
 
-  enterConversation(target) {
+  enterConversation(target, force = true) {
     const joined = this.state.joinedChannels;
     if (!joined.includes(target)) {
       joined.push(target);
@@ -82,7 +90,9 @@ export default class App extends React.Component {
     const alertNew = this.state.alertNew;
     if (index > -1) alertNew.splice(index, 1);
 
-    this.setState({ activeConversation: target, joinedChannels: joined, alertNew, targets });
+    const activeConversation = force ? target : this.state.activeConversation;
+
+    this.setState({ activeConversation, joinedChannels: joined, alertNew, targets });
   }
 
   leaveChannel(channel) {
@@ -107,13 +117,11 @@ export default class App extends React.Component {
   addMessage(sender, to, message, type = 'message') {
     const { messages, alertNew, activeConversation, targets } = this.state;
 
-    // Check if conversation with channel or direct user
-    let targetKey = to;
-    if (targetKey === Client.getNick()) {
-      if (!targets.includes(sender)) {
-        this.enterConversation(sender);
-      }
-      targetKey = sender;
+    const targetKey = to === Client.getNick() ? sender : to;
+    if (!targets.includes(targetKey)) {
+      const force = targetKey === to;
+      this.enterConversation(targetKey, force);
+      Client.saveTarget(targetKey); // Persist direct message user in sidebar
     }
 
     const newMessage = {
@@ -148,6 +156,13 @@ export default class App extends React.Component {
     this.addMessage(Client.getNick(), this.state.activeConversation, 'has disconnected', 'status');
   }
 
+  handleCommand(input, target) {
+    const stateResponse = Client.handleCommand(input, target);
+    if (stateResponse) {
+      this.setState(stateResponse);
+    }
+  }
+
   render() {
     return (
       <div>
@@ -164,7 +179,10 @@ export default class App extends React.Component {
           alertNew={this.state.alertNew}
         />
         <ChatArea
+          // Actions
           addMessage={this.addMessage}
+          handleCommand={this.handleCommand}
+          // State
           activeConversation={this.state.activeConversation}
           messages={this.state.messages}
           users={this.state.users[this.state.activeConversation]}

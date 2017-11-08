@@ -7,7 +7,7 @@ const { app, BrowserWindow } = electron;
 // const Client = require('./src/api/coffee-client.js');
 
 let win;
-const props = { width: 900, height: 550, minWidth: 600, minHeight: 450 };
+const props = { width: 1000, height: 650, minWidth: 600, minHeight: 450 };
 // Client.addServer('My Local', '0.0.0.0', 'bryan');
 
 app.on('ready', () => {

@@ -164,6 +164,9 @@ body {
   .message b {
     color: red; }
 
+.error {
+  color: red; }
+
 .status {
   font-style: italic;
   opacity: 0.4; }

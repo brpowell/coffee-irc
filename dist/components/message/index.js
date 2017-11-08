@@ -53,46 +53,50 @@ var Message = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var className = 'message';
-      var prevMessage = this.props.prevMessage;
+      var _props = this.props,
+          type = _props.type,
+          prevMessage = _props.prevMessage,
+          sender = _props.sender,
+          timestamp = _props.timestamp,
+          message = _props.message;
+
       var stamp = null;
       // TODO: this is just awful
-      if (this.props.type === 'status' || prevMessage == null || this.props.sender !== prevMessage.sender || this.props.sender === prevMessage.sender && this.props.type === 'message' && prevMessage.type === 'status') {
+      if (type === 'status' || prevMessage == null || sender !== prevMessage.sender || sender === prevMessage.sender && type === 'message' && prevMessage.type === 'status') {
         stamp = _react2.default.createElement(
           'span',
           null,
           _react2.default.createElement(
             'b',
-            { className: this.props.sender === _clientManager2.default.getNick() ? 'sender-name' : '' },
-            this.props.sender
+            { className: sender === _clientManager2.default.getNick() ? 'sender-name' : '' },
+            sender
           ),
           _react2.default.createElement(
             'i',
             { className: 'timestamp-first' },
-            this.props.timestamp
+            timestamp
           ),
           _react2.default.createElement('br', null)
         );
-        className += ' message-stamp';
       }
 
       return _react2.default.createElement(
         'div',
         {
-          className: className,
+          className: 'message ' + (stamp ? 'message-stamp' : ''),
           onMouseEnter: this.handleMouseEnter,
           onMouseLeave: this.handleMouseLeave
         },
         stamp,
         _react2.default.createElement(
           'div',
-          { className: this.props.type === 'status' ? 'status' : '' },
-          this.props.message
+          { className: type !== 'message' ? type : '' },
+          message
         ),
         this.state.showTimestamp ? _react2.default.createElement(
           'i',
           { className: 'timestamp' },
-          this.props.timestamp
+          timestamp
         ) : null
       );
     }
@@ -112,5 +116,6 @@ Message.propTypes = {
   prevMessage: _propTypes2.default.objectOf(_propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number])),
   sender: _propTypes2.default.string.isRequired,
   timestamp: _propTypes2.default.string.isRequired,
-  message: _propTypes2.default.string.isRequired
+  message: _propTypes2.default.string.isRequired,
+  type: _propTypes2.default.string.isRequired
 };

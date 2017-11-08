@@ -92,18 +92,13 @@ var ClientManager = function () {
     value: function send(message, target) {
       var cb = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
 
-      var wasMessage = false;
-      if (message.startsWith('/')) {
-        this.handleCommand(message, target);
-      } else if (target.length > 0) {
+      if (target.length > 0) {
         var c = this.conns[this.current].conn;
         c.say(target, message);
-        wasMessage = true;
       }
       if (cb !== undefined) {
         cb();
       }
-      return wasMessage;
     }
 
     /**
@@ -119,13 +114,9 @@ var ClientManager = function () {
     value: function handleCommand(input, target) {
       var rx = /\/\w+/;
       var command = input.match(rx)[0].substring(1);
-      var arg = input.replace(input.match(rx)[0] + ' ', '');
-      var context = { arg: arg, target: target, client: this, conn: this.conns[this.current].conn };
-      if (command in _commands2.default) {
-        _commands2.default[command](context);
-      } else {
-        context.conn.send(input);
-      }
+      var args = input.replace(input.match(rx)[0] + ' ', '');
+      var context = { args: args, target: target, client: this, conn: this.conns[this.current].conn };
+      return command in _commands2.default ? _commands2.default[command](context) : false;
     }
 
     /**
@@ -166,43 +157,43 @@ var ClientManager = function () {
     value: function join(channel) {
       var c = this.conns[this.current].conn;
       c.join(channel);
-      this.addChannel(channel);
+      this.saveTarget(channel);
     }
 
     /**
-     * Add a channel to the active server
+     * Add a conversation target to the active server
      * @param {string} channel 
      * @memberof ClientManager
      */
 
   }, {
-    key: 'addChannel',
-    value: function addChannel(channel) {
+    key: 'saveTarget',
+    value: function saveTarget(target) {
       var path = 'servers.' + this.current + '.channels';
       var channels = _electronSettings2.default.get(path, []);
-      if (channels.indexOf(channel) === -1) {
-        channels.push(channel);
+      if (channels.indexOf(target) === -1) {
+        channels.push(target);
       }
       _electronSettings2.default.set(path, channels);
     }
 
     /**
-     * Remove a channel from the active server
+     * Remove a conversation target from the active server
      * @param {string} channel 
      * @memberof ClientManager
      */
 
   }, {
-    key: 'removeChannel',
-    value: function removeChannel(channel) {
-      var i = this.conns[this.current].channels.indexOf(channel);
+    key: 'removeTarget',
+    value: function removeTarget(target) {
+      var i = this.conns[this.current].channels.indexOf(target);
       if (i !== -1) {
         this.conns[this.current].channels.splice(i, 1);
       }
 
       var path = 'servers.' + this.current + '.channels';
       var channels = _electronSettings2.default.get(path, []);
-      i = channels.indexOf(channel);
+      i = channels.indexOf(target);
       if (i !== -1) {
         channels.splice(i, 1);
       }

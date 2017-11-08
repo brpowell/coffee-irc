@@ -63,6 +63,10 @@ var App = function (_React$Component) {
         _this2.addMessage(sender, to, message);
       });
 
+      _clientManager2.default.on('selfMessage', function (to, message) {
+        _this2.addMessage(_clientManager2.default.getNick(), to, message);
+      });
+
       // TODO: Don't trigger alert new on join (or leave)
       _clientManager2.default.on('join', function (channel, nick) {
         var message = 'has joined ' + channel;
@@ -81,6 +85,11 @@ var App = function (_React$Component) {
 
       _clientManager2.default.on('error', function (error) {
         console.log(error);
+        var args = error.args,
+            rawCommand = error.rawCommand;
+
+        var message = 'Error (' + rawCommand + '): ' + args[2];
+        _this2.addMessage(_clientManager2.default.getNick(), _this2.state.activeConversation, message, 'error');
       });
 
       // triggered when user joins but doesn't part...
@@ -105,10 +114,13 @@ var App = function (_React$Component) {
       this.addMessage = this.addMessage.bind(this);
       this.handleDisconnect = this.handleDisconnect.bind(this);
       this.handleConnect = this.handleConnect.bind(this);
+      this.handleCommand = this.handleCommand.bind(this);
     }
   }, {
     key: 'enterConversation',
     value: function enterConversation(target) {
+      var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
       var joined = this.state.joinedChannels;
       if (!joined.includes(target)) {
         joined.push(target);
@@ -123,7 +135,9 @@ var App = function (_React$Component) {
       var alertNew = this.state.alertNew;
       if (index > -1) alertNew.splice(index, 1);
 
-      this.setState({ activeConversation: target, joinedChannels: joined, alertNew: alertNew, targets: targets });
+      var activeConversation = force ? target : this.state.activeConversation;
+
+      this.setState({ activeConversation: activeConversation, joinedChannels: joined, alertNew: alertNew, targets: targets });
     }
   }, {
     key: 'leaveChannel',
@@ -157,14 +171,12 @@ var App = function (_React$Component) {
           activeConversation = _state.activeConversation,
           targets = _state.targets;
 
-      // Check if conversation with channel or direct user
 
-      var targetKey = to;
-      if (to === _clientManager2.default.getNick()) {
-        if (!targets.includes(sender)) {
-          this.enterConversation(sender);
-        }
-        targetKey = sender;
+      var targetKey = to === _clientManager2.default.getNick() ? sender : to;
+      if (!targets.includes(targetKey)) {
+        var force = targetKey === to;
+        this.enterConversation(targetKey, force);
+        _clientManager2.default.saveTarget(targetKey); // Persist direct message user in sidebar
       }
 
       var newMessage = {
@@ -201,6 +213,14 @@ var App = function (_React$Component) {
       this.addMessage(_clientManager2.default.getNick(), this.state.activeConversation, 'has disconnected', 'status');
     }
   }, {
+    key: 'handleCommand',
+    value: function handleCommand(input, target) {
+      var stateResponse = _clientManager2.default.handleCommand(input, target);
+      if (stateResponse) {
+        this.setState(stateResponse);
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -218,9 +238,12 @@ var App = function (_React$Component) {
           targets: this.state.targets,
           alertNew: this.state.alertNew
         }),
-        _react2.default.createElement(_chatArea2.default, {
-          addMessage: this.addMessage,
-          activeConversation: this.state.activeConversation,
+        _react2.default.createElement(_chatArea2.default
+        // Actions
+        , { addMessage: this.addMessage,
+          handleCommand: this.handleCommand
+          // State
+          , activeConversation: this.state.activeConversation,
           messages: this.state.messages,
           users: this.state.users[this.state.activeConversation]
         })

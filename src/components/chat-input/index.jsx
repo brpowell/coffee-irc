@@ -15,9 +15,13 @@ export default class ChatInput extends React.Component {
   }
 
   handleSendKey(event) {
-    if (event.key === 'Enter' && this.state.input.length > 0) {
-      if (Client.send(this.state.input, this.props.activeConversation) && Client.isConnected()) {
-        this.props.addMessage(Client.getNick(), this.props.activeConversation, this.state.input);
+    const input = this.state.input;
+    const activeConversation = this.props.activeConversation;
+    if (event.key === 'Enter' && input.length > 0) {
+      if (input.startsWith('/')) {
+        this.props.handleCommand(input, activeConversation);
+      } else {
+        Client.send(input, activeConversation);
       }
       this.setState({ input: '' });
     }

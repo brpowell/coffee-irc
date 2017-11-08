@@ -42,7 +42,7 @@ var ChannelList = function (_React$Component) {
     key: 'handleClick',
     value: function handleClick(event) {
       var channel = event.target.textContent;
-      if (_clientManager2.default.isConnected()) {
+      if (_clientManager2.default.isConnected() && channel.startsWith('#')) {
         _clientManager2.default.join(channel);
       }
       if (this.props.activeConversation !== channel) this.props.enterConversation(channel);
@@ -52,6 +52,7 @@ var ChannelList = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
+      // TODO: Combine channel and direct logic to avoid repetition
       var channels = this.props.targets.filter(function (target) {
         return target.startsWith('#');
       }).map(function (channel, index) {

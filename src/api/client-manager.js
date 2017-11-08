@@ -55,18 +55,13 @@ class ClientManager {
    * @memberof ClientManager
    */
   send(message, target, cb = undefined) {
-    let wasMessage = false;
-    if (message.startsWith('/')) {
-      this.handleCommand(message, target);
-    } else if (target.length > 0) {
+    if (target.length > 0) {
       const c = this.conns[this.current].conn;
       c.say(target, message);
-      wasMessage = true;
     }
     if (cb !== undefined) {
       cb();
     }
-    return wasMessage;
   }
 
   /**
@@ -79,13 +74,9 @@ class ClientManager {
   handleCommand(input, target) {
     const rx = /\/\w+/;
     const command = input.match(rx)[0].substring(1);
-    const arg = input.replace(`${input.match(rx)[0]} `, '');
-    const context = { arg, target, client: this, conn: this.conns[this.current].conn };
-    if (command in commands) {
-      commands[command](context);
-    } else {
-      context.conn.send(input);
-    }
+    const args = input.replace(`${input.match(rx)[0]} `, '');
+    const context = { args, target, client: this, conn: this.conns[this.current].conn };
+    return command in commands ? commands[command](context) : false;
   }
 
   /**
@@ -117,37 +108,37 @@ class ClientManager {
   join(channel) {
     const c = this.conns[this.current].conn;
     c.join(channel);
-    this.addChannel(channel);
+    this.saveTarget(channel);
   }
 
   /**
-   * Add a channel to the active server
+   * Add a conversation target to the active server
    * @param {string} channel 
    * @memberof ClientManager
    */
-  addChannel(channel) {
+  saveTarget(target) {
     const path = `servers.${this.current}.channels`;
     const channels = settings.get(path, []);
-    if (channels.indexOf(channel) === -1) {
-      channels.push(channel);
+    if (channels.indexOf(target) === -1) {
+      channels.push(target);
     }
     settings.set(path, channels);
   }
 
   /**
-   * Remove a channel from the active server
+   * Remove a conversation target from the active server
    * @param {string} channel 
    * @memberof ClientManager
    */
-  removeChannel(channel) {
-    let i = this.conns[this.current].channels.indexOf(channel);
+  removeTarget(target) {
+    let i = this.conns[this.current].channels.indexOf(target);
     if (i !== -1) {
       this.conns[this.current].channels.splice(i, 1);
     }
 
     const path = `servers.${this.current}.channels`;
     const channels = settings.get(path, []);
-    i = channels.indexOf(channel);
+    i = channels.indexOf(target);
     if (i !== -1) {
       channels.splice(i, 1);
     }

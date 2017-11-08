@@ -48,9 +48,13 @@ var ChatInput = function (_React$Component) {
   }, {
     key: 'handleSendKey',
     value: function handleSendKey(event) {
-      if (event.key === 'Enter' && this.state.input.length > 0) {
-        if (_clientManager2.default.send(this.state.input, this.props.activeConversation) && _clientManager2.default.isConnected()) {
-          this.props.addMessage(_clientManager2.default.getNick(), this.props.activeConversation, this.state.input);
+      var input = this.state.input;
+      var activeConversation = this.props.activeConversation;
+      if (event.key === 'Enter' && input.length > 0) {
+        if (input.startsWith('/')) {
+          this.props.handleCommand(input, activeConversation);
+        } else {
+          _clientManager2.default.send(input, activeConversation);
         }
         this.setState({ input: '' });
       }

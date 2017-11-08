@@ -10,7 +10,7 @@ export default class ChannelList extends React.Component {
 
   handleClick(event) {
     const channel = event.target.textContent;
-    if (Client.isConnected()) {
+    if (Client.isConnected() && channel.startsWith('#')) {
       Client.join(channel);
     }
     if (this.props.activeConversation !== channel) this.props.enterConversation(channel);

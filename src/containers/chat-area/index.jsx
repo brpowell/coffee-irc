@@ -11,14 +11,18 @@ Redux plans
 */
 
 const ChatArea = (props) => {
-  const { activeConversation, messages, users, addMessage } = props;
+  const { activeConversation, handleCommand, messages, users, addMessage } = props;
   const channelMessages = activeConversation in messages ? messages[activeConversation] : [];
 
   return (
     <div className="chat-area">
       <ChatHeader activeConversation={activeConversation} users={users} />
       <ChatLog messages={channelMessages} />
-      <ChatInput activeConversation={activeConversation} addMessage={addMessage} />
+      <ChatInput
+        activeConversation={activeConversation}
+        addMessage={addMessage}
+        handleCommand={handleCommand}
+      />
     </div>
   );
 };
@@ -26,6 +30,7 @@ const ChatArea = (props) => {
 ChatArea.propTypes = {
   activeConversation: PropTypes.string.isRequired,
   addMessage: PropTypes.func.isRequired,
+  handleCommand: PropTypes.func.isRequired,
   messages: PropTypes.shape({
     channel: PropTypes.string,
     messages: PropTypes.arrayOf(PropTypes.shape({

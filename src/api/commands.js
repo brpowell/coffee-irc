@@ -4,16 +4,26 @@
  */
 const commands = {
   join: (context) => {
-    context.client.join(`#${context.arg}`);
+    context.client.join(`#${context.args}`);
   },
   leave: (context) => {
-    if (context.arg === 'remove') {
-      context.client.removeChannel(context.target);
+    const target = context.target;
+    if (context.args === 'remove' || !target.startsWith('#')) {
+      context.client.removeTarget(target);
+      return { targets: context.client.getChannels() };
     }
-    context.conn.part(context.target);
+    if (context.target.startsWith('#')) {
+      context.conn.part(target);
+    }
+    return false;
   },
   disconnect: (context) => {
     context.conn.disconnect();
+  },
+  msg: (context) => {
+    const target = context.args.split(' ')[0];
+    const message = context.args.replace(`${target} `, '');
+    context.client.send(message, target);
   },
 };
 

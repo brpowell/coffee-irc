@@ -9,16 +9,26 @@ Object.defineProperty(exports, "__esModule", {
  */
 var commands = {
   join: function join(context) {
-    context.client.join('#' + context.arg);
+    context.client.join('#' + context.args);
   },
   leave: function leave(context) {
-    if (context.arg === 'remove') {
-      context.client.removeChannel(context.target);
+    var target = context.target;
+    if (context.args === 'remove' || !target.startsWith('#')) {
+      context.client.removeTarget(target);
+      return { targets: context.client.getChannels() };
     }
-    context.conn.part(context.target);
+    if (context.target.startsWith('#')) {
+      context.conn.part(target);
+    }
+    return false;
   },
   disconnect: function disconnect(context) {
     context.conn.disconnect();
+  },
+  msg: function msg(context) {
+    var target = context.args.split(' ')[0];
+    var message = context.args.replace(target + ' ', '');
+    context.client.send(message, target);
   }
 };
 

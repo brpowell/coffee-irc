@@ -19,27 +19,25 @@ export default class Message extends React.Component {
   }
 
   render() {
-    let className = 'message';
-    const prevMessage = this.props.prevMessage;
+    const { type, prevMessage, sender, timestamp, message } = this.props;
     let stamp = null;
     // TODO: this is just awful
-    if (this.props.type === 'status' || prevMessage == null || this.props.sender !== prevMessage.sender || (this.props.sender === prevMessage.sender && this.props.type === 'message' && prevMessage.type === 'status')) {
+    if (type === 'status' || prevMessage == null || sender !== prevMessage.sender || (sender === prevMessage.sender && type === 'message' && prevMessage.type === 'status')) {
       stamp = (<span>
-        <b className={this.props.sender === Client.getNick() ? 'sender-name' : ''}>{ this.props.sender }</b>
-        <i className="timestamp-first">{ this.props.timestamp }</i><br />
+        <b className={sender === Client.getNick() ? 'sender-name' : ''}>{ sender }</b>
+        <i className="timestamp-first">{ timestamp }</i><br />
       </span>);
-      className += ' message-stamp';
     }
 
     return (
       <div
-        className={className}
+        className={`message ${stamp ? 'message-stamp' : ''}`}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
         { stamp }
-        <div className={this.props.type === 'status' ? 'status' : ''}>{ this.props.message }</div>
-        { this.state.showTimestamp ? <i className="timestamp">{ this.props.timestamp }</i> : null }
+        <div className={type !== 'message' ? type : ''}>{ message }</div>
+        { this.state.showTimestamp ? <i className="timestamp">{ timestamp }</i> : null }
       </div>
     );
   }
@@ -57,4 +55,5 @@ Message.propTypes = {
   sender: PropTypes.string.isRequired,
   timestamp: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };

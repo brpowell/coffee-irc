@@ -9,7 +9,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeConversation: '',
+      activeConversation: Client.getNick(),
       joinedChannels: [],
       messages: {},
       alertNew: [],
@@ -60,6 +60,7 @@ export default class App extends React.Component {
 
     Client.on('motd', (motd) => {
       this.setState({ onlineStatus: 'online' });
+      // this.addMessage('', '', motd);
     });
 
     // Only for other users, can't handle self
@@ -76,23 +77,26 @@ export default class App extends React.Component {
   }
 
   enterConversation(target, force = true) {
-    const joined = this.state.joinedChannels;
-    if (!joined.includes(target)) {
-      joined.push(target);
-    }
-
-    const targets = this.state.targets;
-    if (!targets.includes(target)) {
-      targets.push(target);
-    }
-
-    const index = this.state.alertNew.indexOf(target);
-    const alertNew = this.state.alertNew;
-    if (index > -1) alertNew.splice(index, 1);
-
     const activeConversation = force ? target : this.state.activeConversation;
+    if (target !== '') {
+      const joined = this.state.joinedChannels;
+      if (!joined.includes(target) && target.startsWith('#')) {
+        joined.push(target);
+      }
 
-    this.setState({ activeConversation, joinedChannels: joined, alertNew, targets });
+      const targets = this.state.targets;
+      if (!targets.includes(target)) {
+        targets.push(target);
+      }
+
+      const index = this.state.alertNew.indexOf(target);
+      const alertNew = this.state.alertNew;
+      if (index > -1) alertNew.splice(index, 1);
+
+      this.setState({ activeConversation, joinedChannels: joined, alertNew, targets });
+    } else {
+      this.setState({ activeConversation });
+    }
   }
 
   leaveChannel(channel) {
@@ -138,7 +142,9 @@ export default class App extends React.Component {
       messages[targetKey] = [newMessage];
     }
 
-    if (!alertNew.includes(targetKey) && activeConversation !== targetKey) {
+    if (!alertNew.includes(targetKey) &&
+        activeConversation !== targetKey &&
+        sender !== Client.getNick()) {
       alertNew.push(targetKey);
     }
 

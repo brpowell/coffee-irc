@@ -43,7 +43,7 @@ var App = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
     _this.state = {
-      activeConversation: '',
+      activeConversation: _clientManager2.default.getNick(),
       joinedChannels: [],
       messages: {},
       alertNew: [],
@@ -101,6 +101,7 @@ var App = function (_React$Component) {
 
       _clientManager2.default.on('motd', function (motd) {
         _this2.setState({ onlineStatus: 'online' });
+        // this.addMessage('', '', motd);
       });
 
       // Only for other users, can't handle self
@@ -121,23 +122,26 @@ var App = function (_React$Component) {
     value: function enterConversation(target) {
       var force = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-      var joined = this.state.joinedChannels;
-      if (!joined.includes(target)) {
-        joined.push(target);
-      }
-
-      var targets = this.state.targets;
-      if (!targets.includes(target)) {
-        targets.push(target);
-      }
-
-      var index = this.state.alertNew.indexOf(target);
-      var alertNew = this.state.alertNew;
-      if (index > -1) alertNew.splice(index, 1);
-
       var activeConversation = force ? target : this.state.activeConversation;
+      if (target !== '') {
+        var joined = this.state.joinedChannels;
+        if (!joined.includes(target) && target.startsWith('#')) {
+          joined.push(target);
+        }
 
-      this.setState({ activeConversation: activeConversation, joinedChannels: joined, alertNew: alertNew, targets: targets });
+        var targets = this.state.targets;
+        if (!targets.includes(target)) {
+          targets.push(target);
+        }
+
+        var index = this.state.alertNew.indexOf(target);
+        var alertNew = this.state.alertNew;
+        if (index > -1) alertNew.splice(index, 1);
+
+        this.setState({ activeConversation: activeConversation, joinedChannels: joined, alertNew: alertNew, targets: targets });
+      } else {
+        this.setState({ activeConversation: activeConversation });
+      }
     }
   }, {
     key: 'leaveChannel',
@@ -193,7 +197,7 @@ var App = function (_React$Component) {
         messages[targetKey] = [newMessage];
       }
 
-      if (!alertNew.includes(targetKey) && activeConversation !== targetKey) {
+      if (!alertNew.includes(targetKey) && activeConversation !== targetKey && sender !== _clientManager2.default.getNick()) {
         alertNew.push(targetKey);
       }
 

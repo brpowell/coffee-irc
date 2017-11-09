@@ -10,7 +10,7 @@ const commands = {
     const target = context.target;
     if (context.args === 'remove' || !target.startsWith('#')) {
       context.client.removeTarget(target);
-      return { targets: context.client.getChannels() };
+      return { targets: context.client.getChannels(), activeConversation: '' };
     }
     if (context.target.startsWith('#')) {
       context.conn.part(target);

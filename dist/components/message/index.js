@@ -18,6 +18,10 @@ var _clientManager = require('../../api/client-manager');
 
 var _clientManager2 = _interopRequireDefault(_clientManager);
 
+var _jdenticon = require('jdenticon');
+
+var _jdenticon2 = _interopRequireDefault(_jdenticon);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25,6 +29,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+// import { jdenticon } from 'jdenticon';
+
+// const jdenticon = require('jdenticon');
+
 
 var Message = function (_React$Component) {
   _inherits(Message, _React$Component);
@@ -34,7 +42,7 @@ var Message = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).call(this, props));
 
-    _this.state = { showTimestamp: false };
+    _this.state = { hover: false };
     _this.handleMouseEnter = _this.handleMouseEnter.bind(_this);
     _this.handleMouseLeave = _this.handleMouseLeave.bind(_this);
     return _this;
@@ -43,12 +51,12 @@ var Message = function (_React$Component) {
   _createClass(Message, [{
     key: 'handleMouseEnter',
     value: function handleMouseEnter() {
-      this.setState({ showTimestamp: true });
+      this.setState({ hover: true });
     }
   }, {
     key: 'handleMouseLeave',
     value: function handleMouseLeave() {
-      this.setState({ showTimestamp: false });
+      this.setState({ hover: false });
     }
   }, {
     key: 'render',
@@ -64,40 +72,53 @@ var Message = function (_React$Component) {
       // TODO: this is just awful
       if (type === 'status' || prevMessage == null || sender !== prevMessage.sender || sender === prevMessage.sender && type === 'message' && prevMessage.type === 'status') {
         stamp = _react2.default.createElement(
-          'span',
-          null,
+          'div',
+          { className: 'message-header' },
           _react2.default.createElement(
             'b',
-            { className: sender === _clientManager2.default.getNick() ? 'sender-name' : '' },
+            null,
             sender
           ),
           _react2.default.createElement(
-            'i',
-            { className: 'timestamp-first' },
+            'span',
+            { className: 'timestamp' },
             timestamp
           ),
           _react2.default.createElement('br', null)
         );
       }
+      var avatar = null;
+      if (prevMessage == null || sender !== prevMessage.sender || prevMessage.type === 'status') {
+        avatar = _jdenticon2.default.toSvg(sender, 45);
+      }
+      var gutter = avatar ? _react2.default.createElement('div', { className: 'avatar', dangerouslySetInnerHTML: { __html: avatar } }) : _react2.default.createElement(
+        'div',
+        { className: 'avatar' },
+        _react2.default.createElement(
+          'span',
+          { className: 'timestamp' },
+          this.state.hover ? timestamp : ''
+        )
+      );
 
       return _react2.default.createElement(
         'div',
         {
-          className: 'message ' + (stamp ? 'message-stamp' : ''),
+          className: 'message',
           onMouseEnter: this.handleMouseEnter,
           onMouseLeave: this.handleMouseLeave
         },
-        stamp,
+        gutter,
         _react2.default.createElement(
           'div',
-          { className: type !== 'message' ? type : '' },
-          message
-        ),
-        this.state.showTimestamp ? _react2.default.createElement(
-          'i',
-          { className: 'timestamp' },
-          timestamp
-        ) : null
+          { className: 'message-content ' + (stamp ? 'message-stamp' : '') },
+          stamp,
+          _react2.default.createElement(
+            'span',
+            { className: type !== 'message' ? type : '' },
+            message
+          )
+        )
       );
     }
   }]);

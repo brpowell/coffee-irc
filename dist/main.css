@@ -139,30 +139,39 @@ body {
 
 .chat-log {
   width: 100%;
-  height: calc(100% - 95px);
+  height: calc(100% - 109px);
   background-color: white;
   overflow-y: scroll;
   word-wrap: break-word;
-  min-width: 600px; }
-
-.timestamp-first {
-  margin-left: 8px;
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.4); }
+  min-width: 600px;
+  padding-top: 4px;
+  padding-bottom: 8px; }
 
 .timestamp {
   float: right;
-  font-size: 14px;
+  margin-top: 2px;
+  font-size: 12px;
   color: rgba(0, 0, 0, 0.4); }
 
-.message-stamp {
-  margin-top: 6px; }
-
 .message {
-  padding-left: 8px;
-  padding-right: 8px; }
-  .message b {
-    color: red; }
+  word-wrap: break-word;
+  display: block;
+  position: relative;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 10px; }
+  .message .avatar {
+    position: absolute; }
+  .message .message-header {
+    display: flex;
+    margin-bottom: 2px; }
+  .message .message-content {
+    margin-left: 52px; }
+    .message .message-content b {
+      margin-right: 6px; }
+
+.message:hover {
+  background-color: #f7f7f7; }
 
 .error {
   color: red; }
@@ -170,9 +179,6 @@ body {
 .status {
   font-style: italic;
   opacity: 0.4; }
-
-.sender-name {
-  color: blue !important; }
 
 .server-area {
   padding: 10px; }

@@ -1,8 +1,10 @@
 .chat-log {
     width: 100%;
-    height: calc(100% - 95px);
+    height: calc(100% - 109px);
     background-color: white;
     overflow-y: scroll;
     word-wrap: break-word;
     min-width: 600px;
+    padding-top: 4px;
+    padding-bottom: 8px;
 }

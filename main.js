@@ -1,7 +1,6 @@
 const electron = require('electron');
 const url = require('url');
 const path = require('path');
-require('electron-reload')(__dirname);
 const { app, BrowserWindow } = electron;
 
 // const Client = require('./src/api/coffee-client.js');

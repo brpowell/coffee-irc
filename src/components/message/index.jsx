@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import jdenticon from 'jdenticon';
+import autolinker from 'autolinker';
 
 export default class Message extends React.Component {
   constructor(props) {
@@ -46,7 +47,10 @@ export default class Message extends React.Component {
         {gutter}
         <div className={`message-content ${stamp ? 'message-stamp' : ''}`}>
           { stamp }
-          <span className={type !== 'message' ? type : ''}>{ message }</span>
+          <span
+            className={type !== 'message' ? type : ''}
+            dangerouslySetInnerHTML={{ __html: autolinker.link(message, { stripPrefix: false }) }}
+          />
         </div>
       </div>
     );

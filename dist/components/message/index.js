@@ -18,6 +18,10 @@ var _jdenticon = require('jdenticon');
 
 var _jdenticon2 = _interopRequireDefault(_jdenticon);
 
+var _autolinker = require('autolinker');
+
+var _autolinker2 = _interopRequireDefault(_autolinker);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -105,11 +109,10 @@ var Message = function (_React$Component) {
           'div',
           { className: 'message-content ' + (stamp ? 'message-stamp' : '') },
           stamp,
-          _react2.default.createElement(
-            'span',
-            { className: type !== 'message' ? type : '' },
-            message
-          )
+          _react2.default.createElement('span', {
+            className: type !== 'message' ? type : '',
+            dangerouslySetInnerHTML: { __html: _autolinker2.default.link(message, { stripPrefix: false }) }
+          })
         )
       );
     }

@@ -2,9 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Message from '../message';
 
+// Ratio of scrollTop to scrollHeight
+const SCROLL_FACTOR = 2.2951219512;
+
 export default class ChatLog extends React.Component {
+  componentWillUpdate() {
+    const { scrollTop, scrollHeight } = this.node;
+    this.scrolling = Math.round(scrollTop * SCROLL_FACTOR) < scrollHeight;
+  }
+
   componentDidUpdate() {
-    this.node.scrollTop = this.node.scrollHeight;
+    const { scrollTop, scrollHeight } = this.node;
+    this.node.scrollTop = this.scrolling ? scrollTop : scrollHeight;
   }
 
   renderMessages() {

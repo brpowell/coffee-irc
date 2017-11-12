@@ -3,6 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _dummy = require('./dummy');
+
+var _dummy2 = _interopRequireDefault(_dummy);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * An object mapping command names to functions. Each command accepts a
  * context that holds the client, the current connection, a target, and an argument
@@ -29,6 +36,9 @@ var commands = {
     var target = context.args.split(' ')[0];
     var message = context.args.replace(target + ' ', '');
     context.client.send(message, target);
+  },
+  dummy: function dummy() {
+    return { messages: _dummy2.default };
   }
 };
 

@@ -1,8 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { jdenticon } from 'jdenticon';
-import Client from '../../api/client-manager';
-// const jdenticon = require('jdenticon');
 import jdenticon from 'jdenticon';
 
 export default class Message extends React.Component {

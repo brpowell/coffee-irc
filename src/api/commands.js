@@ -1,3 +1,5 @@
+import sampleMessages from './dummy';
+
 /**
  * An object mapping command names to functions. Each command accepts a
  * context that holds the client, the current connection, a target, and an argument
@@ -25,6 +27,7 @@ const commands = {
     const message = context.args.replace(`${target} `, '');
     context.client.send(message, target);
   },
+  dummy: () => ({ messages: sampleMessages }),
 };
 
 export default commands;

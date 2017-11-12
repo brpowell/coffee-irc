@@ -26,6 +26,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// Ratio of scrollTop to scrollHeight
+var SCROLL_FACTOR = 2.2951219512;
+
 var ChatLog = function (_React$Component) {
   _inherits(ChatLog, _React$Component);
 
@@ -36,9 +39,22 @@ var ChatLog = function (_React$Component) {
   }
 
   _createClass(ChatLog, [{
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate() {
+      var _node = this.node,
+          scrollTop = _node.scrollTop,
+          scrollHeight = _node.scrollHeight;
+
+      this.scrolling = Math.round(scrollTop * SCROLL_FACTOR) < scrollHeight;
+    }
+  }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate() {
-      this.node.scrollTop = this.node.scrollHeight;
+      var _node2 = this.node,
+          scrollTop = _node2.scrollTop,
+          scrollHeight = _node2.scrollHeight;
+
+      this.node.scrollTop = this.scrolling ? scrollTop : scrollHeight;
     }
   }, {
     key: 'renderMessages',

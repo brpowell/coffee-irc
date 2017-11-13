@@ -4,6 +4,7 @@ import Client from '../../api/client-manager';
 
 import Sidebar from '../../containers/sidebar';
 import ChatArea from '../../containers/chat-area';
+import ServerSettingsModal from '../modals/server-settings';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -15,7 +16,8 @@ export default class App extends React.Component {
       alertNew: [],
       users: {},
       targets: Client.getChannels(),
-      onlineStatus: 'connecting' };
+      onlineStatus: 'connecting',
+      showModal: false };
     this.bindActions();
   }
 
@@ -74,6 +76,7 @@ export default class App extends React.Component {
     this.handleDisconnect = this.handleDisconnect.bind(this);
     this.handleConnect = this.handleConnect.bind(this);
     this.handleCommand = this.handleCommand.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   enterConversation(target, force = true) {
@@ -169,14 +172,23 @@ export default class App extends React.Component {
     }
   }
 
+  toggleModal() {
+    this.setState({ showModal: !this.state.showModal });
+  }
+
   render() {
     return (
       <div>
+        <ServerSettingsModal
+          isOpen={this.state.showModal}
+          onRequestClose={() => this.setState({ showModal: false })}
+        />
         <Sidebar
           // Actions
           enterConversation={this.enterConversation}
           handleDisconnect={this.handleDisconnect}
           handleConnect={this.handleConnect}
+          showModal={() => this.setState({ showModal: true })}
           // State
           onlineStatus={this.state.onlineStatus}
           activeConversation={this.state.activeConversation}

@@ -26,6 +26,10 @@ var _chatArea = require('../../containers/chat-area');
 
 var _chatArea2 = _interopRequireDefault(_chatArea);
 
+var _serverSettings = require('../modals/server-settings');
+
+var _serverSettings2 = _interopRequireDefault(_serverSettings);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -49,7 +53,8 @@ var App = function (_React$Component) {
       alertNew: [],
       users: {},
       targets: _clientManager2.default.getChannels(),
-      onlineStatus: 'connecting' };
+      onlineStatus: 'connecting',
+      showModal: false };
     _this.bindActions();
     return _this;
   }
@@ -116,6 +121,7 @@ var App = function (_React$Component) {
       this.handleDisconnect = this.handleDisconnect.bind(this);
       this.handleConnect = this.handleConnect.bind(this);
       this.handleCommand = this.handleCommand.bind(this);
+      this.toggleModal = this.toggleModal.bind(this);
     }
   }, {
     key: 'enterConversation',
@@ -225,16 +231,32 @@ var App = function (_React$Component) {
       }
     }
   }, {
+    key: 'toggleModal',
+    value: function toggleModal() {
+      this.setState({ showModal: !this.state.showModal });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this3 = this;
+
       return _react2.default.createElement(
         'div',
         null,
+        _react2.default.createElement(_serverSettings2.default, {
+          isOpen: this.state.showModal,
+          onRequestClose: function onRequestClose() {
+            return _this3.setState({ showModal: false });
+          }
+        }),
         _react2.default.createElement(_sidebar2.default
         // Actions
         , { enterConversation: this.enterConversation,
           handleDisconnect: this.handleDisconnect,
-          handleConnect: this.handleConnect
+          handleConnect: this.handleConnect,
+          showModal: function showModal() {
+            return _this3.setState({ showModal: true });
+          }
           // State
           , onlineStatus: this.state.onlineStatus,
           activeConversation: this.state.activeConversation,

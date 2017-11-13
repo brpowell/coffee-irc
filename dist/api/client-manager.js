@@ -211,6 +211,11 @@ var ClientManager = function () {
     value: function getChannels() {
       return this.conns[this.current].channels;
     }
+  }, {
+    key: 'getSettings',
+    value: function getSettings(server) {
+      return _electronSettings2.default.get('servers.' + server);
+    }
 
     /**
      * Check if the active server is connected

@@ -154,6 +154,10 @@ class ClientManager {
     return this.conns[this.current].channels;
   }
 
+  getSettings(server) {
+    return settings.get(`servers.${server}`);
+  }
+
   /**
    * Check if the active server is connected
    * @returns {bool}

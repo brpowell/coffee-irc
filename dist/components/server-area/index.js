@@ -65,7 +65,7 @@ var ServerArea = function (_React$Component) {
 
       menuItems['-'] = null;
       menuItems['Set Nickname'] = null;
-      menuItems['Server Settings'] = null;
+      menuItems['Server Settings'] = this.props.showModal;
 
       return _react2.default.createElement(_popoverMenu2.default, {
         menuItems: menuItems,

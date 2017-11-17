@@ -14,6 +14,10 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _clientManager = require('../../api/client-manager');
 
 var _clientManager2 = _interopRequireDefault(_clientManager);
@@ -38,18 +42,53 @@ var ServerSettingsModal = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (ServerSettingsModal.__proto__ || Object.getPrototypeOf(ServerSettingsModal)).call(this, props));
 
-    var settings = _clientManager2.default.getSettings(_clientManager2.default.current);
-    console.log(settings);
+    var config = props.currentServer;
     _this.state = {
-      name: _clientManager2.default.current,
-      address: settings.address,
-      nick: settings.nick,
-      port: settings.port ? settings.port : 6667
+      name: config.name,
+      address: config.address,
+      nick: config.nick,
+      port: config.port || 6667,
+      channels: config.channels
     };
+    _this.handleSave = _this.handleSave.bind(_this);
+    _this.handleInput = _this.handleInput.bind(_this);
     return _this;
   }
 
   _createClass(ServerSettingsModal, [{
+    key: 'handleInput',
+    value: function handleInput(event) {
+      var newVal = {};
+      newVal[event.target.id] = event.target.value;
+      this.setState(newVal);
+    }
+  }, {
+    key: 'handleSave',
+    value: function handleSave() {
+      this.props.updateServer(this.state);
+      this.props.onRequestClose();
+    }
+  }, {
+    key: 'renderField',
+    value: function renderField(id, label, placeholder) {
+      return _react2.default.createElement(
+        'div',
+        { className: 'form-group' },
+        _react2.default.createElement(
+          'label',
+          { htmlFor: id },
+          label
+        ),
+        _react2.default.createElement('input', {
+          id: id,
+          type: 'text',
+          placeholder: placeholder,
+          value: this.state[id],
+          onChange: this.handleInput
+        })
+      );
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -61,36 +100,27 @@ var ServerSettingsModal = function (_Component) {
           contentLabel: 'Server Settings'
         },
         _react2.default.createElement(
+          'button',
+          { className: 'close-modal', onClick: this.props.onRequestClose },
+          '+'
+        ),
+        _react2.default.createElement(
           'h1',
           null,
           'Server Settings'
         ),
         _react2.default.createElement(
           'form',
-          null,
-          _react2.default.createElement(
-            'div',
-            { className: 'form-group' },
-            _react2.default.createElement('input', { type: 'text', placeholder: 'Display Name', value: this.state.name })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'form-group' },
-            _react2.default.createElement('input', { type: 'text', placeholder: 'Server Address', value: this.state.address })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'form-group' },
-            _react2.default.createElement('input', { type: 'text', placeholder: 'Port', value: this.state.port })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'form-group' },
-            _react2.default.createElement('input', { type: 'text', placeholder: 'Nickname', value: this.state.nick })
-          ),
+          { className: 'modal-form', onSubmit: function onSubmit(event) {
+              return event.preventDefault();
+            } },
+          this.renderField('nick', 'Nickname', 'SassChan'),
+          this.renderField('name', 'Display Name', 'My Server'),
+          this.renderField('address', 'Server Address', 'chat.freenode.net'),
+          this.renderField('port', 'Port', '6667'),
           _react2.default.createElement(
             'button',
-            null,
+            { onClick: this.handleSave },
             'Save'
           )
         )
@@ -102,3 +132,11 @@ var ServerSettingsModal = function (_Component) {
 }(_react.Component);
 
 exports.default = ServerSettingsModal;
+
+
+ServerSettingsModal.PropTypes = {
+  updateServer: _propTypes2.default.func.isRequired,
+  onRequestClose: _propTypes2.default.func.isRequired,
+  isOpen: _propTypes2.default.bool.isRequired,
+  currentServer: _propTypes2.default.string.isRequired
+};

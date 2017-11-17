@@ -1,0 +1,62 @@
+@import '../../sass/constants';
+
+.ReactModalPortal > div {
+  opacity: 0;
+}
+
+.ReactModalPortal .ReactModal__Overlay {
+  transition: opacity 200ms ease-in-out;
+  background: rgba(0, 0, 0, 0.15);
+  &--after-open {
+    opacity: 1;
+  }
+  &--before-close {
+      opacity: 0;
+  }
+}
+
+.close-modal {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  float: right;
+  background-color: transparent;
+  border: 1px solid lightgrey;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 26px;
+  padding-bottom: 4px;
+  color: grey;
+  transform: rotateZ(45deg);
+  outline: none;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+.modal-form {
+  .form-group {
+    margin-bottom: 14px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  input {
+    min-width: 300px;
+    height: 28px;
+    border: 1px solid lightgrey;
+    border-radius: 6px;
+    outline: none;
+    font-size: 16px;
+    padding-left: 8px;
+    transition: border-color 0.25s;
+  }
+
+  input:focus {
+    border-color: $color-input-focus;
+  }
+}
+

@@ -17,6 +17,7 @@ export default class Sidebar extends Component {
           handleDisconnect={this.props.handleDisconnect}
           handleConnect={this.props.handleConnect}
           showModal={this.props.showModal}
+          currentServer={this.props.currentServer}
         />
         <ChannelList
           activeConversation={this.props.activeConversation}

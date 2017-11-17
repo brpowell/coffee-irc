@@ -12,6 +12,10 @@ var _electronSettings = require('electron-settings');
 
 var _electronSettings2 = _interopRequireDefault(_electronSettings);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _commands = require('./commands');
 
 var _commands2 = _interopRequireDefault(_commands);
@@ -130,6 +134,11 @@ var ClientManager = function () {
     value: function getNick() {
       return this.conns[this.current].conn.nick;
     }
+  }, {
+    key: 'changeNick',
+    value: function changeNick(nick) {
+      this.conns[this.current].conn.send("NICK", nick);
+    }
 
     /**
      * Add an event listener to the active server 
@@ -212,9 +221,22 @@ var ClientManager = function () {
       return this.conns[this.current].channels;
     }
   }, {
-    key: 'getSettings',
-    value: function getSettings(server) {
-      return _electronSettings2.default.get('servers.' + server);
+    key: 'getServerConfig',
+    value: function getServerConfig(server) {
+      var active = server || this.current;
+      var config = _electronSettings2.default.get('servers.' + active);
+      config.name = active;
+      return config;
+    }
+  }, {
+    key: 'updateServerConfig',
+    value: function updateServerConfig(server, config) {
+      _electronSettings2.default.delete('servers.' + server);
+      if (server === this.current) {
+        this.current = config.name;
+        _electronSettings2.default.set('current', this.current);
+      }
+      _electronSettings2.default.set('servers.' + config.name, _lodash2.default.omit(config, 'name'));
     }
 
     /**

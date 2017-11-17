@@ -54,7 +54,8 @@ var App = function (_React$Component) {
       users: {},
       targets: _clientManager2.default.getChannels(),
       onlineStatus: 'connecting',
-      showModal: false };
+      showModal: false,
+      currentServer: _clientManager2.default.getServerConfig() };
     _this.bindActions();
     return _this;
   }
@@ -109,6 +110,10 @@ var App = function (_React$Component) {
         // this.addMessage('', '', motd);
       });
 
+      _clientManager2.default.on('nick', function (oldnick, newnick, channels, message) {
+        _this2.addMessage(newnick, _this2.activeConversation, message, 'status');
+      });
+
       // Only for other users, can't handle self
       // Client.on('quit', (nick, reason, channels, message) => {
       // });
@@ -121,7 +126,7 @@ var App = function (_React$Component) {
       this.handleDisconnect = this.handleDisconnect.bind(this);
       this.handleConnect = this.handleConnect.bind(this);
       this.handleCommand = this.handleCommand.bind(this);
-      this.toggleModal = this.toggleModal.bind(this);
+      this.updateServer = this.updateServer.bind(this);
     }
   }, {
     key: 'enterConversation',
@@ -231,9 +236,15 @@ var App = function (_React$Component) {
       }
     }
   }, {
-    key: 'toggleModal',
-    value: function toggleModal() {
-      this.setState({ showModal: !this.state.showModal });
+    key: 'updateServer',
+    value: function updateServer(config) {
+      var current = this.state.currentServer;
+      // TODO: this should probably be done in event handler to prevent changing if failure
+      if (current.nick !== config.nick) {
+        _clientManager2.default.changeNick(config.nick);
+      }
+      _clientManager2.default.updateServerConfig(current.name, config);
+      this.setState({ currentServer: config });
     }
   }, {
     key: 'render',
@@ -247,7 +258,9 @@ var App = function (_React$Component) {
           isOpen: this.state.showModal,
           onRequestClose: function onRequestClose() {
             return _this3.setState({ showModal: false });
-          }
+          },
+          updateServer: this.updateServer,
+          currentServer: this.state.currentServer
         }),
         _react2.default.createElement(_sidebar2.default
         // Actions
@@ -262,7 +275,8 @@ var App = function (_React$Component) {
           activeConversation: this.state.activeConversation,
           joinedChannels: this.state.joinedChannels,
           targets: this.state.targets,
-          alertNew: this.state.alertNew
+          alertNew: this.state.alertNew,
+          currentServer: this.state.currentServer
         }),
         _react2.default.createElement(_chatArea2.default
         // Actions

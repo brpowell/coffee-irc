@@ -1,5 +1,6 @@
 import irc from 'irc';
 import settings from 'electron-settings';
+import _ from 'lodash';
 import commands from './commands';
 
 class ClientManager {
@@ -88,6 +89,10 @@ class ClientManager {
     return this.conns[this.current].conn.nick;
   }
 
+  changeNick(nick) {
+    this.conns[this.current].conn.send("NICK", nick);
+  }
+
   /**
    * Add an event listener to the active server 
    * @param {any} event 
@@ -154,8 +159,20 @@ class ClientManager {
     return this.conns[this.current].channels;
   }
 
-  getSettings(server) {
-    return settings.get(`servers.${server}`);
+  getServerConfig(server) {
+    const active = server || this.current;
+    const config = settings.get(`servers.${active}`);
+    config.name = active;
+    return config;
+  }
+
+  updateServerConfig(server, config) {
+    settings.delete(`servers.${server}`);
+    if (server === this.current) {
+      this.current = config.name;
+      settings.set('current', this.current);
+    }
+    settings.set(`servers.${config.name}`, _.omit(config, 'name'));
   }
 
   /**

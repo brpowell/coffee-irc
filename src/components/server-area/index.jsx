@@ -41,6 +41,7 @@ export default class ServerArea extends React.Component {
   }
 
   render() {
+    const { name, nick } = this.props.currentServer;
     return (
       <Popover
         isOpen={this.state.menuOpen}
@@ -50,9 +51,9 @@ export default class ServerArea extends React.Component {
         onOuterAction={this.closeMenu}
       >
         <div role="button" className="server-area" onClick={this.toggleMenu} tabIndex={0}>
-          <div className="server-info">{ Client.current }</div>
+          <div className="server-info">{ name }</div>
           <div className="user-info">
-            { this.props.onlineStatus === 'online' ? `@${Client.getNick()}` : this.props.onlineStatus }
+            { this.props.onlineStatus === 'online' ? `@${nick}` : this.props.onlineStatus }
             <div className={this.props.onlineStatus} />
           </div>
         </div>

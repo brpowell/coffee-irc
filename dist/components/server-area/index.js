@@ -80,6 +80,10 @@ var ServerArea = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _props$currentServer = this.props.currentServer,
+          name = _props$currentServer.name,
+          nick = _props$currentServer.nick;
+
       return _react2.default.createElement(
         _reactPopover2.default,
         {
@@ -95,12 +99,12 @@ var ServerArea = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'server-info' },
-            _clientManager2.default.current
+            name
           ),
           _react2.default.createElement(
             'div',
             { className: 'user-info' },
-            this.props.onlineStatus === 'online' ? '@' + _clientManager2.default.getNick() : this.props.onlineStatus,
+            this.props.onlineStatus === 'online' ? '@' + nick : this.props.onlineStatus,
             _react2.default.createElement('div', { className: this.props.onlineStatus })
           )
         )

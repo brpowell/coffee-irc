@@ -51,7 +51,8 @@ var Sidebar = function (_Component) {
           onlineStatus: this.props.onlineStatus,
           handleDisconnect: this.props.handleDisconnect,
           handleConnect: this.props.handleConnect,
-          showModal: this.props.showModal
+          showModal: this.props.showModal,
+          currentServer: this.props.currentServer
         }),
         _react2.default.createElement(_channelList2.default, {
           activeConversation: this.props.activeConversation,

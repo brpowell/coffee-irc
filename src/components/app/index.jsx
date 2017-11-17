@@ -17,7 +17,8 @@ export default class App extends React.Component {
       users: {},
       targets: Client.getChannels(),
       onlineStatus: 'connecting',
-      showModal: false };
+      showModal: false,
+      currentServer: Client.getServerConfig() };
     this.bindActions();
   }
 
@@ -65,6 +66,10 @@ export default class App extends React.Component {
       // this.addMessage('', '', motd);
     });
 
+    Client.on('nick', (oldnick, newnick, channels, message) => {
+      this.addMessage(newnick, this.activeConversation, message, 'status');
+    });
+
     // Only for other users, can't handle self
     // Client.on('quit', (nick, reason, channels, message) => {
     // });
@@ -76,7 +81,7 @@ export default class App extends React.Component {
     this.handleDisconnect = this.handleDisconnect.bind(this);
     this.handleConnect = this.handleConnect.bind(this);
     this.handleCommand = this.handleCommand.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
+    this.updateServer = this.updateServer.bind(this);
   }
 
   enterConversation(target, force = true) {
@@ -172,8 +177,14 @@ export default class App extends React.Component {
     }
   }
 
-  toggleModal() {
-    this.setState({ showModal: !this.state.showModal });
+  updateServer(config) {
+    const current = this.state.currentServer;
+    // TODO: this should probably be done in event handler to prevent changing if failure
+    if (current.nick !== config.nick) {
+      Client.changeNick(config.nick);
+    }
+    Client.updateServerConfig(current.name, config);
+    this.setState({ currentServer: config });
   }
 
   render() {
@@ -182,6 +193,8 @@ export default class App extends React.Component {
         <ServerSettingsModal
           isOpen={this.state.showModal}
           onRequestClose={() => this.setState({ showModal: false })}
+          updateServer={this.updateServer}
+          currentServer={this.state.currentServer}
         />
         <Sidebar
           // Actions
@@ -195,6 +208,7 @@ export default class App extends React.Component {
           joinedChannels={this.state.joinedChannels}
           targets={this.state.targets}
           alertNew={this.state.alertNew}
+          currentServer={this.state.currentServer}
         />
         <ChatArea
           // Actions

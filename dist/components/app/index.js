@@ -218,14 +218,18 @@ var App = function (_React$Component) {
     key: 'handleConnect',
     value: function handleConnect() {
       _clientManager2.default.connect();
-      this.setState({ onlineStatus: 'online' });
+      this.setState({ onlineStatus: 'connecting...' });
     }
   }, {
     key: 'handleDisconnect',
-    value: function handleDisconnect() {
-      _clientManager2.default.disconnect();
-      this.setState({ onlineStatus: 'offline' });
-      this.addMessage(_clientManager2.default.getNick(), this.state.activeConversation, 'has disconnected', 'status');
+    value: function handleDisconnect(cb) {
+      var _this3 = this;
+
+      _clientManager2.default.disconnect(function () {
+        _this3.addMessage(_this3.state.currentServer.nick, _this3.state.activeConversation, 'has disconnected', 'status');
+        _this3.setState({ onlineStatus: 'offline' });
+        cb();
+      });
     }
   }, {
     key: 'handleCommand',
@@ -238,18 +242,29 @@ var App = function (_React$Component) {
   }, {
     key: 'updateServer',
     value: function updateServer(config) {
+      // let updated = false;
       var current = this.state.currentServer;
       // TODO: this should probably be done in event handler to prevent changing if failure
       if (current.nick !== config.nick) {
         _clientManager2.default.changeNick(config.nick);
       }
+
+      // if (current.address !== config.address) {
+      //   this.handleDisconnect(() => {
+      //     Client.updateServerConfig(current.name, config);
+      //     updated = true;
+      //     this.handleConnect();
+      //   });
+      // }
+
+      // Update the client's config as well as the app state's config to match
       _clientManager2.default.updateServerConfig(current.name, config);
       this.setState({ currentServer: config });
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       return _react2.default.createElement(
         'div',
@@ -257,7 +272,7 @@ var App = function (_React$Component) {
         _react2.default.createElement(_serverSettings2.default, {
           isOpen: this.state.showModal,
           onRequestClose: function onRequestClose() {
-            return _this3.setState({ showModal: false });
+            return _this4.setState({ showModal: false });
           },
           updateServer: this.updateServer,
           currentServer: this.state.currentServer
@@ -268,7 +283,7 @@ var App = function (_React$Component) {
           handleDisconnect: this.handleDisconnect,
           handleConnect: this.handleConnect,
           showModal: function showModal() {
-            return _this3.setState({ showModal: true });
+            return _this4.setState({ showModal: true });
           }
           // State
           , onlineStatus: this.state.onlineStatus,

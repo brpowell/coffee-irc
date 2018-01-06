@@ -161,13 +161,15 @@ export default class App extends React.Component {
 
   handleConnect() {
     Client.connect();
-    this.setState({ onlineStatus: 'online' });
+    this.setState({ onlineStatus: 'connecting...' });
   }
 
-  handleDisconnect() {
-    Client.disconnect();
-    this.setState({ onlineStatus: 'offline' });
-    this.addMessage(Client.getNick(), this.state.activeConversation, 'has disconnected', 'status');
+  handleDisconnect(cb) {
+    Client.disconnect(() => {
+      this.addMessage(this.state.currentServer.nick, this.state.activeConversation, 'has disconnected', 'status');
+      this.setState({ onlineStatus: 'offline' });
+      cb();
+    });
   }
 
   handleCommand(input, target) {
@@ -178,11 +180,22 @@ export default class App extends React.Component {
   }
 
   updateServer(config) {
+    // let updated = false;
     const current = this.state.currentServer;
     // TODO: this should probably be done in event handler to prevent changing if failure
     if (current.nick !== config.nick) {
       Client.changeNick(config.nick);
     }
+
+    // if (current.address !== config.address) {
+    //   this.handleDisconnect(() => {
+    //     Client.updateServerConfig(current.name, config);
+    //     updated = true;
+    //     this.handleConnect();
+    //   });
+    // }
+
+    // Update the client's config as well as the app state's config to match
     Client.updateServerConfig(current.name, config);
     this.setState({ currentServer: config });
   }

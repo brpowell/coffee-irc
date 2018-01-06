@@ -265,8 +265,13 @@ var ClientManager = function () {
     value: function connect() {
       var cb = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
 
+      var config = _electronSettings2.default.get('servers.' + this.current);
+      this.conns[this.current] = {
+        channels: config.channels,
+        conn: new _irc2.default.Client(config.address, config.nick, config.options)
+      };
       var c = this.conns[this.current].conn;
-      c.connect(cb);
+      c.connect(3, cb);
     }
   }]);
 

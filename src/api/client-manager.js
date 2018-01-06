@@ -192,8 +192,13 @@ class ClientManager {
   }
 
   connect(cb = undefined) {
+    const config = settings.get(`servers.${this.current}`);
+    this.conns[this.current] = {
+      channels: config.channels,
+      conn: new irc.Client(config.address, config.nick, config.options),
+    };
     const c = this.conns[this.current].conn;
-    c.connect(cb);
+    c.connect(3, cb);
   }
 }
 

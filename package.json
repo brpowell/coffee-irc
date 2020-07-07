@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "autolinker": "^1.6.0",
-    "electron": "^1.6.11",
+    "electron": "^7.2.4",
     "electron-reload": "^1.2.1",
     "electron-settings": "^3.1.1",
     "irc": "^0.5.2",
